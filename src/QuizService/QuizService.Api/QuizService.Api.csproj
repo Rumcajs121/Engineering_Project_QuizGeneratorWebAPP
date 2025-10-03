@@ -11,7 +11,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\QuizGeneratorWebApp.ServiceDefaults\QuizGeneratorWebApp.ServiceDefaults.csproj" />
+      <ProjectReference Include="..\QuizService.Application\QuizService.Application.csproj" />
+      <ProjectReference Include="..\QuizService.Infrastructure\QuizService.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

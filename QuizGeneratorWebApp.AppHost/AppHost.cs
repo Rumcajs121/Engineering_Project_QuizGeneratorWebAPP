@@ -6,7 +6,7 @@ builder.AddProject<Projects.LLMService>("llmservice");
 
 builder.AddProject<Projects.QuizGeneratorWebApp>("quizgeneratorwebapp");
 
-builder.AddProject<Projects.QuizService>("quizservice");
+builder.AddProject<Projects.QuizService_Api>("quizservice");
 
 builder.AddProject<Projects.UserService>("userservice");
 
