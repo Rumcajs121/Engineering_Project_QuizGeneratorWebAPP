@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizService.Infrastructure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizService.Application", "src\QuizService\QuizService.Application\QuizService.Application.csproj", "{D8E2FBF0-FB55-4882-9AD9-EB1FD944CAB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Messaging", "BuildingBlocks\BuildingBlocks.Messaging\BuildingBlocks.Messaging.csproj", "{63E0C1AB-671C-40B1-962E-927031D5F5A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +78,7 @@ Global
 		{4F8FF16C-554B-414C-824B-27B7377FCEFE} = {DDC32DBD-B1F1-4758-9B97-6866DE5D8C66}
 		{74D799BE-B945-4996-81D1-832747968CC2} = {DDC32DBD-B1F1-4758-9B97-6866DE5D8C66}
 		{D8E2FBF0-FB55-4882-9AD9-EB1FD944CAB3} = {DDC32DBD-B1F1-4758-9B97-6866DE5D8C66}
+		{63E0C1AB-671C-40B1-962E-927031D5F5A1} = {002E2C70-1B71-496A-8540-FDD68CEBC3DD}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{31B1BE28-4A33-4D37-A69B-B8FF51CC2E37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -130,5 +133,9 @@ Global
 		{D8E2FBF0-FB55-4882-9AD9-EB1FD944CAB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8E2FBF0-FB55-4882-9AD9-EB1FD944CAB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8E2FBF0-FB55-4882-9AD9-EB1FD944CAB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63E0C1AB-671C-40B1-962E-927031D5F5A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63E0C1AB-671C-40B1-962E-927031D5F5A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63E0C1AB-671C-40B1-962E-927031D5F5A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63E0C1AB-671C-40B1-962E-927031D5F5A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
