@@ -2,7 +2,7 @@ namespace BuildingBlocks.Messaging.Events;
 
 public interface IEventBase
 {
-    public Guid EventId { get;}
-    public DateTime OccurredOnUtc{ get;}
-    public string? EventType { get;}
+    public Guid EventId { get;init;}
+    public DateTime OccurredOnUtc{ get; init;}
+    public string? EventType { get; }
 }
