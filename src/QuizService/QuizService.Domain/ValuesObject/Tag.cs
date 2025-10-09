@@ -15,9 +15,9 @@ public class Tag:Entity<QuizTagId>
     private Tag(string value)=>Name=value;
     
     public static Tag Of(string value)
-    {
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(value);
-        ArgumentOutOfRangeException.ThrowIfNotEqual(value.Length,DefaultLength);
-        return new Tag(value);
-    }
+         {
+             ArgumentNullException.ThrowIfNullOrWhiteSpace(value);
+             ArgumentOutOfRangeException.ThrowIfNotEqual(value.Length,DefaultLength);
+             return new Tag(value);
+         }
 }

@@ -15,15 +15,19 @@ public class Quiz:Aggregate<QuizId>
     public IReadOnlyCollection<QuizQuestion> Questions => _questions.AsReadOnly();
     public string? ShortDescription { get; set; }
 
-    public static Quiz Create(QuizId id, QuizStatus quizStatus, Guid sourceId, string shortDescription)
+    public static Quiz Create(QuizId id, QuizStatus quizStatus, Guid sourceId, string shortDescription, IEnumerable<QuizQuestion> questions)
     {
         var quiz = new Quiz
         {
             Id = id,
             QuizStatus = QuizStatus.Generating,
             SourceId = sourceId,
-            ShortDescription = shortDescription
+            ShortDescription = shortDescription,
         };
+        foreach (var question in questions)
+        {
+            quiz._questions.Add(question);
+        }
         quiz.AddDomainEvent(new QuizGenerateEvent(quiz));
         return quiz;
     }
@@ -40,11 +44,4 @@ public class Quiz:Aggregate<QuizId>
         }
         QuizStatus = QuizStatus.Archived;
     }
-
-    public void Add(QuizQuestion quizQuestion)
-    {
-        //TODO: Create QuizQuestion 
-    }
-    
-    
 }
