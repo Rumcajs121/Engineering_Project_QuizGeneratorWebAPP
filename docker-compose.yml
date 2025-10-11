@@ -1,1 +1,5 @@
-﻿
+﻿services:
+  quizDb:
+    image: mcr.microsoft.com/mssql/server
+volumes:
+    mssql_quiz:

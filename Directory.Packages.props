@@ -7,12 +7,15 @@
     <!--      DD NEW PACKAGE FOR EXAMPLE: -->
     <!--      <PackageVersion Include="PackageA" Version="1.0.0"/>-->
     <!--BuildingBlocks-->
-    <PackageVersion Include="Carter" Version="9.0.0" />
+    <PackageVersion Include="Carter" Version="8.2.1" />
     <PackageVersion Include="FluentValidation" Version="12.0.0" />
     <PackageVersion Include="Mapster" Version="7.4.0" />
     <PackageVersion Include="MediatR" Version="13.0.0" />
     <!--API-->
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8" />
+      <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9" />
+      <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.9" />
+      <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.9" />
     <!--ORCHESTRATION-->
     <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.5.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.9" />

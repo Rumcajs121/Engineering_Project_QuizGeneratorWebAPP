@@ -6,6 +6,7 @@ namespace QuizService.Domain.Models.Quiz;
 public class QuizAnswer:Entity<QuizAnswerId>
 {
     public QuizQuestionId QuizQuestionId {get; }
+    
     public int Ordinal {get;}
     public string Text {get;}
     public bool IsCorrect {get;}

@@ -1,6 +1,6 @@
 namespace QuizService.Domain.ValuesObject;
 
-public class QuizTag
+public record QuizTag
 {
     //TODO: Secondary table N:N
     public Guid QuizQuestionId { get; set; }

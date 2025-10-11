@@ -2,7 +2,7 @@ using QuizService.Domain.Exceptions;
 
 namespace QuizService.Domain.ValuesObject;
 
-public class QuizQuestionId
+public record QuizQuestionId
 {
     public Guid Value { get;}
 

@@ -1,0 +1,12 @@
+name: QuizGenerator
+services:
+  quizDb:
+    container_name: quizDb
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=1qazXSW@
+    restart: always
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_quiz:/var/lib/mssql/data/
