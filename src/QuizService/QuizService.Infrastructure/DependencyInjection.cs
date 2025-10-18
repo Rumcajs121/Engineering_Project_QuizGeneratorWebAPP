@@ -8,8 +8,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureService(this IServiceCollection services,IConfiguration configuration)
     {
-        services.AddDbContext<QuizDbCOntext>(
-            options=>options.UseSqlServer(configuration.GetConnectionString("ConnectionStrings")));
+        services.AddDbContext<QuizDbContext>(
+            options=>options.UseSqlServer(configuration.GetConnectionString("Database")));
         return services;
     }
 }

@@ -4,6 +4,10 @@ namespace QuizService.Domain.ValuesObject;
 
 public record QuizAnswerId
 {
+    protected QuizAnswerId()
+    {
+        
+    }
     public Guid Value { get;}
 
     private QuizAnswerId(Guid value)=>Value = value;

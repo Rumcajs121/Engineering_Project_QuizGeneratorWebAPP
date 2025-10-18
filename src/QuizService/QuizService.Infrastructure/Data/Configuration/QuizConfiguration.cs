@@ -15,16 +15,23 @@ public class QuizConfiguration : IEntityTypeConfiguration<Quiz>
         builder.OwnsMany<QuizQuestion>(q => q.Questions, qq =>
             {
                 qq.ToTable("QuizQuestions");
-                qq.WithOwner()
-                    .HasForeignKey("QuizId");
-                qq.HasKey("QuizId", "QuizQuestionId");
-                
+                qq.Property<QuizId>("QuizId")
+                    .IsRequired()
+                    .HasColumnName("QuizId")
+                    .HasConversion(
+                        id => id.Value,
+                        value => QuizId.Of(value));
+                qq.HasKey("QuizId", nameof(QuizQuestion.Id));
                 qq.Property(x => x.Id)
-                    .ValueGeneratedNever()
                     .HasColumnName("QuizQuestionId")
+                    .ValueGeneratedNever()
                     .HasConversion(
                         id => id.Value,
                         value => QuizQuestionId.Of(value));
+                qq.WithOwner()
+                    .HasForeignKey("QuizId");
+                
+                
                 qq.Property(x => x.Text)
                     .HasMaxLength(1000)
                     .IsRequired()
@@ -39,15 +46,29 @@ public class QuizConfiguration : IEntityTypeConfiguration<Quiz>
                 qq.OwnsMany(x => x.Answers, qa =>
                 {
                     qa.ToTable("QuizAnswers");
-                    qa.HasKey("QuizId", "QuizQuestionId", "QuizAnswerId");
-                    qa.WithOwner()
-                        .HasForeignKey("QuizId", "QuizQuestionId");
+                    qa.Property<QuizId>("QuizId")  // <-- shadow FK typu QuizId
+                        .HasColumnName("QuizId")
+                        .HasConversion(
+                            id => id.Value,
+                            value => QuizId.Of(value));
+
+                    qa.Property<QuizQuestionId>("QuizQuestionId")  // <-- shadow FK typu QuizQuestionId
+                        .HasColumnName("QuizQuestionId")
+                        .HasConversion(
+                            id => id.Value,
+                            value => QuizQuestionId.Of(value));
                     qa.Property(x => x.Id)
-                        .ValueGeneratedNever()
                         .HasColumnName("QuizAnswerId")
+                        .ValueGeneratedNever()
                         .HasConversion(
                             id => id.Value,
                             value => QuizAnswerId.Of(value));
+                    qa.HasKey("QuizId", "QuizQuestionId", nameof(QuizAnswer.Id));
+                    qa.WithOwner()
+                        .HasForeignKey("QuizId", "QuizQuestionId");
+                    
+                    
+                    
                     qa.Property(x => x.Ordinal)
                         .IsRequired();
                     qa.Property(x => x.Text)
@@ -67,13 +88,13 @@ public class QuizConfiguration : IEntityTypeConfiguration<Quiz>
     private void ConfigureQuizTable(EntityTypeBuilder<Quiz> builder)
     {
         builder.ToTable("Quizzes");
-        builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
             .ValueGeneratedNever()
             .HasColumnName("QuizId")
             .HasConversion(
                 id => id.Value,
                 value => QuizId.Of(value));
+        builder.HasKey(x => x.Id);
         builder.Property(x => x.ShortDescription)
             .HasMaxLength(500)
             .IsRequired(false)

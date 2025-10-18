@@ -6,8 +6,14 @@ public class TagConfiguration:IEntityTypeConfiguration<Tag>
 {
     public void Configure(EntityTypeBuilder<Tag> builder)
     {
-        builder.HasKey(t=>t.Id);
         builder.ToTable("Tags");
+        builder.Property(t=>t.Id)
+            .ValueGeneratedNever()
+            .HasColumnName("TagId")
+            .HasConversion(
+                id=>id.Value,
+                value=>QuizTagId.Of(value));
+        builder.HasKey(t=>t.Id);
         builder.HasMany(q => q.Quizzes)
             .WithMany(q => q.Tags)
             .UsingEntity<Dictionary<string, object>>(
@@ -28,11 +34,7 @@ public class TagConfiguration:IEntityTypeConfiguration<Tag>
                     je.HasIndex("TagId");
                     je.ToTable("QuizTag");
                 });
-            builder.Property(t=>t.Id)
-                .ValueGeneratedNever()
-                .HasConversion(
-                    id=>id.Value,
-                    value=>QuizTagId.Of(value));
+            
             builder.Property(x => x.Name)
                 .HasMaxLength(50)
                 .IsRequired()

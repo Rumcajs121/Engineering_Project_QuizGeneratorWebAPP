@@ -8,6 +8,11 @@ public record QuizQuestionId
 
     private QuizQuestionId(Guid value)=>Value = value;
 
+    protected QuizQuestionId()
+    {
+        
+    }
+
     public static QuizQuestionId Of(Guid value)
     {
         ArgumentNullException.ThrowIfNull(value);
