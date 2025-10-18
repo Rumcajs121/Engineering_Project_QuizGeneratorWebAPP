@@ -5,10 +5,11 @@ namespace QuizService.Domain.ValuesObject;
 
 public class Tag:Entity<QuizTagId>
 {
-    private const int DefaultLength = 3;
-    public string? Name { get;}
-
-    public Tag()
+    public string? Name { get; private set; }
+    
+    private readonly List<Quiz> _quizzes = new();
+    public IReadOnlyCollection<Quiz> Quizzes => _quizzes .AsReadOnly();
+    protected Tag()
     {
         //FOR EF
     }
@@ -17,7 +18,6 @@ public class Tag:Entity<QuizTagId>
     public static Tag Of(string value)
          {
              ArgumentNullException.ThrowIfNullOrWhiteSpace(value);
-             ArgumentOutOfRangeException.ThrowIfNotEqual(value.Length,DefaultLength);
              return new Tag(value);
          }
 }

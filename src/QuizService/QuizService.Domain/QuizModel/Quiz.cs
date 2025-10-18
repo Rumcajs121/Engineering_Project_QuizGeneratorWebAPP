@@ -13,37 +13,13 @@ public class Quiz:Aggregate<QuizId>
     public Guid SourceId { get; set; }
     private readonly List<QuizQuestion> _questions = new();
     public IReadOnlyCollection<QuizQuestion> Questions => _questions.AsReadOnly();
+    
+    private readonly List<Tag> _tags = new();
+    public IReadOnlyCollection<Tag> Tags => _tags.AsReadOnly();
     public string? ShortDescription { get; set; }
 
-    public static Quiz Create(QuizId id, QuizStatus quizStatus, Guid sourceId, string shortDescription, IEnumerable<QuizQuestion> questions)
+    protected Quiz()
     {
-        var quiz = new Quiz
-        {
-            Id = id,
-            QuizStatus = QuizStatus.Generating,
-            SourceId = sourceId,
-            ShortDescription = shortDescription,
-        };
-        foreach (var question in questions)
-        {
-            quiz._questions.Add(question);
-        }
-        quiz.AddDomainEvent(new QuizGenerateEvent(quiz));
-        return quiz;
+        
     }
-
-    public  void Archive()
-    {
-        if (QuizStatus == QuizStatus.Archived)
-        {
-            return;
-        }
-        if (QuizStatus == QuizStatus.Failed || QuizStatus == QuizStatus.Generating)
-        {
-            throw new DomainException("Quiz isn't already archived");
-        }
-        QuizStatus = QuizStatus.Archived;
-    }
-    
-    //TODO: Add Question ?? 
 }
