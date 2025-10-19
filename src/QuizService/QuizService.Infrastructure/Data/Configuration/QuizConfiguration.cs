@@ -46,13 +46,13 @@ public class QuizConfiguration : IEntityTypeConfiguration<Quiz>
                 qq.OwnsMany(x => x.Answers, qa =>
                 {
                     qa.ToTable("QuizAnswers");
-                    qa.Property<QuizId>("QuizId")  // <-- shadow FK typu QuizId
+                    qa.Property<QuizId>("QuizId")
                         .HasColumnName("QuizId")
                         .HasConversion(
                             id => id.Value,
                             value => QuizId.Of(value));
 
-                    qa.Property<QuizQuestionId>("QuizQuestionId")  // <-- shadow FK typu QuizQuestionId
+                    qa.Property<QuizQuestionId>("QuizQuestionId")
                         .HasColumnName("QuizQuestionId")
                         .HasConversion(
                             id => id.Value,
@@ -76,7 +76,7 @@ public class QuizConfiguration : IEntityTypeConfiguration<Quiz>
                         .IsRequired()
                         .IsUnicode(true);
                     qa.Property(x => x.IsCorrect)
-                        .HasDefaultValue(false);
+                        .IsRequired();
 
 
                 });
