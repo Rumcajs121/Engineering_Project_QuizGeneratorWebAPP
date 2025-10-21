@@ -61,7 +61,7 @@ public class QuizQuestion : Entity<QuizQuestionId>
 
     public void EditAnswer(QuizAnswerId answerId, int ordinal, string text, bool isCorrect)
     {
-        var answer = _answers.FirstOrDefault(a => a.Id == answerId)
+        var answer = _answers.SingleOrDefault(a => a.Id == answerId)
                      ?? throw new DomainException("Answer not found.");
         if (_answers.Any(a => a.Id != answerId && a.Ordinal == ordinal))
             throw new DomainException($"Answer with ordinal {ordinal} already exists for this question.");

@@ -26,7 +26,7 @@ public class QuizAnswer:Entity<QuizAnswerId>
     private void ValidateArgument(int ordinal, string text)
     {
         if (ordinal < 0) throw new DomainException("Ordinal must be >= 0");
-        if(text.Length>1000 || string.IsNullOrWhiteSpace(text)) throw new DomainException("Text is null");
+        if(text.Length>1000 || string.IsNullOrWhiteSpace(text)) throw new DomainException("Answer text cannot be blank");
     }
 
     protected QuizAnswer() { }
