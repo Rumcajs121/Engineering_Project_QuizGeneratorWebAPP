@@ -2,6 +2,7 @@
 using QuizService.Domain.Abstraction;
 using QuizService.Domain.Enums;
 using QuizService.Domain.Exceptions;
+using QuizService.Domain.Models.Quiz.Snapshots;
 using QuizService.Domain.ValuesObject;
 
 namespace QuizService.Domain.Models.Quiz;
@@ -63,6 +64,29 @@ public class Quiz:Aggregate<QuizId>
             throw new DomainException("Question already added to this quiz.");
         _questions.Add(question);
     }
+    public QuizSnapshot ToSnapshot(int version, DateTimeOffset now)
+        => new QuizSnapshot(
+            QuizId: this.Id.Value,
+            Status: this.QuizStatus.ToString(),
+            SourceId: this.SourceId,
+            ShortDescription: this.ShortDescription,
+            Questions: this.Questions
+                .Select(q => new QuestionSnapshot(
+                    q.Id.Value,
+                    q.Text,
+                    q.Explanation,
+                    q.SourceChunkId,
+                    q.Answers
+                        .OrderBy(a => a.Ordinal)
+                        .Select(a => new AnswerSnapshot(a.Id.Value, a.Ordinal, a.Text, a.IsCorrect))
+                        .ToArray()
+                ))
+                .ToArray(),
+            Tags: this.Tags.Select(t => t.Name!).ToArray(),
+            Version: version,
+            CreatedAt: now
+        );
+    
 
     protected Quiz() { }
 }
