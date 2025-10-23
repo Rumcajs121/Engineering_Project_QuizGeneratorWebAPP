@@ -64,7 +64,7 @@ public class Quiz:Aggregate<QuizId>
             throw new DomainException("Question already added to this quiz.");
         _questions.Add(question);
     }
-    public QuizSnapshot ToSnapshot(int version, DateTimeOffset now)
+    public QuizSnapshot QuizToSnapshot(int version, DateTimeOffset now)
         => new QuizSnapshot(
             QuizId: this.Id.Value,
             Status: this.QuizStatus.ToString(),
@@ -86,7 +86,6 @@ public class Quiz:Aggregate<QuizId>
             Version: version,
             CreatedAt: now
         );
-    
 
     protected Quiz() { }
 }
