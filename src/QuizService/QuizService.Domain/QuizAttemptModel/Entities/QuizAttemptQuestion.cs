@@ -9,29 +9,33 @@ namespace QuizService.Domain.Entities;
 public class QuizAttemptQuestion:Entity<QuizAttemptQuestionId>
 {
     public QuizQuestionId QuizQuestionId { get; private set; }
-    private readonly List<QuizAnswerId> _selectedAnswerIds = new();
-    private readonly List<QuizAnswerId> _correctAnswerIds = new();
+    public IReadOnlyList<Guid> SelectedAnswerIds => _selectedAnswerIds.AsReadOnly();
+    public IReadOnlyList<Guid> CorrectAnswerIds => _correctAnswerIds.AsReadOnly();
+    private readonly List<Guid> _selectedAnswerIds = new();
+    private readonly List<Guid> _correctAnswerIds = new();
     public bool IsCorrect { get; private set; }
     
-    public static QuizAttemptQuestion Of(QuizAttemptQuestionId quizAttemptQuestionId , 
-        QuizQuestionId quizQuestionId,List<QuizAnswerId> selectedAnswerIds,List<QuizAnswerId> correctAnswerIds,bool isCorrect )
+    public static QuizAttemptQuestion Of(QuizAttemptQuestionId quizAttemptQuestionId,QuizQuestionId quizQuestionId, 
+        List<Guid> selectedAnswerIds,List<Guid> correctAnswerIds)
     {
-        var qa = new QuizAttemptQuestion();
-        qa.Id = QuizAttemptQuestionId.Of(Guid.NewGuid());
-        
+        var qa = new QuizAttemptQuestion
+        { 
+            Id = quizAttemptQuestionId,
+            QuizQuestionId = quizQuestionId
+        };
         qa._correctAnswerIds.AddRange(correctAnswerIds);
         if (selectedAnswerIds == null || selectedAnswerIds.Count == 0)
             throw new DomainException("You have to select an answer.");
         qa._selectedAnswerIds.AddRange(selectedAnswerIds);
-        qa.IsCorrect = qa.CheckAnswear();
+        qa.IsCorrect = qa.CheckAnswer();
         return qa;
     }
-    public bool CheckAnswear()
+    public bool CheckAnswer()
     {
         return _selectedAnswerIds
-            .OrderBy(id=>id.Value)
+            .OrderBy(id=>id)
             .SequenceEqual(_correctAnswerIds
-                .OrderBy(id=>id.Value));
+                .OrderBy(id=>id));
         
     }
 

@@ -8,9 +8,9 @@ namespace QuizService.Domain;
 
 public class QuizAttempt:Aggregate<QuizAttemptId>
 {
-    public QuizId QuizId { get; private set; } //reference to quiz
+    public QuizId QuizId { get; private set; }
     public Guid UserId { get; private set; } //TODO: reference to user ??
-    public string SnapchotQuizJson { get; private set; }
+    public string SnapshotQuizJson { get; private set; }
     public int Score { get; private set; }
     public DateTime StartQuiz { get; private set; }
     public DateTime EndTime { get; private set; }
@@ -18,25 +18,33 @@ public class QuizAttempt:Aggregate<QuizAttemptId>
     private readonly List<QuizAttemptQuestion> _attemptQuestions= new();
     public IReadOnlyCollection<QuizAttemptQuestion> AttemptQuestions => _attemptQuestions.AsReadOnly();
 
-    public QuizAttempt Create(QuizId quizId,Guid userId,
-        string  snapchotQuizJson,int score,
-        DateTime endTim,int difficulty,IEnumerable<QuizAttemptQuestion> questions)
+    public static QuizAttempt Create(
+        QuizId quizId,
+        Guid userId,
+        string snapshotQuizJson,
+        int score,
+        DateTime startTime,
+        DateTime endTime,
+        int difficulty,
+        IEnumerable<QuizAttemptQuestion> questions)
     {
+        if (questions is null || !questions.Any())
+            throw new DomainException("QuizAttempt must contain questions.");
+        if (endTime < startTime)
+            throw new DomainException("EndTime cannot be before StartQuiz.");
+
         var qa = new QuizAttempt
         {
             Id = QuizAttemptId.Of(Guid.NewGuid()),
             QuizId = quizId,
             UserId = userId,
-            SnapchotQuizJson = snapchotQuizJson,
+            SnapshotQuizJson = snapshotQuizJson,
             Score = score,
-            StartQuiz = DateTime.Now,
-            EndTime = endTim,
-            Difficult = DifficultQuestion(difficulty)
+            StartQuiz = startTime,
+            EndTime = endTime,
+            Difficult = ValidateDifficulty(difficulty)
         };
-        foreach (var q in questions)
-        {
-            qa.AddQuestionAttempt(q);
-        }
+        foreach (var q in questions) qa.AddQuestionAttempt(q);
         return qa;
     }
 
@@ -50,7 +58,7 @@ public class QuizAttempt:Aggregate<QuizAttemptId>
         _attemptQuestions.Add(question);
     }
 
-    public int DifficultQuestion(int difficulty)
+    public static int ValidateDifficulty(int difficulty)
     {
         if (difficulty < 1 || difficulty > 10)
             throw new DomainException("You choice difficulty from 1 to 10");

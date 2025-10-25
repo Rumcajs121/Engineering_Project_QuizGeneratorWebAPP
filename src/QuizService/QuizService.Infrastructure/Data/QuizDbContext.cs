@@ -1,5 +1,6 @@
 
 
+using QuizService.Domain;
 using QuizService.Domain.Abstraction;
 
 namespace QuizService.Infrastructure.Data;
@@ -8,6 +9,7 @@ public class QuizDbContext(DbContextOptions<QuizDbContext> options):DbContext(op
 {
     public DbSet<Quiz> Quizzes => Set<Quiz>();
     public DbSet<Tag>  Tags => Set<Tag>();
+    public DbSet<QuizAttempt>  QuizAttempts => Set<QuizAttempt>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
