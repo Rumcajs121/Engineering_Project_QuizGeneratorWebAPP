@@ -5,5 +5,5 @@ namespace QuizService.Domain.Abstraction;
 
 public interface IQuizRepository:IRepository<Quiz,QuizId>
 {
-    //TODO: IQuizRepository 
+    
 }

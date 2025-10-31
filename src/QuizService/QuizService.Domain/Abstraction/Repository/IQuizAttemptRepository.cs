@@ -6,4 +6,8 @@ namespace QuizService.Domain.Abstraction;
 public class IQuizAttemptRepository:IRepository<QuizAttempt,QuizAttemptId>
 {
     //TODO: QuizAttemptId
+    public Task AddAsync(QuizAttempt aggregate, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
 }
