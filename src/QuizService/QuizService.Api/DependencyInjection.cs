@@ -1,4 +1,5 @@
 using QuizService.Domain.Abstraction;
+using QuizService.Domain.Abstraction.Repository;
 using QuizService.Infrastructure.Repository;
 
 namespace QuizService.Api;
@@ -10,6 +11,7 @@ public static  class DependencyInjection
         services.AddScoped<IQuizRepository,QuizRepository>();
         services.AddScoped<IUnitOfWork, EfUnitOfWork>();
         services.AddScoped<IQuizAttemptRepository,QuizAttemptRepository>();
+        services.AddScoped<ITagRepository,TagRepository>();
         return services;
     }
 

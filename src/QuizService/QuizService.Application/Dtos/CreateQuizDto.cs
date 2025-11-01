@@ -6,7 +6,7 @@ public class CreateQuizDto
     public string QuizStatus { get; init; }
     public Guid SourceId { get; init; }
     public IEnumerable<CreateQusestionDto> Question { get; init; }
-    public IEnumerable<string> Tag { get; init; }
+    public List<string> Tag { get; init; }
     public string ShortDescription { get; init; }
     public DateTimeOffset CreatedAt { get; init; }
 }
