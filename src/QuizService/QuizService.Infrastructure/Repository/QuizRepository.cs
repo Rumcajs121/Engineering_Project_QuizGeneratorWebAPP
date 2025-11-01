@@ -12,4 +12,11 @@ public class QuizRepository(QuizDbContext dbContext) : IQuizRepository
     {
         await _db.Quizzes.AddAsync(aggregate, cancellationToken);
     }
+
+    public async Task<List<Quiz>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        var quizzes=await _db.Quizzes.Include(x=>x.Questions).Include(x=>x.Tags).ToListAsync(cancellationToken: cancellationToken);
+        return quizzes;
+    }
+    
 }

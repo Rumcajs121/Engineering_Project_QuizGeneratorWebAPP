@@ -11,7 +11,7 @@ public class Tag:Entity<QuizTagId>
     public IReadOnlyCollection<Quiz> Quizzes => _quizzes .AsReadOnly();
     protected Tag()
     {
-        //FOR EF
+        //FOR EFc
     }
     private Tag(string value)=>Name=value;
     

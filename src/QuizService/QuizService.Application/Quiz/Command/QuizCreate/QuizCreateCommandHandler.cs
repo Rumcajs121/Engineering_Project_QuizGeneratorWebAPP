@@ -3,7 +3,7 @@ using QuizService.Application.Dtos;
 using QuizService.Domain.Abstraction;
 using QuizService.Domain.Models.Quiz;
 
-namespace QuizService.Application.Quiz.Command;
+namespace QuizService.Application.Quiz.Command.QuizCreate;
 
 public class QuizCreateCommandHandler(IUnitOfWork unitOfWork, IQuizRepository quizRepository)
     : ICommandHandler<QuizCreateCommand, CreateQuizResult>

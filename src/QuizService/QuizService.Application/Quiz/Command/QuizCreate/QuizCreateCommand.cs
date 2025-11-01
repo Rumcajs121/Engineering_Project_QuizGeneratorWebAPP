@@ -1,11 +1,8 @@
-
 using BuildingBlocks.CQRS;
 using FluentValidation;
 using QuizService.Application.Dtos;
-using QuizService.Domain.Models.Quiz.Snapshots;
-using ICommand = BuildingBlocks.CQRS.ICommand;
 
-namespace QuizService.Application.Quiz.Command;
+namespace QuizService.Application.Quiz.Command.QuizCreate;
 public  record CreateQuizResult(Guid Id);
 
 public abstract record QuizCreateCommand(CreateQuizDto CreateQuizDto) : ICommand<CreateQuizResult>;
