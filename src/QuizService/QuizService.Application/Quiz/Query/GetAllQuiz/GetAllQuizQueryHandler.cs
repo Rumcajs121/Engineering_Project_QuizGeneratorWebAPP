@@ -1,5 +1,5 @@
 using BuildingBlocks.CQRS;
-using QuizService.Application.Factories;
+using QuizService.Application.Mappers;
 using QuizService.Domain.Abstraction;
 
 namespace QuizService.Application.Quiz.Query.GetAllQuiz;
@@ -12,7 +12,7 @@ public class GetAllQuizQueryHandler(IQuizRepository repository):IQueryHandler<Ge
     public async Task<GetAllQuizResult> Handle(GetAllQuizQuery query, CancellationToken cancellationToken)
     {
        var orginalQuiz= await _repository.GetAllAsync(cancellationToken);
-       var result=QuizFactories.ToShortQuizDto(orginalQuiz);
+       var result=QuizMapping.ToShortQuizDto(orginalQuiz);
        return new GetAllQuizResult(result);
     }
 }

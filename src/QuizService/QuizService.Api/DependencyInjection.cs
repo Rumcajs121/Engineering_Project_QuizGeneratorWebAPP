@@ -1,3 +1,5 @@
+using Carter;
+using QuizService.Api.Endpoints;
 using QuizService.Domain.Abstraction;
 using QuizService.Domain.Abstraction.Repository;
 using QuizService.Infrastructure.Repository;
@@ -12,11 +14,17 @@ public static  class DependencyInjection
         services.AddScoped<IUnitOfWork, EfUnitOfWork>();
         services.AddScoped<IQuizAttemptRepository,QuizAttemptRepository>();
         services.AddScoped<ITagRepository,TagRepository>();
+        services.AddCarter(configurator: c =>
+        {
+            c.WithModule<CreateQuiz>();
+            c.WithModule<GetAllQuiz>();
+        });
         return services;
     }
 
     public static WebApplication UseApiService(this WebApplication app)
     {
+        app.MapCarter();
         return app;
     }
 }
