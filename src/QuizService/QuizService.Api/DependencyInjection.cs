@@ -1,3 +1,4 @@
+using BuildingBlocks.Exceptions.Handler;
 using Carter;
 using QuizService.Api.Endpoints;
 using QuizService.Domain.Abstraction;
@@ -19,6 +20,7 @@ public static  class DependencyInjection
             c.WithModule<CreateQuiz>();
             c.WithModule<GetAllQuiz>();
         });
+        
         return services;
     }
 
