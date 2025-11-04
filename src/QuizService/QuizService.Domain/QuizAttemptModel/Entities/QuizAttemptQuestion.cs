@@ -8,6 +8,7 @@ namespace QuizService.Domain.Entities;
 
 public class QuizAttemptQuestion:Entity<QuizAttemptQuestionId>
 {
+    //TODO:TestQuestion p[roperty to add ?? 
     public QuizQuestionId QuizQuestionId { get; private set; }
     public IReadOnlyList<Guid> SelectedAnswerIds => _selectedAnswerIds.AsReadOnly();
     public IReadOnlyList<Guid> CorrectAnswerIds => _correctAnswerIds.AsReadOnly();

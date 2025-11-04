@@ -1,4 +1,5 @@
 
+using BuildingBlocks.Exceptions;
 using QuizService.Domain.Abstraction;
 using QuizService.Domain.Exceptions;
 using QuizService.Infrastructure.Data;

@@ -1,13 +1,10 @@
 using QuizService.Domain.IdentityValuesObject;
+using QuizService.Domain.Models.Quiz;
 using QuizService.Domain.ValuesObject;
 
 namespace QuizService.Domain.Abstraction;
 
-public class IQuizAttemptRepository:IRepository<QuizAttempt,QuizAttemptId>
+public interface IQuizAttemptRepository:IRepository<QuizAttempt,QuizAttemptId>
 {
-    //TODO: QuizAttemptId
-    public Task AddAsync(QuizAttempt aggregate, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
+    Task<QuizAttempt>GetAttemptQuizByIdAsync(QuizAttemptId id, CancellationToken cancellationToken = default);
 }

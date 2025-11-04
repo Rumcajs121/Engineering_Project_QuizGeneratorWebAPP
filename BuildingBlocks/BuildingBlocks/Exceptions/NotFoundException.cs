@@ -7,8 +7,10 @@ public class NotFoundException:Exception
         
     }
 
-    public NotFoundException(string name,object key):base($"Entity\"{name}\"({key})")
+    public NotFoundException(string message, string details):base(message)
     {
-        
+        Details = details;
     }
+
+    public string? Details { get;}
 }

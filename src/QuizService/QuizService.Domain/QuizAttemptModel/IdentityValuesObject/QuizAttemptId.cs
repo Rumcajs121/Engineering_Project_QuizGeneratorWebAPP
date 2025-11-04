@@ -23,4 +23,6 @@ public record QuizAttemptId
 
         return new QuizAttemptId(value);
     }
+    
+    
 }
