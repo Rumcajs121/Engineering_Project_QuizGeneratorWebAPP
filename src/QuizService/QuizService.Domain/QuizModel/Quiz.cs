@@ -16,7 +16,7 @@ public class Quiz:Aggregate<QuizId>
     
     private readonly List<Tag> _tags = new();
     public IReadOnlyCollection<Tag> Tags => _tags.AsReadOnly();
-    public string? ShortDescription { get; private set; }
+    public string? Title { get; private set; }
     
     
     public static Quiz Create(Guid sourceId, string? shortDescription, IEnumerable<QuizQuestion> questions, IEnumerable<Tag>? tags = null)
@@ -35,7 +35,7 @@ public class Quiz:Aggregate<QuizId>
             Id = QuizId.Of(Guid.NewGuid()),
             QuizStatus = QuizStatus.Generating,
             SourceId = sourceId,
-            ShortDescription = shortDescription
+            Title = shortDescription
         };
         foreach (var q in questions ?? Enumerable.Empty<QuizQuestion>())
             quiz.AddQuestion(q);
@@ -67,9 +67,10 @@ public class Quiz:Aggregate<QuizId>
     public QuizSnapshot QuizToSnapshot(int version, DateTimeOffset now)
         => new QuizSnapshot(
             QuizId: this.Id.Value,
+            QuizName:Title,
             Status: this.QuizStatus.ToString(),
             SourceId: this.SourceId,
-            ShortDescription: this.ShortDescription,
+            ShortDescription: this.Title,
             Questions: this.Questions
                 .Select(q => new QuestionSnapshot(
                     q.Id.Value,

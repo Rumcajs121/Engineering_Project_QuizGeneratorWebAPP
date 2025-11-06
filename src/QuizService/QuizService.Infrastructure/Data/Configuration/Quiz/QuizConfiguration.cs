@@ -95,7 +95,7 @@ public class QuizConfiguration : IEntityTypeConfiguration<Quiz>
                 id => id.Value,
                 value => QuizId.Of(value));
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.ShortDescription)
+        builder.Property(x => x.Title)
             .HasMaxLength(500)
             .IsRequired(false)
             .IsUnicode(true);

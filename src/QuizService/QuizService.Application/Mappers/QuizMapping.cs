@@ -14,7 +14,7 @@ public static class QuizMapping
             var shortQuizDto = new ShortQuizDto
             {
                 QuizStatus = quiz.QuizStatus.ToString(),
-                Description = quiz.ShortDescription,
+                Description = quiz.Title,
                 Tag = quiz.Tags.Select(x => x.Name).ToList(),
                 Quantity = quiz.Questions.Count,
                 DateofCreate = quiz.CreateTime

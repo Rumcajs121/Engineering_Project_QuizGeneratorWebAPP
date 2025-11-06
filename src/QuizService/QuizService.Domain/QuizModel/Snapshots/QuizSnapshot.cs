@@ -3,6 +3,7 @@ namespace QuizService.Domain.Models.Quiz.Snapshots;
 
 public sealed record QuizSnapshot(
     Guid QuizId,
+    string QuizName,
     string Status,
     Guid SourceId,
     string? ShortDescription,
