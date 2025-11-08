@@ -54,9 +54,9 @@ public static class QuizAttemptMapping
             Title: snapshot.QuizName,
             Difficult: quizAttempt.Difficult,
             StartQuiz: quizAttempt.StartQuiz,
-            EndTime: quizAttempt.EndTime,
-            Duration: quizAttempt.EndTime - quizAttempt.StartQuiz,
+            EndTime: quizAttempt.SubmittedAt,
             Questions: questionDtos
         );
     }
+    
 }

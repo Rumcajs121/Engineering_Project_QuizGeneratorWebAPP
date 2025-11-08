@@ -13,7 +13,7 @@ public class QuizAttempt:Aggregate<QuizAttemptId>
     public string SnapshotQuizJson { get; private set; }
     public int Score { get; private set; }
     public DateTime StartQuiz { get; private set; }
-    public DateTime EndTime { get; private set; }
+    public DateTime? SubmittedAt { get; private set; }
     public int  Difficult { get; private set; }
     private readonly List<QuizAttemptQuestion> _attemptQuestions= new();
     public IReadOnlyCollection<QuizAttemptQuestion> AttemptQuestions => _attemptQuestions.AsReadOnly();
@@ -22,16 +22,12 @@ public class QuizAttempt:Aggregate<QuizAttemptId>
         QuizId quizId,
         Guid userId,
         string snapshotQuizJson,
-        int score,
         DateTime startTime,
-        DateTime endTime,
         int difficulty,
         IEnumerable<QuizAttemptQuestion> questions)
     {
         if (questions is null || !questions.Any())
             throw new DomainException("QuizAttempt must contain questions.");
-        if (endTime < startTime)
-            throw new DomainException("EndTime cannot be before StartQuiz.");
 
         var qa = new QuizAttempt
         {
@@ -39,22 +35,21 @@ public class QuizAttempt:Aggregate<QuizAttemptId>
             QuizId = quizId,
             UserId = userId,
             SnapshotQuizJson = snapshotQuizJson,
-            Score = score,
+            Score = 0,
             StartQuiz = startTime,
-            EndTime = endTime,
+            SubmittedAt = null,
             Difficult = ValidateDifficulty(difficulty)
         };
-        foreach (var q in questions) qa.AddQuestionAttempt(q);
+        foreach (var q in questions) 
+            qa.AddQuestionAttempt(q);
         return qa;
     }
 
     public void AddQuestionAttempt(QuizAttemptQuestion question)
     {
         if (question == null) throw new ArgumentNullException(nameof(question));
-        if (_attemptQuestions.Any(q => q.Id == question.Id))
-        {
+        if (_attemptQuestions.Any(q => q.QuizQuestionId == question.QuizQuestionId))
             throw new DomainException("Question already added to this quiz.");
-        }
         _attemptQuestions.Add(question);
     }
 
@@ -63,6 +58,26 @@ public class QuizAttempt:Aggregate<QuizAttemptId>
         if (difficulty < 1 || difficulty > 10)
             throw new DomainException("You choice difficulty from 1 to 10");
         return difficulty;
+    }
+    public int SubmitAnswers(
+        IReadOnlyDictionary<QuizQuestionId, IEnumerable<Guid>> selections,
+        DateTime submittedAtUtc)
+    {
+        if (SubmittedAt is not null)
+            throw new DomainException("Quiz already submitted.");
+
+        foreach (var q in _attemptQuestions)
+        {
+            var selected = selections.TryGetValue(q.QuizQuestionId, out var ids)
+                ? ids
+                : Enumerable.Empty<Guid>();
+
+            q.ApplySelection(selected);
+        }
+
+        Score = _attemptQuestions.Count(q => q.IsCorrect);
+        SubmittedAt = submittedAtUtc;
+        return Score;
     }
 
     protected QuizAttempt()

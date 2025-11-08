@@ -8,7 +8,6 @@ namespace QuizService.Domain.Entities;
 
 public class QuizAttemptQuestion:Entity<QuizAttemptQuestionId>
 {
-    //TODO:TestQuestion p[roperty to add ?? 
     public QuizQuestionId QuizQuestionId { get; private set; }
     public IReadOnlyList<Guid> SelectedAnswerIds => _selectedAnswerIds.AsReadOnly();
     public IReadOnlyList<Guid> CorrectAnswerIds => _correctAnswerIds.AsReadOnly();
@@ -16,8 +15,8 @@ public class QuizAttemptQuestion:Entity<QuizAttemptQuestionId>
     private readonly List<Guid> _correctAnswerIds = new();
     public bool IsCorrect { get; private set; }
     
-    public static QuizAttemptQuestion Of(QuizAttemptQuestionId quizAttemptQuestionId,QuizQuestionId quizQuestionId, 
-        List<Guid> selectedAnswerIds,List<Guid> correctAnswerIds)
+    public static QuizAttemptQuestion Of(QuizAttemptQuestionId quizAttemptQuestionId,QuizQuestionId quizQuestionId 
+   ,List<Guid> correctAnswerIds)
     {
         var qa = new QuizAttemptQuestion
         { 
@@ -25,19 +24,21 @@ public class QuizAttemptQuestion:Entity<QuizAttemptQuestionId>
             QuizQuestionId = quizQuestionId
         };
         qa._correctAnswerIds.AddRange(correctAnswerIds);
-        if (selectedAnswerIds == null || selectedAnswerIds.Count == 0)
-            throw new DomainException("You have to select an answer.");
-        qa._selectedAnswerIds.AddRange(selectedAnswerIds);
-        qa.IsCorrect = qa.CheckAnswer();
         return qa;
     }
+    public void ApplySelection(IEnumerable<Guid> selectedIds)
+    {
+        _selectedAnswerIds.Clear();
+        _selectedAnswerIds.AddRange((selectedIds ?? Enumerable.Empty<Guid>()).Distinct());
+        IsCorrect = CheckAnswer();
+    }
+
+
     public bool CheckAnswer()
     {
-        return _selectedAnswerIds
-            .OrderBy(id=>id)
-            .SequenceEqual(_correctAnswerIds
-                .OrderBy(id=>id));
-        
+        var selected = _selectedAnswerIds.ToHashSet();
+        var correct  = _correctAnswerIds.ToHashSet();
+        return selected.SetEquals(correct);
     }
 
     protected QuizAttemptQuestion()

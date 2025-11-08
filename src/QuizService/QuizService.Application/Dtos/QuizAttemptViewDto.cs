@@ -14,9 +14,8 @@ public record QuizAttemptViewDto(
     int Score, 
     int Difficult,
     DateTime StartQuiz, 
-    DateTime EndTime, 
-    TimeSpan Duration, 
-    List<QuizAttemptQuestionViewDto> Questions);
+    DateTime? EndTime, 
+    List<QuizAttemptQuestionViewDto>? Questions);
 
 public record QuizAttemptQuestionViewDto(
     string Text, 

@@ -7,4 +7,5 @@ namespace QuizService.Domain.Abstraction;
 public interface IQuizAttemptRepository:IRepository<QuizAttempt,QuizAttemptId>
 {
     Task<QuizAttempt>GetAttemptQuizByIdAsync(QuizAttemptId id, CancellationToken cancellationToken = default);
+    
 }

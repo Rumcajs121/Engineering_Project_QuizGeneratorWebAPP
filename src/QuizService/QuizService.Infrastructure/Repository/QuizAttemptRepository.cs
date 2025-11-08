@@ -10,9 +10,9 @@ public class QuizAttemptRepository(QuizDbContext db):IQuizAttemptRepository
 {
     private readonly QuizDbContext _db = db;
 
-    public Task AddAsync(QuizAttempt aggregate, CancellationToken cancellationToken = default)
+    public async Task AddAsync(QuizAttempt aggregate, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        await _db.QuizAttempts.AddAsync(aggregate, cancellationToken);
     }
 
     public async Task<QuizAttempt> GetAttemptQuizByIdAsync(QuizAttemptId id, CancellationToken cancellationToken = default)
