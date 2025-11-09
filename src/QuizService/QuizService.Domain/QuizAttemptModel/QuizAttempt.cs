@@ -9,12 +9,12 @@ namespace QuizService.Domain;
 public class QuizAttempt:Aggregate<QuizAttemptId>
 {
     public QuizId QuizId { get; private set; }
-    public Guid UserId { get; private set; } //TODO: reference to user ??
+    public Guid? UserId { get; private set; } //TODO: reference to user ??
     public string SnapshotQuizJson { get; private set; }
     public int Score { get; private set; }
     public DateTime StartQuiz { get; private set; }
     public DateTime? SubmittedAt { get; private set; }
-    public int  Difficult { get; private set; }
+    public int?  Difficult { get; private set; }
     private readonly List<QuizAttemptQuestion> _attemptQuestions= new();
     public IReadOnlyCollection<QuizAttemptQuestion> AttemptQuestions => _attemptQuestions.AsReadOnly();
 
@@ -37,7 +37,6 @@ public class QuizAttempt:Aggregate<QuizAttemptId>
             SnapshotQuizJson = snapshotQuizJson,
             Score = 0,
             StartQuiz = startTime,
-            SubmittedAt = null,
             Difficult = ValidateDifficulty(difficulty)
         };
         foreach (var q in questions) 

@@ -1,16 +1,16 @@
 ﻿using QuizService.Domain.Enums;
+using QuizService.Domain.ValuesObject;
+
 namespace QuizService.Domain.Models.Quiz.Snapshots;
 
 public sealed record QuizSnapshot(
-    Guid QuizId,
+    QuizId QuizId,
     string QuizName,
     string Status,
     Guid SourceId,
     string? ShortDescription,
     IReadOnlyList<QuestionSnapshot> Questions,
-    IReadOnlyList<string> Tags,
-    int Version,
-    DateTimeOffset CreatedAt);
+    IReadOnlyList<string> Tags);
 public sealed record QuestionSnapshot(
     Guid Id,
     string Text,

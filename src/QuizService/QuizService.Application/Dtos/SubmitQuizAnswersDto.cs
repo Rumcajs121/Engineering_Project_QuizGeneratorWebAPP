@@ -10,3 +10,7 @@ public record SubmitAnswerDto(
     Guid QuizQuestionId,
     IReadOnlyList<Guid> SelectedAnswerIds
 );
+public record SubmitQuizAnswerResultDto(
+    int score,
+    int maxScore
+);
