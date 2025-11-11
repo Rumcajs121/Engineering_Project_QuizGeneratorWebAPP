@@ -19,15 +19,15 @@ public class Quiz:Aggregate<QuizId>
     public string? Title { get; private set; }
     
     
-    public static Quiz Create(Guid sourceId, string? shortDescription, IEnumerable<QuizQuestion> questions, IEnumerable<Tag>? tags = null)
+    public static Quiz Create(Guid sourceId, string? titleQuiz, IEnumerable<QuizQuestion> questions, IEnumerable<Tag>? tags = null)
     {
         if (sourceId == Guid.Empty)
             throw new DomainException("SourceId is required.");
-        if (shortDescription != null)
+        if (titleQuiz != null)
         {
-            shortDescription = shortDescription.Trim();
-            if (shortDescription.Length == 0) shortDescription = null;
-            if (shortDescription?.Length > 500) 
+            titleQuiz = titleQuiz.Trim();
+            if (titleQuiz.Length == 0) titleQuiz = null;
+            if (titleQuiz?.Length > 500) 
                 throw new DomainException("ShortDescription must be ≤ 500 chars.");
         }
         var quiz = new Quiz
@@ -35,7 +35,7 @@ public class Quiz:Aggregate<QuizId>
             Id = QuizId.Of(Guid.NewGuid()),
             QuizStatus = QuizStatus.Generating,
             SourceId = sourceId,
-            Title = shortDescription
+            Title = titleQuiz
         };
         foreach (var q in questions ?? Enumerable.Empty<QuizQuestion>())
             quiz.AddQuestion(q);
