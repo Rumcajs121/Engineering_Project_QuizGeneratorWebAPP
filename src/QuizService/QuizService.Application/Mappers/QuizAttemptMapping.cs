@@ -1,5 +1,4 @@
-using System.Text.Json;
-using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 using QuizService.Application.Dtos;
 using QuizService.Domain;
 using QuizService.Domain.Entities;
@@ -13,7 +12,7 @@ public static class QuizAttemptMapping
 {
     public static QuizAttemptViewDto QuizAttemptToDto(QuizAttempt quizAttempt)
     {
-        var snapshot=JsonSerializer.Deserialize<QuizSnapshot>(quizAttempt.SnapshotQuizJson);
+        var snapshot = JsonConvert.DeserializeObject<QuizSnapshot>(quizAttempt.SnapshotQuizJson);
         var attemptQuestionsById = quizAttempt.AttemptQuestions
             .ToDictionary(aq => aq.QuizQuestionId.Value);
 
@@ -65,7 +64,7 @@ public static class QuizAttemptMapping
 
     public static QuizAttempt ToQuizAttempt(QuizSnapshot quiz)
     {
-        var snapshotToJson = JsonSerializer.Serialize(quiz);
+        var snapshotToJson = JsonConvert.SerializeObject(quiz);
         var questionAttempt = new List<QuizAttemptQuestion>();
         foreach (var q in quiz.Questions)
         {

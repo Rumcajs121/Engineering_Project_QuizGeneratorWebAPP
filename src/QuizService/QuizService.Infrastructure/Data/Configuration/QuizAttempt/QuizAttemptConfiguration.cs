@@ -93,7 +93,6 @@ public class QuizAttemptConfiguration:IEntityTypeConfiguration<Domain.QuizAttemp
             .IsRequired()
             .HasColumnType("datetime2");
         builder.Property(e => e.SubmittedAt)
-            .IsRequired()
             .HasColumnType("datetime2");
         builder.Property(e => e.Difficult)
             .IsRequired()

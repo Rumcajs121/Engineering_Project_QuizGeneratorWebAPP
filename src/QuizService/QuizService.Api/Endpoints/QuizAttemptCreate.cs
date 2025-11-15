@@ -8,7 +8,7 @@ using QuizService.Application.Quiz.Command.QuizCreate;
 
 namespace QuizService.Api.Endpoints;
 
-public record QuizAttemptCreateResponse(QuizAttemptViewDto viewDto);
+public record QuizAttemptCreateResponse(QuizAttemptViewDto ViewDto);
 
 public class QuizAttemptCreate:ICarterModule
 {
@@ -18,7 +18,7 @@ public class QuizAttemptCreate:ICarterModule
             {
                 var result = await sender.Send(new  QuizAttemptCreateCommand(id));
                 var response = result.Adapt<QuizAttemptCreateResponse>();
-                return Results.Created($"/quiz/{response.viewDto.QuizId}", response);
+                return Results.Created($"/quiz/{response.ViewDto.QuizId}", response);
             }).WithName("QuizAttemptCreate")
             .Produces<QuizAttemptCreateResponse>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status400BadRequest)

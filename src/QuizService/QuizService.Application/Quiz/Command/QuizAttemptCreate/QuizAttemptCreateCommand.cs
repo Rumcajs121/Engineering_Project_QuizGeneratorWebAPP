@@ -4,9 +4,9 @@ using QuizService.Application.Dtos;
 
 namespace QuizService.Application.Quiz.Command.QuizAttemptCreate;
 
+public record QuizAttemptCreateCommandResult(QuizAttemptViewDto ViewDto);
 
 public record QuizAttemptCreateCommand(Guid QuizId) : ICommand<QuizAttemptCreateCommandResult>; 
-public record QuizAttemptCreateCommandResult(QuizAttemptViewDto viewDto);
 
 public class QuizAttemptCreateCommandValidator : AbstractValidator<QuizAttemptCreateCommand>
 {
