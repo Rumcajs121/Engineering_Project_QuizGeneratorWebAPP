@@ -8,7 +8,7 @@ public class SubmitQuizCommandHandler(IQuizAttemptService _service, IUnitOfWork 
 {
     public async Task<SubmitQuizCommandResult> Handle(SubmitQuizCommand request, CancellationToken cancellationToken)
     {
-        var submitQuiz =await  _service.SubmitQuiz(request.dto);
+        var submitQuiz =await  _service.SubmitQuiz(request.Dto);
         await _uow.SaveChangesAsync(cancellationToken);
         return new SubmitQuizCommandResult(submitQuiz);
     }

@@ -7,7 +7,7 @@ using QuizService.Application.Quiz.Query.GetAttemptQuizById;
 
 namespace QuizService.Api.Endpoints;
 
-public record GetAttemptQuizByIdResponse(QuizAttemptViewDto Response);
+public record GetAttemptQuizByIdResponse(QuizAttemptViewDto AttemptByUser);
 public class GetAttemptQuizById:ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)

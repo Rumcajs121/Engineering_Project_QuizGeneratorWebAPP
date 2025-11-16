@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using QuizService.Application.Dtos;
 using QuizService.Domain;
 using QuizService.Domain.Entities;
+using QuizService.Domain.Exceptions;
 using QuizService.Domain.IdentityValuesObject;
 using QuizService.Domain.Models.Quiz.Snapshots;
 using QuizService.Domain.ValuesObject;
@@ -10,55 +11,44 @@ namespace QuizService.Application.Mappers;
 
 public static class QuizAttemptMapping
 {
-    public static QuizAttemptViewDto QuizAttemptToDto(QuizAttempt quizAttempt)
+    public static QuizAttemptViewDto QuizAttemptToDto(QuizAttempt attempt)
     {
-        var snapshot = JsonConvert.DeserializeObject<QuizSnapshot>(quizAttempt.SnapshotQuizJson);
-        var attemptQuestionsById = quizAttempt.AttemptQuestions
-            .ToDictionary(aq => aq.QuizQuestionId.Value);
+        var snapshot = JsonConvert.DeserializeObject<QuizSnapshot>(attempt.SnapshotQuizJson)
+                       ?? throw new DomainException("Invalid quiz snapshot JSON.");
 
-        var questionDtos = snapshot.Questions.Select(q =>
-        {
-            var aq = attemptQuestionsById[q.Id];
-
-            var selected = aq.SelectedAnswerIds.ToHashSet();
-            var correct = q.Answers.Where(a => a.IsCorrect)
-                .Select(a => a.Id)
-                .ToHashSet();
-
-            bool isQuestionCorrect = selected.SetEquals(correct);
-            
-            var answerDtos = q.Answers.Select(a =>
+        var questionsDto = snapshot.Questions
+            .Select(snapshotQuestion =>
             {
-                bool selectedByUser = selected.Contains(a.Id);
-                var state =
-                    selectedByUser && a.IsCorrect ? AnswerState.SelectedCorrect :
-                    selectedByUser && !a.IsCorrect ? AnswerState.SelectedWrong :
-                    !selectedByUser && a.IsCorrect ? AnswerState.MissedCorrect :
-                    AnswerState.Neutral;
+                var attemptQuestion = attempt.AttemptQuestions
+                    .FirstOrDefault(aq => aq.QuizQuestionId.Value == snapshotQuestion.Id);
 
-                return new QuizAttemptAnswerViewDto(
-                    Text: a.Text,
-                    IsCorrect: a.IsCorrect,
-                    SelectedByUser: selectedByUser,
-                    State: state
+                bool isCorrect = attemptQuestion?.IsCorrect ?? false;
+
+                var answersDto = snapshotQuestion.Answers
+                    .Select(a => new QuizAttemptAnswerViewDto(
+                        AnswerId: a.Id,
+                        Text: a.Text
+                    ))
+                    .ToList();
+
+                return new QuizAttemptQuestionViewDto(
+                    QuestionId: snapshotQuestion.Id,
+                    Text: snapshotQuestion.Text,
+                    Explanation: snapshotQuestion.Explanation,
+                    IsCorrect: isCorrect,
+                    Answers: answersDto
                 );
-            }).ToList();
-            return new QuizAttemptQuestionViewDto(
-                Text: q.Text,
-                Explanation: q.Explanation,
-                IsCorrect: isQuestionCorrect,
-                Answers: answerDtos
-            );
-        })
+            })
             .ToList();
+
         return new QuizAttemptViewDto(
             QuizId: snapshot.QuizId.Value,
-            Score: quizAttempt.Score,
             Title: snapshot.QuizName,
-            Difficult: quizAttempt.Difficult ?? 1,
-            StartQuiz: quizAttempt.StartQuiz,
-            EndTime: quizAttempt.SubmittedAt,
-            Questions: questionDtos
+            Score: attempt.Score,
+            Difficult: attempt.Difficult ?? 1,
+            StartQuiz: attempt.StartQuiz,
+            SubmittedAt: attempt.SubmittedAt,
+            Questions: questionsDto
         );
     }
 

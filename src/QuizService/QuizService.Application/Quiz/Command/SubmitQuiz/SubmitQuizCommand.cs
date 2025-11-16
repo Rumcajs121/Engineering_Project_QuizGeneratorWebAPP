@@ -6,31 +6,31 @@ namespace QuizService.Application.Quiz.Command.SubmitQuizCommand;
 
 public record SubmitQuizCommandResult(SubmitQuizAnswerResultDto Score);
 
-public record SubmitQuizCommand(SubmitQuizAnswersDto dto) : ICommand<SubmitQuizCommandResult>;
+public record SubmitQuizCommand(SubmitQuizAnswersDto Dto) : ICommand<SubmitQuizCommandResult>;
 
 public class SubmitQuizCommandValidator : AbstractValidator<SubmitQuizCommand>
 {
     public SubmitQuizCommandValidator()
     {
-        RuleFor(x => x.dto)
+        RuleFor(x => x.Dto)
             .NotNull()
             .WithMessage("Payload is required.");
 
-        When(x => x.dto != null, () =>
+        When(x => x.Dto != null, () =>
         {
-            RuleFor(x => x.dto.AttemptId)
+            RuleFor(x => x.Dto.AttemptId)
                 .NotEmpty()
                 .WithMessage("AttemptId is required and cannot be empty Guid.");
 
-            RuleFor(x => x.dto.Answers)
+            RuleFor(x => x.Dto.Answers)
                 .NotNull()
                 .WithMessage("Answers collection is required.")
                 .Must(a => a != null && a.Any())
                 .WithMessage("At least one answer is required.");
 
-            When(x => x.dto.Answers != null, () =>
+            When(x => x.Dto.Answers != null, () =>
             {
-                RuleForEach(x => x.dto.Answers)
+                RuleForEach(x => x.Dto.Answers)
                     .ChildRules(answer =>
                     {
                         answer.RuleFor(a => a.QuizQuestionId)

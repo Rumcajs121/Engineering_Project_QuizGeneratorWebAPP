@@ -47,7 +47,7 @@ public class QuizAttempt:Aggregate<QuizAttemptId>
     public void AddQuestionAttempt(QuizAttemptQuestion question)
     {
         if (question == null) throw new ArgumentNullException(nameof(question));
-        if (_attemptQuestions.Any(q => q.QuizQuestionId == question.QuizQuestionId))
+        if (_attemptQuestions.Any(q => q.QuizQuestionId == question.QuizQuestionId)) //TODO: Secure duplicate ?? 
             throw new DomainException("Question already added to this quiz.");
         _attemptQuestions.Add(question);
     }
