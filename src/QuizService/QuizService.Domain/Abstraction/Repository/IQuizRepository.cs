@@ -9,4 +9,5 @@ public interface IQuizRepository:IRepository<Quiz,QuizId>
     Task<Quiz>GetByIdAsync(QuizId id, CancellationToken cancellationToken = default);
     
     
+    
 }

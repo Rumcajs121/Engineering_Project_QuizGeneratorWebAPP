@@ -8,7 +8,7 @@ using QuizService.Application.Quiz.Command.SubmitQuizCommand;
 namespace QuizService.Api.Endpoints;
 
 public record SubmitQuizRequest(SubmitQuizAnswersDto Dto);
-public record SubmitQuizResponse(SubmitQuizAnswerResultDto Score);
+public record SubmitQuizResponse(int Score);
 public class SubmitQuiz:ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
@@ -18,7 +18,7 @@ public class SubmitQuiz:ICarterModule
                 var command = request.Adapt<SubmitQuizCommand>();
                 var result = await sender.Send(command);
                 var response = result.Adapt<SubmitQuizResponse>();
-                return Results.Created($"Your Score:{response.Score.score} / {response.Score.maxScore}", response);
+                return Results.Created($"Your Score:{response.Score}", response);
             }).WithName("SubmitQuiz")
             .Produces<SubmitQuizResponse>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status400BadRequest)

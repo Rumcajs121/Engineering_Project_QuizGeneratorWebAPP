@@ -19,6 +19,12 @@ public class QuizAttemptConfiguration:IEntityTypeConfiguration<Domain.QuizAttemp
         builder.OwnsMany<QuizAttemptQuestion>(q => q.AttemptQuestions, qa =>
         {
             qa.ToTable("QuizAttemptQuestions");
+            qa.Property(x => x.Id)
+                .HasColumnName("QuizAttemptQuestionId")
+                .ValueGeneratedNever().HasConversion(
+                    id => id.Value,
+                    value => QuizAttemptQuestionId.Of(value));
+            qa.HasKey(x => x.Id);
             qa.Property<QuizAttemptId>("QuizAttemptId")
                 .IsRequired()
                 .HasColumnName("QuizAttemptId")
@@ -26,10 +32,6 @@ public class QuizAttemptConfiguration:IEntityTypeConfiguration<Domain.QuizAttemp
                     id => id.Value,
                     value => QuizAttemptId.Of(value)
                 );
-            qa.HasKey("QuizAttemptId",nameof(QuizAttemptQuestion.Id));
-            qa.Property(x => x.Id).HasColumnName("QuizAttemptQuestionId").ValueGeneratedNever().HasConversion(
-                id => id.Value,
-                value => QuizAttemptQuestionId.Of(value));
             qa.WithOwner().HasForeignKey("QuizAttemptId");
             qa.Property(x=>x.QuizQuestionId)
                 .IsRequired()
@@ -38,6 +40,9 @@ public class QuizAttemptConfiguration:IEntityTypeConfiguration<Domain.QuizAttemp
                     id => id.Value,
                     value => QuizQuestionId.Of(value)
                 );
+            qa.HasIndex("QuizAttemptId", "QuizQuestionId")
+                .IsUnique()
+                .HasDatabaseName("IX_QuizAttemptQuestions_Attempt_Question_UQ");
             var guidListComparer = new ValueComparer<List<Guid>>(
                 (a, b) => ReferenceEquals(a, b) || (a != null && b != null && a.SequenceEqual(b)),
                 a => a == null ? 0 : a.Aggregate(0, (hash, g) => HashCode.Combine(hash, g.GetHashCode())),
@@ -64,7 +69,6 @@ public class QuizAttemptConfiguration:IEntityTypeConfiguration<Domain.QuizAttemp
                 .HasColumnType("bit")
                 .HasDefaultValue(false);
         });
-        
     }
 
     private void ConfigureQuizAttemptTable(EntityTypeBuilder<Domain.QuizAttempt> builder)

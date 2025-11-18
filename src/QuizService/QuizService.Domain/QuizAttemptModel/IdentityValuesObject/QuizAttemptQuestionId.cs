@@ -2,7 +2,7 @@
 
 namespace QuizService.Domain.IdentityValuesObject;
 
-public class QuizAttemptQuestionId
+public record QuizAttemptQuestionId
 {
     public Guid Value { get;}
 
@@ -24,3 +24,4 @@ public class QuizAttemptQuestionId
         return new QuizAttemptQuestionId(value);
     }
 }
+

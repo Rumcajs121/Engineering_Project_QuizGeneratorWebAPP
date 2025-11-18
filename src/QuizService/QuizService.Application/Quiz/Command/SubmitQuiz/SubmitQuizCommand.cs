@@ -4,7 +4,7 @@ using QuizService.Application.Dtos;
 
 namespace QuizService.Application.Quiz.Command.SubmitQuizCommand;
 
-public record SubmitQuizCommandResult(SubmitQuizAnswerResultDto Score);
+public record SubmitQuizCommandResult(int Score);
 
 public record SubmitQuizCommand(SubmitQuizAnswersDto Dto) : ICommand<SubmitQuizCommandResult>;
 

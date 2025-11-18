@@ -11,6 +11,6 @@ public record SubmitAnswerDto(
     IReadOnlyList<Guid> SelectedAnswerIds
 );
 public record SubmitQuizAnswerResultDto(
-    int score,
-    int maxScore
+    int Score,
+    int MaxScore
 );

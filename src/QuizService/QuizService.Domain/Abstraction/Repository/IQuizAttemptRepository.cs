@@ -1,3 +1,4 @@
+using QuizService.Domain.Entities;
 using QuizService.Domain.IdentityValuesObject;
 using QuizService.Domain.Models.Quiz;
 using QuizService.Domain.ValuesObject;

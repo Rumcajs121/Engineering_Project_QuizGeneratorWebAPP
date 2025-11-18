@@ -64,7 +64,6 @@ public class QuizAttempt:Aggregate<QuizAttemptId>
     {
         if (SubmittedAt is not null)
             throw new DomainException("Quiz already submitted.");
-
         foreach (var q in _attemptQuestions)
         {
             var selected = selections.TryGetValue(q.QuizQuestionId, out var ids)
@@ -73,7 +72,6 @@ public class QuizAttempt:Aggregate<QuizAttemptId>
 
             q.ApplySelection(selected);
         }
-
         Score = _attemptQuestions.Count(q => q.IsCorrect);
         SubmittedAt = submittedAtUtc;
         return Score;

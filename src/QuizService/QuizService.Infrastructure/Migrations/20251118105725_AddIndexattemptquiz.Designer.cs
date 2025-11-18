@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizService.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using QuizService.Infrastructure.Data;
 namespace QuizService.Infrastructure.Migrations
 {
     [DbContext(typeof(QuizDbContext))]
-    partial class QuizDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251118105725_AddIndexattemptquiz")]
+    partial class AddIndexattemptquiz
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -261,6 +264,10 @@ namespace QuizService.Infrastructure.Migrations
                 {
                     b.OwnsMany("QuizService.Domain.Entities.QuizAttemptQuestion", "AttemptQuestions", b1 =>
                         {
+                            b1.Property<Guid>("QuizAttemptId")
+                                .HasColumnType("uniqueidentifier")
+                                .HasColumnName("QuizAttemptId");
+
                             b1.Property<Guid>("Id")
                                 .HasColumnType("uniqueidentifier")
                                 .HasColumnName("QuizAttemptQuestionId");
@@ -282,10 +289,6 @@ namespace QuizService.Infrastructure.Migrations
                             b1.Property<string>("LastModifiedBy")
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<Guid>("QuizAttemptId")
-                                .HasColumnType("uniqueidentifier")
-                                .HasColumnName("QuizAttemptId");
-
                             b1.Property<Guid>("QuizQuestionId")
                                 .HasColumnType("uniqueidentifier")
                                 .HasColumnName("QuizQuestionId");
@@ -300,7 +303,7 @@ namespace QuizService.Infrastructure.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("SelectedAnswerIds");
 
-                            b1.HasKey("Id");
+                            b1.HasKey("QuizAttemptId", "Id");
 
                             b1.HasIndex("QuizQuestionId")
                                 .HasDatabaseName("IX_QuizAttemptQuestions_QuizQuestionId");
