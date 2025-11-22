@@ -1,7 +1,6 @@
 
 
 using BuildingBlocks.Exceptions.Handler;
-using QuizService.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 

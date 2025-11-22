@@ -14,4 +14,9 @@
       <ProjectReference Include="..\..\QuizGeneratorWebApp.ServiceDefaults\QuizGeneratorWebApp.ServiceDefaults.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Domain\DataImport\" />
+      <Folder Include="Features\" />
+    </ItemGroup>
+
 </Project>
