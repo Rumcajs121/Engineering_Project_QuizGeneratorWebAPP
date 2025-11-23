@@ -13,4 +13,8 @@
       <PackageReference Include="MediatR" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Redis\" />
+    </ItemGroup>
+
 </Project>

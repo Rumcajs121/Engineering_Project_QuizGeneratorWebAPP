@@ -13,6 +13,10 @@
         <PackageReference Include="Mapster" />
         <PackageReference Include="MediatR" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
+        <PackageReference Include="Microsoft.SemanticKernel.Core" />
+        <PackageReference Include="Newtonsoft.Json" />
+        <PackageReference Include="PdfPig" />
+        <PackageReference Include="StackExchange.Redis" />
         <PackageReference Include="Swashbuckle.AspNetCore" />
     </ItemGroup>
 
@@ -21,7 +25,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Domain\DataImport\" />
       <Folder Include="Features\" />
     </ItemGroup>
 
