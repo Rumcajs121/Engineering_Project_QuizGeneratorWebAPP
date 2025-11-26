@@ -41,9 +41,7 @@ public class UploadDataService(IUploadDataRepository repository):IUploadDataServ
         var byteArrayTxt=await repository.DownloadBlobData(fileName);
         var fileTxt=Encoding.UTF8.GetString(byteArrayTxt);
         var lines = fileTxt.Split('\n'); 
-#pragma warning disable SKEXP0050
         var chunks = TextChunker.SplitPlainTextParagraphs(
-#pragma warning restore SKEXP0050
             lines: lines,
             maxTokensPerParagraph: 200,  
             overlapTokens: 20, 

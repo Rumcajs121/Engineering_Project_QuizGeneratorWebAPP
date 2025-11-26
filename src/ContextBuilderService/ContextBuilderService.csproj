@@ -4,8 +4,8 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <NoWarn>SKEXP0050</NoWarn>
     </PropertyGroup>
-
     <ItemGroup>
         <PackageReference Include="Azure.Storage.Blobs" />
         <PackageReference Include="Carter" />
@@ -13,10 +13,10 @@
         <PackageReference Include="Mapster" />
         <PackageReference Include="MediatR" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
+        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
         <PackageReference Include="Microsoft.SemanticKernel.Core" />
         <PackageReference Include="Newtonsoft.Json" />
         <PackageReference Include="PdfPig" />
-        <PackageReference Include="StackExchange.Redis" />
         <PackageReference Include="Swashbuckle.AspNetCore" />
     </ItemGroup>
 
@@ -27,5 +27,6 @@
     <ItemGroup>
       <Folder Include="Features\" />
     </ItemGroup>
+    
 
 </Project>

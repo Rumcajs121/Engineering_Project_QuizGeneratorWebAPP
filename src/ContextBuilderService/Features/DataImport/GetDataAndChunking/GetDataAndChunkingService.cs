@@ -1,6 +1,10 @@
 namespace ContextBuilderService.Features.DataImport.GetDataAndChunking;
 
-public class GetDataAndChunkingService
+public interface IGetDataAndChunkingService
+{
+    
+}
+public class GetDataAndChunkingService:IGetDataAndChunkingService
 {
     
 }

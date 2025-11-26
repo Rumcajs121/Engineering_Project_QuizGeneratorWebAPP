@@ -9,10 +9,12 @@ var builder = DistributedApplication.CreateBuilder(args);
 //---BACKENDY---
 
 var ctxBuilderSvc=builder.AddProject<Projects.ContextBuilderService>("contextbuilderservice");
-var llmService=builder.AddProject<Projects.LLMService>("llmservice");
-var quizService = builder.AddProject<Projects.QuizService_Api>("quizservice").WithSwaggerUI();
+var llmService=builder.AddProject<Projects.LLMService>("llmservice").WithSwaggerUI();
+var quizService = builder.AddProject<Projects.QuizService_Api>("quizservice")
+    .WithSwaggerUI();
 
-var userService =builder.AddProject<Projects.UserService>("userservice");
+var userService =builder.AddProject<Projects.UserService>("userservice")
+    .WithSwaggerUI();
 //--GATEWAY--
 var yarp=builder.AddProject<Projects.YarpGateway>("yarpgateway").WithExternalHttpEndpoints()
     .WithReference(userService).WaitFor(userService)
@@ -23,7 +25,7 @@ var yarp=builder.AddProject<Projects.YarpGateway>("yarpgateway").WithExternalHtt
 builder.AddProject<Projects.QuizGeneratorWebApp>("quizgeneratorwebapp")
     .WithExternalHttpEndpoints()
     .WithReference(yarp)
-    .WaitFor(yarp);;
+    .WaitFor(yarp);
 
 
 builder.Build().Run();
