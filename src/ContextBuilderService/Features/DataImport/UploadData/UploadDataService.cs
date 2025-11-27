@@ -1,20 +1,17 @@
 using System.Text;
 using ContextBuilderService.ContextBuilder.UploadData;
-using ContextBuilderService.Domain.DataImport;
-using Microsoft.SemanticKernel.Text;
-using Newtonsoft.Json;
+
 using UglyToad.PdfPig;
 
 namespace ContextBuilderService.Features.DataImport.UploadData;
 
 public interface IUploadDataService
 {
-    Task<bool> ParseToTxt(IFormFile file);
-    Task<bool> GetDataAndChunking(string fileName);
+    Task<bool> PdfToTxtUploadService(IFormFile file);
 }
 public class UploadDataService(IUploadDataRepository repository):IUploadDataService
 {
-    public async Task<bool> ParseToTxt(IFormFile file)
+    public async Task<bool> PdfToTxtUploadService(IFormFile file)
     {
         using var stream = file.OpenReadStream();
         using var pdf=PdfDocument.Open(stream);
@@ -32,34 +29,6 @@ public class UploadDataService(IUploadDataRepository repository):IUploadDataServ
         };
         await repository.UploadDataToBlob(txtFormFile);
         return true;
-    }
-
-
-    public async Task<bool> GetDataAndChunking(string fileName)
-    {
-
-        var byteArrayTxt=await repository.DownloadBlobData(fileName);
-        var fileTxt=Encoding.UTF8.GetString(byteArrayTxt);
-        var lines = fileTxt.Split('\n'); 
-        var chunks = TextChunker.SplitPlainTextParagraphs(
-            lines: lines,
-            maxTokensPerParagraph: 200,  
-            overlapTokens: 20, 
-            chunkHeader: $"DOCUMENT: {fileName}\n\n",
-            tokenCounter: null
-        );
-        var totalChunks = chunks.Count;
-        var documentId = Guid.NewGuid(); 
-        var chunkModel = chunks.Select((content, index) => new Chunk(
-            DocumentId: documentId,
-            ChunkIndex: index,
-            TotalChunks: totalChunks,
-            FileName: fileName,
-            Content: content
-        )).ToList();
-        var jsonChunk=JsonConvert.SerializeObject(chunkModel);
-        
-        throw new NotImplementedException();
     }
 }
 
