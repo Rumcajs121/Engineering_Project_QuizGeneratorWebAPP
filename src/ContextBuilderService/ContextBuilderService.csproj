@@ -17,6 +17,7 @@
         <PackageReference Include="Microsoft.SemanticKernel.Core" />
         <PackageReference Include="Newtonsoft.Json" />
         <PackageReference Include="PdfPig" />
+        <PackageReference Include="StackExchange.Redis" />
         <PackageReference Include="Swashbuckle.AspNetCore" />
     </ItemGroup>
 
@@ -28,7 +29,7 @@
 
     <ItemGroup>
       <Folder Include="Features\" />
-      <Folder Include="Infrastructure\Persistence\" />
+      <Folder Include="Infrastructure\Persistence\DistributedCache\" />
     </ItemGroup>
     
 

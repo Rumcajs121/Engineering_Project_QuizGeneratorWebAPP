@@ -1,3 +1,4 @@
+using System.Reflection;
 using Carter;
 using ContextBuilderService.ContextBuilder.UploadData;
 using ContextBuilderService.Domain.Repository;
@@ -13,13 +14,17 @@ public static class DependencyInjection
     {
         services.AddStackExchangeRedisCache(options =>
         {
-            options.Configuration = configuration.GetValue<string>("CacheSettings:ConnectionString");
+            options.Configuration = configuration.GetConnectionString("Redis");
+            options.InstanceName = "ChunksCache";
         });
         return services;
     }
     public static IServiceCollection AddApplication(this IServiceCollection services,IConfiguration configuration)
     {
-        
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+        });
         return services;
     }
     public static IServiceCollection AddApiService(this IServiceCollection services)

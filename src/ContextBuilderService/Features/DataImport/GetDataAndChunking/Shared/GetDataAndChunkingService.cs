@@ -8,12 +8,12 @@ namespace ContextBuilderService.Features.DataImport.GetDataAndChunking;
 
 public interface IGetDataAndChunkingService
 {
-    Task<string> GetDataAndChunking(string fileName);
+    Task<bool> GetDataAndChunking(string fileName);
 }
 public class GetDataAndChunkingService(IRepository repository):IGetDataAndChunkingService
 {
     
-    public async Task<string> GetDataAndChunking(string fileName)
+    public async Task<bool> GetDataAndChunking(string fileName)
     {
         var byteArrayTxt=await repository.DownloadBlobData(fileName);
         var fileTxt=Encoding.UTF8.GetString(byteArrayTxt);
@@ -34,7 +34,7 @@ public class GetDataAndChunkingService(IRepository repository):IGetDataAndChunki
             FileName: fileName,
             Content: content
         )).ToList();
-        var jsonChunk=JsonConvert.SerializeObject(chunkModel);
-        return jsonChunk;
+        await repository.SaveChunkAsync(chunkModel);
+        return true;
     }
 }

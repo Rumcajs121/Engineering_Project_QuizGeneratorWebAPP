@@ -1,40 +1,70 @@
+using System.Text;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using ContextBuilderService.ContextBuilder.UploadData;
+using ContextBuilderService.Domain.DataImport;
 using ContextBuilderService.Domain.Repository;
 using ContextBuilderService.Features.DataImport.GetDataAndChunking;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 
 namespace ContextBuilderService.Infrastructure.DataImport.Repositories;
 
-public class DataRepository : IRepository
+public class DataRepository(IDistributedCache cache,IConfiguration configuration) : IRepository
 {
-    
     public async Task<bool> UploadDataToBlob(IFormFile file)
     {
-        var connectionString =
-            "DefaultEndpointsProtocol=https;AccountName=textnoteforquizblob;AccountKey=q733artWYaAg14eo151BuJAz9FDIOtG8prJ718PMhnfaELc9mXTpCSKfr6o9kIV/zNWLuG5O28QV+AStRVs8yA==;EndpointSuffix=core.windows.net";
-        BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
+         BlobServiceClient blobServiceClient = new BlobServiceClient(configuration.GetConnectionString("BlobStorage"));
         var containerName = "dataquiz";
         BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
         await containerClient.CreateIfNotExistsAsync();
-        BlobClient blobClient = containerClient.GetBlobClient(file.FileName);
+        var blobName = $"{Guid.NewGuid()}";
+        BlobClient blobClient = containerClient.GetBlobClient(blobName);
         var blobHttpHeaders = new BlobHttpHeaders();
         blobHttpHeaders.ContentType = file.ContentType;
-        await blobClient.UploadAsync(file.OpenReadStream(),blobHttpHeaders);
+        await blobClient.UploadAsync(file.OpenReadStream(), blobHttpHeaders);
 
         return true;
+    }
+    
+    public async Task SaveChunkAsync(IEnumerable<Chunk> chunks)
+    {
+        Guid? documentId = null;
+        var indexes = new List<int>();
+
+        foreach (var chunk in chunks)
+        {
+            documentId ??= chunk.DocumentId;
+            indexes.Add(chunk.ChunkIndex);
+
+            var key = $"chunk:{chunk.DocumentId}:{chunk.ChunkIndex}";
+            var json = JsonConvert.SerializeObject(chunk);
+
+            await cache.SetStringAsync(key, json, new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24)
+            });
+        }
+        if (documentId is not null)
+        {
+            var docKey = $"doc:{documentId}:chunks";
+            var indexesJson = JsonConvert.SerializeObject(indexes);
+
+            await cache.SetStringAsync(docKey, indexesJson, new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24)
+            });
+        }
     }
 
     public async Task<byte[]> DownloadBlobData(string fileName)
     {
-        var connectionString =
-            "DefaultEndpointsProtocol=https;AccountName=textnoteforquizblob;AccountKey=q733artWYaAg14eo151BuJAz9FDIOtG8prJ718PMhnfaELc9mXTpCSKfr6o9kIV/zNWLuG5O28QV+AStRVs8yA==;EndpointSuffix=core.windows.net";
-        BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
+        BlobServiceClient blobServiceClient = new BlobServiceClient(configuration.GetConnectionString("BlobStorage"));
         var containerName = "dataquiz";
         BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
         await containerClient.CreateIfNotExistsAsync();
         BlobClient blobClient = containerClient.GetBlobClient(fileName);
-        var donloadResponse=await blobClient.DownloadContentAsync();
+        var donloadResponse = await blobClient.DownloadContentAsync();
         return donloadResponse.Value.Content.ToArray();
     }
 }
