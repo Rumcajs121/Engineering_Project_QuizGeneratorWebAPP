@@ -1,5 +1,6 @@
 using System.Text;
 using ContextBuilderService.Domain.DataImport;
+using ContextBuilderService.Domain.Repository;
 using Microsoft.SemanticKernel.Text;
 using Newtonsoft.Json;
 
@@ -9,7 +10,7 @@ public interface IGetDataAndChunkingService
 {
     Task<string> GetDataAndChunking(string fileName);
 }
-public class GetDataAndChunkingService(IGetDataAndChunkingRepository repository):IGetDataAndChunkingService
+public class GetDataAndChunkingService(IRepository repository):IGetDataAndChunkingService
 {
     
     public async Task<string> GetDataAndChunking(string fileName)

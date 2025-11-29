@@ -1,11 +1,12 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using ContextBuilderService.ContextBuilder.UploadData;
+using ContextBuilderService.Domain.Repository;
 using ContextBuilderService.Features.DataImport.GetDataAndChunking;
 
 namespace ContextBuilderService.Infrastructure.DataImport.Repositories;
 
-public class DataRepository : IUploadDataRepository, IGetDataAndChunkingRepository
+public class DataRepository : IRepository
 {
     
     public async Task<bool> UploadDataToBlob(IFormFile file)

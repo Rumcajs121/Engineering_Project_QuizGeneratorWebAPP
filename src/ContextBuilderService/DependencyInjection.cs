@@ -1,5 +1,6 @@
 using Carter;
 using ContextBuilderService.ContextBuilder.UploadData;
+using ContextBuilderService.Domain.Repository;
 using ContextBuilderService.Features.DataImport.GetDataAndChunking;
 using ContextBuilderService.Features.DataImport.UploadData;
 using ContextBuilderService.Infrastructure.DataImport.Repositories;
@@ -23,8 +24,7 @@ public static class DependencyInjection
     }
     public static IServiceCollection AddApiService(this IServiceCollection services)
     {
-        services.AddScoped<IUploadDataRepository, DataRepository>();
-        services.AddScoped<IGetDataAndChunkingRepository, DataRepository>();
+        services.AddScoped<IRepository, DataRepository>();
         services.AddScoped<IUploadDataService, UploadDataService>();
         services.AddScoped<IGetDataAndChunkingService, GetDataAndChunkingService>();
         

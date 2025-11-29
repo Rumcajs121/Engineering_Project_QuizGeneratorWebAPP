@@ -1,6 +1,7 @@
 using System.Text;
 using ContextBuilderService.ContextBuilder.UploadData;
-
+using ContextBuilderService.Domain.Repository;
+using ContextBuilderService.Features.DataImport.GetDataAndChunking;
 using UglyToad.PdfPig;
 
 namespace ContextBuilderService.Features.DataImport.UploadData;
@@ -9,7 +10,7 @@ public interface IUploadDataService
 {
     Task<bool> PdfToTxtUploadService(IFormFile file);
 }
-public class UploadDataService(IUploadDataRepository repository):IUploadDataService
+public class UploadDataService(IRepository repository):IUploadDataService
 {
     public async Task<bool> PdfToTxtUploadService(IFormFile file)
     {
