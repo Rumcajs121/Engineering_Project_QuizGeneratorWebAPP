@@ -1,14 +1,11 @@
-using System.Text;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using ContextBuilderService.ContextBuilder.UploadData;
 using ContextBuilderService.Domain.DataImport;
 using ContextBuilderService.Domain.Repository;
-using ContextBuilderService.Features.DataImport.GetDataAndChunking;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 
-namespace ContextBuilderService.Infrastructure.DataImport.Repositories;
+namespace ContextBuilderService.Infrastructure.Repository;
 
 public class DataRepository(IDistributedCache cache,IConfiguration configuration) : IRepository
 {

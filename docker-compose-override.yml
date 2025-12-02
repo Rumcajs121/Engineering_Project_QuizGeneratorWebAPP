@@ -10,8 +10,8 @@ services:
       - "1433:1433"
     volumes:
       - mssql_quiz:/var/lib/mssql/data/
-  distributedcache:
-    container_name: distributedcache
+  distributedcachequiz:
+    container_name: distributedcachequiz
     restart: always
     ports:
       - "6379:6379"    

@@ -7,11 +7,28 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Carter" />
+        <PackageReference Include="FluentValidation" />
+        <PackageReference Include="MediatR" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
+        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
+        <PackageReference Include="Newtonsoft.Json" />
+        <PackageReference Include="StackExchange.Redis" />
+        <PackageReference Include="Swashbuckle.AspNetCore" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\QuizGeneratorWebApp.ServiceDefaults\QuizGeneratorWebApp.ServiceDefaults.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Commons\Models\" />
+      <Folder Include="Infrastructure\LLMProvider\" />
+      <Folder Include="Infrastructure\MCPServer\Agents\" />
+      <Folder Include="Infrastructure\MCPServer\Clients\" />
+      <Folder Include="Infrastructure\MCPServer\Configuration\" />
+      <Folder Include="Infrastructure\MCPServer\Tools\" />
+      <Folder Include="Infrastructure\VectorStore\" />
     </ItemGroup>
 
 </Project>

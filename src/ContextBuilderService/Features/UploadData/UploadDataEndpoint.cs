@@ -19,11 +19,11 @@ public class UploadDataEndpoint:ICarterModule
             var result=await sender.Send(command);
             var response=result.Adapt<UploadDataResponse>();
             return Results.Ok(response);
-        }).WithName("CUploadData")
+        }).WithName("UploadData")
         .DisableAntiforgery()
         .Produces<UploadDataResponse>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("UploadData")
-        .WithDescription("UploadData");;
+        .WithDescription("UploadData");
     }
 }

@@ -1,7 +1,7 @@
 ﻿services:
   quizDb:
     image: mcr.microsoft.com/mssql/server
-  distributedcache:
+  distributedcachequiz:
     image: redis
 volumes:
     mssql_quiz:
