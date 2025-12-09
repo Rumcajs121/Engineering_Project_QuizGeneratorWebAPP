@@ -15,4 +15,16 @@ services:
     restart: always
     ports:
       - "6379:6379"    
-    
+  ollama:
+    ports:
+      - "11434:11434"
+    restart: always
+    volumes:
+      - ollama_volume:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

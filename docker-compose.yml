@@ -3,6 +3,8 @@
     image: mcr.microsoft.com/mssql/server
   distributedcachequiz:
     image: redis
+  ollama:
+    image: ollama/ollama:latest
 volumes:
     mssql_quiz:
-      
+    ollama_volume:  
