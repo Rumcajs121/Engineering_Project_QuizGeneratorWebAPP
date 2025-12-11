@@ -2,6 +2,7 @@ using System.Reflection;
 using Carter;
 using LLMService.Features.CreateEmbendingWithChunk;
 using LLMService.Features.GenerateQuiz;
+using LLMService.Infrastructure.LLMProvider;
 using Microsoft.Extensions.AI;
 using OllamaSharp;
 
@@ -37,10 +38,17 @@ public static class Dependencyinjection
         return services;
     }
 
-    public static IServiceCollection AddAgent(this IServiceCollection services,IConfiguration configuration)
+    public static IServiceCollection AddLLM(this IServiceCollection services,IConfiguration configuration)
     {
-        //TODO:Embending IEmbendingGenerator IChatClinet
-        services.AddSingleton<IChatClient>(sp => new OllamaApiClient(new Uri("http://localhost:11434/"), "nomic-embed-text"));
+
+        services.AddSingleton<ChatModelClient>();
+        services.AddSingleton<EmbeddingModelClient>();
+        
+        services.AddSingleton<IChatClient>(sp =>
+            sp.GetRequiredService<ChatModelClient>());
+
+        services.AddSingleton<IEmbeddingGenerator<string, Embedding<float>>>(sp =>
+            sp.GetRequiredService<EmbeddingModelClient>());
         return services;
     }
     public static WebApplication UseApiService(this WebApplication app)

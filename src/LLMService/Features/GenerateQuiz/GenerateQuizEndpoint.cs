@@ -6,6 +6,6 @@ public class GenerateQuizEndpoint:ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        throw new NotImplementedException();
+        app.MapPost("/generate", () => "OK"); 
     }
 }

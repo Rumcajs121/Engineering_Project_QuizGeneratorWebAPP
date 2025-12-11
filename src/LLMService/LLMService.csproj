@@ -10,7 +10,7 @@
         <PackageReference Include="Carter" />
         <PackageReference Include="FluentValidation" />
         <PackageReference Include="MediatR" />
-        <PackageReference Include="Microsoft.Agents.AI.Hosting.AGUI.AspNetCore" />
+        <PackageReference Include="Microsoft.Agents.AI" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
         <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
         <PackageReference Include="Newtonsoft.Json" />
@@ -27,7 +27,6 @@
 
     <ItemGroup>
       <Folder Include="Commons\Models\" />
-      <Folder Include="Infrastructure\LLMProvider\" />
       <Folder Include="Infrastructure\MCPServer\Agents\" />
       <Folder Include="Infrastructure\MCPServer\Clients\" />
       <Folder Include="Infrastructure\MCPServer\Configuration\" />
