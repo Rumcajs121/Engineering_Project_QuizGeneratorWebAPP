@@ -26,7 +26,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Commons\Models\" />
       <Folder Include="Infrastructure\MCPServer\Agents\" />
       <Folder Include="Infrastructure\MCPServer\Clients\" />
       <Folder Include="Infrastructure\MCPServer\Configuration\" />
