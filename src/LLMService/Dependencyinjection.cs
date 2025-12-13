@@ -5,6 +5,7 @@ using LLMService.Features.GenerateQuiz;
 using LLMService.Infrastructure.LLMProvider;
 using Microsoft.Extensions.AI;
 using OllamaSharp;
+using Qdrant.Client;
 
 namespace LLMService;
 
@@ -43,6 +44,8 @@ public static class Dependencyinjection
 
         services.AddSingleton<ChatModelClient>();
         services.AddSingleton<EmbeddingModelClient>();
+        services.AddSingleton(_ =>
+            new QdrantClient(new Uri("http://localhost:6333")));
         
         services.AddSingleton<IChatClient>(sp =>
             sp.GetRequiredService<ChatModelClient>());
