@@ -31,7 +31,7 @@ public static class Dependencyinjection
         {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
         });
-        services.AddSingleton<ICreateEmbendingWithChunkService, CreateEmbendingWithChunkService>();
+        services.AddSingleton<ICreateEmbeddingWithChunkService, CreateEmbeddingWithChunkService>();
         services.AddSingleton<IGenerateQuizService, GenerateQuizService>();
         return services;
     }

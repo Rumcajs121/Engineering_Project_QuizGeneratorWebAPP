@@ -5,18 +5,19 @@ using LLMService.Infrastructure.VectorStore;
 
 namespace LLMService.Features.CreateEmbendingWithChunk;
 
-public interface ICreateEmbendingWithChunkService
+public interface ICreateEmbeddingWithChunkService
 {
-    Task<bool> CreateEmbedding(Guid documentId);
+    Task<bool> CreateEmbedding(Guid documentId,CancellationToken ct);
 }
 
-public class CreateEmbendingWithChunkService(IEmbeddingGenerator<string, Embedding<float>> embedding,ICacheDataRepository cacheRepository,IVectorDataRepository vectorDataRepository):ICreateEmbendingWithChunkService
+public class CreateEmbeddingWithChunkService(IEmbeddingGenerator<string, Embedding<float>> embedding,ICacheDataRepository cacheRepository,IVectorDataRepository vectorDataRepository):ICreateEmbeddingWithChunkService
 {
-    private async Task<List<ChunkEmbedding>> EmbeddingData(IEnumerable<Chunk> chunks)
+    private async Task<List<ChunkEmbedding>> EmbeddingData(IEnumerable<Chunk> chunks,CancellationToken ct)
     {
         var result = new List<ChunkEmbedding>(chunks.Count());
         foreach (var chunk in chunks)
         {
+            ct.ThrowIfCancellationRequested(); 
             var emb=await embedding.GenerateAsync(chunk.Content);
             result.Add(new ChunkEmbedding
             {
@@ -28,11 +29,11 @@ public class CreateEmbendingWithChunkService(IEmbeddingGenerator<string, Embeddi
         }
         return result;
     }
-    public async Task<bool> CreateEmbedding(Guid documentId)
+    public async Task<bool> CreateEmbedding(Guid documentId,CancellationToken ct)
     {
         var chunks=await cacheRepository.GetChunksAsync(documentId);
-        var embeddingChunks=await EmbeddingData(chunks);
-        var saveVectorData=await vectorDataRepository.SaveAsyncEmbending(embeddingChunks);
+        var embeddingChunks=await EmbeddingData(chunks,ct);
+        var saveVectorData=await vectorDataRepository.SaveAsyncEmbedding(embeddingChunks);
         return saveVectorData;
     }
 }               

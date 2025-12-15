@@ -7,10 +7,10 @@ namespace LLMService.Infrastructure.VectorStore;
 
 public interface IVectorDataRepository
 {
-    Task<bool> SaveAsyncEmbending(List<ChunkEmbedding> chunkEmbeddings);
+    Task<bool> SaveAsyncEmbedding(List<ChunkEmbedding> chunkEmbeddings);
     Task<string> TopKChunk(int k,string question, IReadOnlyList<Guid> documentIds);
 }
-public class VectorDataRepository(QdrantClient qdrantClient,IEmbeddingGenerator<string, Embedding<float>> embending):IVectorDataRepository
+public class VectorDataRepository(QdrantClient qdrantClient,IEmbeddingGenerator<string, Embedding<float>> embedding):IVectorDataRepository
 {
     
     private async Task EnsureCollectionAsync()
@@ -21,7 +21,7 @@ public class VectorDataRepository(QdrantClient qdrantClient,IEmbeddingGenerator<
             "chunksNotes",
             new VectorParams { Size = 768, Distance = Distance.Cosine });
     }
-    public async Task<bool> SaveAsyncEmbending(List<ChunkEmbedding> chunkEmbeddings)
+    public async Task<bool> SaveAsyncEmbedding(List<ChunkEmbedding> chunkEmbeddings)
     {
         if (chunkEmbeddings is null || chunkEmbeddings.Count == 0) return true;
         await EnsureCollectionAsync();
@@ -50,7 +50,7 @@ public class VectorDataRepository(QdrantClient qdrantClient,IEmbeddingGenerator<
 
     public async Task<string> TopKChunk(int k, string question, IReadOnlyList<Guid> documentIds)
     {
-        var qEmbedding = await embending.GenerateAsync(question);
+        var qEmbedding = await embedding.GenerateAsync(question);
         var queryVector = qEmbedding.Vector.ToArray();
         var filter = new Filter();
         filter.Should.AddRange(
