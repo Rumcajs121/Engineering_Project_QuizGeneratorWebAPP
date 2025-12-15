@@ -1,6 +1,5 @@
 using LLMService.Commons.Models;
 using Microsoft.Extensions.AI;
-
 using LLMService.Infrastructure.DistributedCache;
 using LLMService.Infrastructure.VectorStore;
 

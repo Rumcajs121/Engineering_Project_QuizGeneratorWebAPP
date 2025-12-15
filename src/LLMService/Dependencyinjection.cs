@@ -39,7 +39,7 @@ public static class Dependencyinjection
     {
         services.AddCarter(configurator: c =>
         {
-            c.WithModule<CreateEmbendingWithChunkEndpoint>();
+            c.WithModule<CreateEmbeddingWithChunkEndpoint>();
             c.WithModule<GenerateQuizEndpoint>();
         });
         
