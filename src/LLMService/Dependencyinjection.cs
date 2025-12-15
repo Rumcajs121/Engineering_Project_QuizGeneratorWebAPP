@@ -2,10 +2,10 @@ using System.Reflection;
 using Carter;
 using LLMService.Features.CreateEmbendingWithChunk;
 using LLMService.Features.GenerateQuiz;
+using LLMService.Infrastructure.DistributedCache;
 using LLMService.Infrastructure.LLMProvider;
 using LLMService.Infrastructure.VectorStore;
 using Microsoft.Extensions.AI;
-using OllamaSharp;
 using Qdrant.Client;
 
 namespace LLMService;
@@ -21,6 +21,8 @@ public static class Dependencyinjection
         });
         services.AddSingleton(_ =>
             new QdrantClient(new Uri("http://localhost:6333")));
+        services.AddSingleton<IVectorDataRepository,VectorDataRepository>();
+        services.AddScoped<ICacheDataRepository, CacheDataRepository>();
         return services;
     }
     public static IServiceCollection AddApplication(this IServiceCollection services,IConfiguration configuration)
@@ -29,6 +31,8 @@ public static class Dependencyinjection
         {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
         });
+        services.AddSingleton<ICreateEmbendingWithChunkService, CreateEmbendingWithChunkService>();
+        services.AddSingleton<IGenerateQuizService, GenerateQuizService>();
         return services;
     }
     public static IServiceCollection AddApiService(this IServiceCollection services)
@@ -38,9 +42,8 @@ public static class Dependencyinjection
             c.WithModule<CreateEmbendingWithChunkEndpoint>();
             c.WithModule<GenerateQuizEndpoint>();
         });
-        services.AddScoped<ICreateEmbendingWithChunkService,CreateEmbendingWithChunkService>();
-        services.AddScoped<IGenerateQuizService,GenerateQuizService>();
-        services.AddScoped<IVectorDataRepository,VectorDataRepository>();
+        
+        
         
 
         return services;

@@ -1,15 +1,18 @@
 using System.Windows.Input;
 using BuildingBlocks.CQRS;
 
+
 namespace LLMService.Features.CreateEmbendingWithChunk;
 
 public record CreateEmbendingWithChunkCommandResponse(bool Success);
-public record CreateEmbendingWithChunkCommand(string DataJson):ICommand<CreateEmbendingWithChunkCommandResponse>;
+public record CreateEmbendingWithChunkCommand(Guid DocumendId):ICommand<CreateEmbendingWithChunkCommandResponse>;
 
-public class CreateEmbendingWithChunkCommandHandler:ICommandHandler<CreateEmbendingWithChunkCommand,CreateEmbendingWithChunkCommandResponse>
+public class CreateEmbendingWithChunkCommandHandler(ICreateEmbendingWithChunkService service):ICommandHandler<CreateEmbendingWithChunkCommand,CreateEmbendingWithChunkCommandResponse>
 {
-    public Task<CreateEmbendingWithChunkCommandResponse> Handle(CreateEmbendingWithChunkCommand request, CancellationToken cancellationToken)
+    public async Task<CreateEmbendingWithChunkCommandResponse> Handle(CreateEmbendingWithChunkCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        
+        var result = await service.CreateEmbedding(request.DocumendId);
+        return new CreateEmbendingWithChunkCommandResponse(result);
     }
 }

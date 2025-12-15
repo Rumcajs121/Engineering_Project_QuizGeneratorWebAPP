@@ -52,21 +52,17 @@ public class VectorDataRepository(QdrantClient qdrantClient,IEmbeddingGenerator<
     {
         var qEmbedding = await embending.GenerateAsync(question);
         var queryVector = qEmbedding.Vector.ToArray();
-        var filter = new Filter
-        {
-            Should =
+        var filter = new Filter();
+        filter.Should.AddRange(
+            documentIds.Select(id => new Condition
             {
-                documentIds.Select(id =>
-                    new Condition
-                    {
-                        Field = new FieldCondition
-                        {
-                            Key = "documentId",
-                            Match = new Match { Text = id.ToString() }
-                        }
-                    })
-            }
-        };
+                Field = new FieldCondition
+                {
+                    Key = "documentId",
+                    Match = new Match { Text = id.ToString() }
+                }
+            })
+        );
         var results = await qdrantClient.SearchAsync("chunksNotes",
             queryVector,
             limit: (ulong)k,
