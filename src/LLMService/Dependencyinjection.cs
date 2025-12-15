@@ -3,6 +3,7 @@ using Carter;
 using LLMService.Features.CreateEmbendingWithChunk;
 using LLMService.Features.GenerateQuiz;
 using LLMService.Infrastructure.LLMProvider;
+using LLMService.Infrastructure.VectorStore;
 using Microsoft.Extensions.AI;
 using OllamaSharp;
 using Qdrant.Client;
@@ -18,6 +19,8 @@ public static class Dependencyinjection
             options.Configuration = configuration.GetConnectionString("Redis");
             options.InstanceName = "ChunksCache";
         });
+        services.AddSingleton(_ =>
+            new QdrantClient(new Uri("http://localhost:6333")));
         return services;
     }
     public static IServiceCollection AddApplication(this IServiceCollection services,IConfiguration configuration)
@@ -35,6 +38,10 @@ public static class Dependencyinjection
             c.WithModule<CreateEmbendingWithChunkEndpoint>();
             c.WithModule<GenerateQuizEndpoint>();
         });
+        services.AddScoped<ICreateEmbendingWithChunkService,CreateEmbendingWithChunkService>();
+        services.AddScoped<IGenerateQuizService,GenerateQuizService>();
+        services.AddScoped<IVectorDataRepository,VectorDataRepository>();
+        
 
         return services;
     }
@@ -44,8 +51,6 @@ public static class Dependencyinjection
 
         services.AddSingleton<ChatModelClient>();
         services.AddSingleton<EmbeddingModelClient>();
-        services.AddSingleton(_ =>
-            new QdrantClient(new Uri("http://localhost:6333")));
         
         services.AddSingleton<IChatClient>(sp =>
             sp.GetRequiredService<ChatModelClient>());
@@ -56,7 +61,6 @@ public static class Dependencyinjection
     }
     public static WebApplication UseApiService(this WebApplication app)
     {
-        
         app.MapCarter();
         return app;
     }

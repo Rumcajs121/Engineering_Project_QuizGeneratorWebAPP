@@ -50,7 +50,7 @@ public static class LLMPromptSettings
 
     private static ChatMessage UserPrompt(string topic, string context)
     {
-        // Wersja bez C# 11 (żeby było spójnie z SystemPrompt)
+
         var text =
             "Wygeneruj quiz wielokrotnego wyboru w języku polskim na temat:\n" +
             $"\"{topic}\"\n\n" +
