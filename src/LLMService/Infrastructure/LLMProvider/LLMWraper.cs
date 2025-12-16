@@ -8,7 +8,7 @@ public class ChatModelClient
     : OllamaApiClient, IChatClient
 {
     public ChatModelClient()
-        : base(new Uri("http://localhost:11434"), "llama3")
+        : base(new Uri("http://localhost:11434"), "llama3.1")
     {
     }
 }

@@ -20,8 +20,8 @@ public static class Dependencyinjection
             options.InstanceName = "ChunksCache";
         });
         services.AddSingleton(_ =>
-            new QdrantClient(new Uri("http://localhost:6333")));
-        services.AddSingleton<IVectorDataRepository,VectorDataRepository>();
+            new QdrantClient(new Uri("http://localhost:6334")));
+        services.AddScoped<IVectorDataRepository,VectorDataRepository>();
         services.AddScoped<ICacheDataRepository, CacheDataRepository>();
         return services;
     }
@@ -31,8 +31,8 @@ public static class Dependencyinjection
         {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
         });
-        services.AddSingleton<ICreateEmbeddingWithChunkService, CreateEmbeddingWithChunkService>();
-        services.AddSingleton<IGenerateQuizService, GenerateQuizService>();
+        services.AddScoped<ICreateEmbeddingWithChunkService, CreateEmbeddingWithChunkService>();
+        services.AddScoped<IGenerateQuizService, GenerateQuizService>();
         return services;
     }
     public static IServiceCollection AddApiService(this IServiceCollection services)

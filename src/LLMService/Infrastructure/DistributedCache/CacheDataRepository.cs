@@ -1,3 +1,4 @@
+using BuildingBlocks.Redis;
 using LLMService.Commons.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
@@ -12,16 +13,14 @@ public class CacheDataRepository(IDistributedCache cache):ICacheDataRepository
 {
     public async Task<IEnumerable<Chunk>> GetChunksAsync(Guid documentId)
     {
-        var docKey = $"doc:{documentId}:chunks";
-        var indexesJson = await cache.GetStringAsync(docKey);
+        var indexesJson = await cache.GetStringAsync(RedisConfig.DocChunks(documentId));
         if (string.IsNullOrWhiteSpace(indexesJson))
             return Array.Empty<Chunk>();
         var indexes = JsonConvert.DeserializeObject<List<int>>(indexesJson);
         var result = new List<Chunk>(indexes.Count);
         foreach (var idx in indexes)
         {
-            var key = $"chunk:{documentId}:{idx}";
-            var chunkJson = await cache.GetStringAsync(key);
+            var chunkJson = await cache.GetStringAsync(RedisConfig.Chunk(documentId, idx));
 
             if (string.IsNullOrWhiteSpace(chunkJson))
                 continue;

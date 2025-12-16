@@ -1,5 +1,6 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using BuildingBlocks.Redis;
 using ContextBuilderService.Domain.DataImport;
 using ContextBuilderService.Domain.Repository;
 using Microsoft.Extensions.Caching.Distributed;
@@ -34,7 +35,7 @@ public class DataRepository(IDistributedCache cache,IConfiguration configuration
             documentId ??= chunk.DocumentId;
             indexes.Add(chunk.ChunkIndex);
 
-            var key = $"chunk:{chunk.DocumentId}:{chunk.ChunkIndex}";
+            var key = RedisConfig.Chunk(chunk.DocumentId,chunk.ChunkIndex);
             var json = JsonConvert.SerializeObject(chunk);
 
             await cache.SetStringAsync(key, json, new DistributedCacheEntryOptions
@@ -44,7 +45,7 @@ public class DataRepository(IDistributedCache cache,IConfiguration configuration
         }
         if (documentId is not null)
         {
-            var docKey = $"doc:{documentId}:chunks";
+            var docKey = RedisConfig.DocChunks(documentId.Value);
             var indexesJson = JsonConvert.SerializeObject(indexes);
 
             await cache.SetStringAsync(docKey, indexesJson, new DistributedCacheEntryOptions
