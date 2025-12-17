@@ -7,8 +7,11 @@
     image: ollama/ollama:latest
   qdrant:
     image: qdrant/qdrant:latest
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.4.7
 volumes:
     mssql_quiz:
     ollama_volume:
     qdrant_data:
+    keycloak_data:
       
