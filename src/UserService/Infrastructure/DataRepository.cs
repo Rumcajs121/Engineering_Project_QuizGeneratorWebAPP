@@ -1,6 +1,31 @@
+using Microsoft.EntityFrameworkCore;
+using UserService.Commons.Models;
+
 namespace UserService.Infrastructure;
 
-public class DataRepository
+public interface IDataRepository
 {
-    
+    Task<UserDomain?>  GetUserReadAsync(string externalId);
+    Task<UserDomain?> GetUserForUpdateAsync(string externalId);
+    Task AddUserForDbAsync(UserDomain user);
+    Task<PrivilegesUserDomain> GetPrivileges(string externalIdId);
+    Task  DbSaveAsync();
+}
+public class DataRepository(UserDbContext dbContext):IDataRepository
+{
+    public async Task<UserDomain?> GetUserReadAsync(string externalId)=>await dbContext.Users.AsNoTracking().FirstOrDefaultAsync(x => x.ExternalId == externalId);
+    public Task<UserDomain?> GetUserForUpdateAsync(string externalId) => dbContext.Users.FirstOrDefaultAsync(u => u.ExternalId == externalId);
+    public async Task AddUserForDbAsync(UserDomain user)
+    {
+        await dbContext.Users.AddAsync(user);
+    }
+    public async Task<PrivilegesUserDomain> GetPrivileges(string externalId)
+    {
+        PrivilegesUserDomain userPrivileges=await dbContext.Users.AsNoTracking().Where(x=>x.ExternalId==externalId).Select(x=>x.PrivilegeUserDomain).SingleAsync();
+        return userPrivileges;
+    }
+    public async Task DbSaveAsync()
+    {
+        await dbContext.SaveChangesAsync();
+    }
 }

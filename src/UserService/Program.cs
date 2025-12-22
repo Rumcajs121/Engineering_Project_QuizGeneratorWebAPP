@@ -1,10 +1,16 @@
+using BuildingBlocks.Security;
 using UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-builder.Services.AddInfrastructure(builder.Configuration).AddApplication(builder.Configuration).AddApiService();
+builder.Services.AddInfrastructure(builder.Configuration)
+    .AddApplication(builder.Configuration)
+    .AddApiService()
+    .AddKeycloakJwtAuthentication(builder.Configuration)
+    .AddKeycloakAuthorizationPolicies();;
 builder.Services.AddEndpointsApiExplorer(); 
+
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
@@ -18,5 +24,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseApiService();
 app.Run();
