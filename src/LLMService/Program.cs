@@ -1,5 +1,4 @@
 using LLMService;
-using Microsoft.Extensions.AI;
 
 
 var builder = WebApplication.CreateBuilder(args);
