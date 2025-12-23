@@ -12,7 +12,7 @@ public class CheckPermissionsEndpoint:ICarterModule
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         
-        app.MapGet("/me", async ([AsParameters]CheckPermissionsQueryEndpointRequest request, [FromServices] ISender sender) =>
+        app.MapGet("/permission", async ([AsParameters]CheckPermissionsQueryEndpointRequest request, [FromServices] ISender sender) =>
             {
                 var commandRequest = request.Adapt<CheckPermissionsQueryRequest>();
                 var command=new CheckPermissionsQuery(commandRequest);
@@ -21,9 +21,9 @@ public class CheckPermissionsEndpoint:ICarterModule
                 return Results.Ok(response);
             }).WithName("CheckPermissions")
             .Produces<CheckPermissionsQueryEndpointResponse>()
-            .ProducesProblem(StatusCodes.Status400BadRequest)
-            .WithSummary("CreateEmbeddingWithChunk")
-            .WithDescription("CreateEmbeddingWithChunk")
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .WithSummary("CheckPermissions")
+            .WithDescription("CheckPermissions")
             .RequireAuthorization();
     }
 }

@@ -9,7 +9,7 @@ namespace QuizService.Domain;
 public class QuizAttempt:Aggregate<QuizAttemptId>
 {
     public QuizId QuizId { get; private set; }
-    public Guid? UserId { get; private set; } //TODO: reference to user ??
+    public Guid? UserId { get; private set; } 
     public string SnapshotQuizJson { get; private set; }
     public int Score { get; private set; }
     public DateTime StartQuiz { get; private set; }

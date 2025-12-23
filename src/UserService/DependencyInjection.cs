@@ -1,7 +1,9 @@
 using System.Reflection;
 using Carter;
 using Microsoft.EntityFrameworkCore;
+using UserService.Commons.Dto;
 using UserService.Features.CheckPermissions;
+using UserService.Features.CreateUserProfile;
 using UserService.Infrastructure;
 
 namespace UserService;
@@ -13,6 +15,7 @@ public static class DependencyInjection
         services.AddDbContext<UserDbContext>(
             options=>options.UseSqlServer(configuration.GetConnectionString("Database")));
         services.AddScoped<IDataRepository, DataRepository>();
+        services.AddScoped<ICurrentUser, CurrentUser>();
          return services;
     }
     public static IServiceCollection AddApplication(this IServiceCollection services,IConfiguration configuration)
@@ -22,6 +25,7 @@ public static class DependencyInjection
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
         });
         services.AddScoped<ICheckPermissionsService, CheckPermissionsService>();
+        services.AddScoped<ICreateUserProfileService,CreateUserProfileService>();
         return services;
     }
     public static IServiceCollection AddApiService(this IServiceCollection services)
@@ -29,6 +33,7 @@ public static class DependencyInjection
         services.AddCarter(configurator: c =>
         {
             c.WithModule<CheckPermissionsEndpoint>();
+            c.WithModule<CreateUserProfileEndpoint>();
         });
         
         return services;

@@ -8,7 +8,8 @@ builder.Services.AddInfrastructure(builder.Configuration)
     .AddApplication(builder.Configuration)
     .AddApiService()
     .AddKeycloakJwtAuthentication(builder.Configuration)
-    .AddKeycloakAuthorizationPolicies();;
+    .AddKeycloakAuthorizationPolicies()
+    .AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer(); 
 
 builder.Services.AddSwaggerGen();

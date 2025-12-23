@@ -10,6 +10,7 @@ namespace QuizService.Domain.Models.Quiz;
 public class Quiz:Aggregate<QuizId>
 {
     public QuizStatus QuizStatus { get; private set; }
+    //TODO: Add UserId ?? 
     public Guid SourceId { get; private set; }
     private readonly List<QuizQuestion> _questions = new();
     public IReadOnlyCollection<QuizQuestion> Questions => _questions.AsReadOnly();
