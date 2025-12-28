@@ -12,7 +12,7 @@ public class CreateUserProfileService(IDataRepository repository) : ICreateUserP
 {
     public async Task CreateUser(string subject, string email, string userName, CancellationToken ct)
     {
-        var existing = await repository.GetUserForUpdateAsync(subject);
+        var existing = await repository.GetUserForUpdateAsync(subject,ct);
 
         if (existing is null)
         {

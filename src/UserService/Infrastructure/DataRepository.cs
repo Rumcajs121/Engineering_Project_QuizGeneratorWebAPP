@@ -6,7 +6,7 @@ namespace UserService.Infrastructure;
 public interface IDataRepository
 {
     Task<UserDomain?>  GetUserReadAsync(string externalId);
-    Task<UserDomain?> GetUserForUpdateAsync(string externalId);
+    Task<UserDomain?> GetUserForUpdateAsync(string externalId,CancellationToken ct);
     Task AddUserForDbAsync(UserDomain user);
     Task<PrivilegesUserDomain> GetPrivileges(string externalIdId);
     Task  DbSaveAsync();
@@ -14,7 +14,7 @@ public interface IDataRepository
 public class DataRepository(UserDbContext dbContext):IDataRepository
 {
     public async Task<UserDomain?> GetUserReadAsync(string externalId)=>await dbContext.Users.AsNoTracking().FirstOrDefaultAsync(x => x.ExternalId == externalId);
-    public Task<UserDomain?> GetUserForUpdateAsync(string externalId) => dbContext.Users.FirstOrDefaultAsync(u => u.ExternalId == externalId);
+    public Task<UserDomain?> GetUserForUpdateAsync(string externalId,CancellationToken ct) => dbContext.Users.FirstOrDefaultAsync(u => u.ExternalId == externalId,ct);
     public async Task AddUserForDbAsync(UserDomain user)
     {
         await dbContext.Users.AddAsync(user);

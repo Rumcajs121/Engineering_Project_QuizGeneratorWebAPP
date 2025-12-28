@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using UserService.Commons.Dto;
 using UserService.Features.CheckPermissions;
 using UserService.Features.CreateUserProfile;
+using UserService.Features.EditProfile;
 using UserService.Infrastructure;
 
 namespace UserService;
@@ -26,6 +27,7 @@ public static class DependencyInjection
         });
         services.AddScoped<ICheckPermissionsService, CheckPermissionsService>();
         services.AddScoped<ICreateUserProfileService,CreateUserProfileService>();
+        services.AddScoped<IEditProfileService,EditProfileService>();
         return services;
     }
     public static IServiceCollection AddApiService(this IServiceCollection services)
@@ -34,6 +36,7 @@ public static class DependencyInjection
         {
             c.WithModule<CheckPermissionsEndpoint>();
             c.WithModule<CreateUserProfileEndpoint>();
+            c.WithModule<EditProfileEndpoint>();
         });
         
         return services;
