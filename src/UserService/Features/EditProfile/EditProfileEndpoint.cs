@@ -14,17 +14,21 @@ public class EditProfileEndpoint:ICarterModule
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapPatch("/edit",
-                async ([FromRoute] string Id, [FromBody] EditProfileDto dto, [FromServices] ISender service,
+                async ([FromBody] EditProfileDto dto, [FromServices] ISender service,
                     CancellationToken ct) =>
                 {
-                    var command = new EditProfileCommand(new EditProfileCommandRequest(Id, dto));
+                    var command = new EditProfileCommand(new EditProfileCommandRequest(dto));
                     var result = await service.Send(command, ct);
                     var response = result.Adapt<EditProfileEndpointResponse>();
                     return Results.Ok(response);
-                }).WithName("Edit domain profile")
-            .Produces<EditProfileEndpointResponse>(StatusCodes.Status202Accepted)
+                })  .WithName("EditUserProfile") 
+            .Produces<EditProfileEndpointResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
             .ProducesProblem(StatusCodes.Status404NotFound)
-            .WithSummary("Edit domain profile")
-            .WithDescription("Edit domain profile");
+            .ProducesProblem(StatusCodes.Status409Conflict)
+            .WithSummary("Edit current user profile")
+            .WithDescription("Updates profile data of the currently authenticated user")
+            .RequireAuthorization();
     }
 }

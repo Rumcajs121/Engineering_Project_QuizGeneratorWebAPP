@@ -2,7 +2,7 @@ namespace UserService.Commons.Models;
 
 public class UserDomain
 {
-    //TODO: Check init;
+
     public Guid UserId { get; set; } = Guid.NewGuid();
     public required string ExternalId  { get; set; } 
     public required string Username { get; set; } 
