@@ -1,6 +1,6 @@
 using LLMService.Commons.Models;
+using LLMService.Infrastructure.Redis;
 using Microsoft.Extensions.AI;
-using LLMService.Infrastructure.DistributedCache;
 using LLMService.Infrastructure.VectorStore;
 
 namespace LLMService.Features.CreateEmbendingWithChunk;
@@ -10,7 +10,7 @@ public interface ICreateEmbeddingWithChunkService
     Task<bool> CreateEmbedding(Guid documentId,CancellationToken ct);
 }
 
-public class CreateEmbeddingWithChunkService(IEmbeddingGenerator<string, Embedding<float>> embedding,ICacheDataRepository cacheRepository,IVectorDataRepository vectorDataRepository):ICreateEmbeddingWithChunkService
+public class CreateEmbeddingWithChunkService(IEmbeddingGenerator<string, Embedding<float>> embedding,IRedisDataRepository redisRepository,IVectorDataRepository vectorDataRepository):ICreateEmbeddingWithChunkService
 {
     private async Task<List<ChunkEmbedding>> EmbeddingData(IEnumerable<Chunk> chunks,CancellationToken ct)
     {
@@ -31,7 +31,7 @@ public class CreateEmbeddingWithChunkService(IEmbeddingGenerator<string, Embeddi
     }
     public async Task<bool> CreateEmbedding(Guid documentId,CancellationToken ct)
     {
-        var chunks=await cacheRepository.GetChunksAsync(documentId);
+        var chunks=await redisRepository.GetChunksAsync(documentId);
         var embeddingChunks=await EmbeddingData(chunks,ct);
         var saveVectorData=await vectorDataRepository.SaveAsyncEmbedding(embeddingChunks);
         return saveVectorData;

@@ -2,11 +2,13 @@ using System.Reflection;
 using Carter;
 using LLMService.Features.CreateEmbendingWithChunk;
 using LLMService.Features.GenerateQuiz;
-using LLMService.Infrastructure.DistributedCache;
+using LLMService.Infrastructure;
 using LLMService.Infrastructure.LLMProvider;
+using LLMService.Infrastructure.Redis;
 using LLMService.Infrastructure.VectorStore;
 using Microsoft.Extensions.AI;
 using Qdrant.Client;
+using StackExchange.Redis;
 
 namespace LLMService;
 
@@ -19,10 +21,18 @@ public static class Dependencyinjection
             options.Configuration = configuration.GetConnectionString("Redis");
             options.InstanceName = "ChunksCache";
         });
+        services.AddSingleton<IConnectionMultiplexer>(sp =>
+        {
+            var config=ConfigurationOptions.Parse(configuration.GetConnectionString("Redis"));
+            config.AbortOnConnectFail = false; //TODO: Check this line. 
+            return ConnectionMultiplexer.Connect(config);
+        });
+        
         services.AddSingleton(_ =>
             new QdrantClient(new Uri("http://localhost:6334")));
         services.AddScoped<IVectorDataRepository,VectorDataRepository>();
-        services.AddScoped<ICacheDataRepository, CacheDataRepository>();
+        services.AddScoped<IRedisDataRepository, RedisDataRepository>();
+        services.AddHostedService<QuizJobWorker>();
         return services;
     }
     public static IServiceCollection AddApplication(this IServiceCollection services,IConfiguration configuration)
