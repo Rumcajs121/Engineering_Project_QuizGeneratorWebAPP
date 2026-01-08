@@ -89,15 +89,24 @@ public class RedisDataRepository(IDistributedCache cache, IConnectionMultiplexer
 
     public async Task<string?> DequeueJobAsync()
     {
-        var result = await _db.ExecuteAsync(
-            "BRPOPLPUSH",
-            QueueKey,
-            ProcessingKey,
-            10
-        );
-        if (result.IsNull)
+        try
+        {
+            var result = await _db.ExecuteAsync(
+                "BRPOPLPUSH",
+                QueueKey,
+                ProcessingKey,
+                3 
+            );
+        
+            if (result. IsNull)
+                return null;
+            
+            return result.ToString();
+        }
+        catch (RedisTimeoutException ex)
+        {
             return null;
-        return result.ToString();
+        }
     }
 
     public Task AckJobAsync(string jobId)

@@ -47,11 +47,14 @@ public class QuizJobWorker(IServiceScopeFactory scopeFactory, ILogger<QuizJobWor
                         job.Request.DocumentIds);
                     job.Result = quiz;
                     job.Status = QuizJobStatus.Generated;
+                    logger.LogInformation("Job {JobId} starting generated", jobId);
+                    
                     await repository.UpdateJobAsync(job, stoppingToken);
                     if (job.Result == null)
                     {
                         job.Status = QuizJobStatus.Failed;
                         await repository.UpdateJobAsync(job, stoppingToken);
+                        
                         logger.LogWarning("Job {JobId} failed — quiz is null", jobId);
                         //TODO: In the future requeue Job.
                         await repository.AckJobAsync(jobId);
@@ -63,7 +66,7 @@ public class QuizJobWorker(IServiceScopeFactory scopeFactory, ILogger<QuizJobWor
                     job.Status = QuizJobStatus.Sent;
                     await repository.UpdateJobAsync(job, stoppingToken);
                     await repository.AckJobAsync(jobId);
-
+                    
 
                 }
                 catch (OperationCanceledException)

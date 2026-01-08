@@ -5,11 +5,12 @@ using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 
 namespace LLMService.Features.GenerateQuiz;
 
-public record GenerateQuizResponse(LlmQuiz Quiz);
+public record GenerateQuizResponse(string JobId);
 
 public class GenerateQuizEndpoint : ICarterModule
 {
@@ -34,5 +35,17 @@ public class GenerateQuizEndpoint : ICarterModule
                              The response contains a JobId that can be used to track the job status
                              and retrieve the generated quiz once completed.
                              """);
+        
+        // ! DEVELOPING ENDPOINT !
+        app.MapGet("/test/job/{jobId}", async ([FromRoute]string jobId,[FromServices] IConnectionMultiplexer redis) =>
+        {
+            var db = redis.GetDatabase();
+            var key = $"ChunksCachejob:quiz:{jobId}";
+            var json = await db.HashGetAsync(key, "data");
+            var job = JsonConvert.DeserializeObject<QuizJob>(json!);
+            var CountQuestion=job.Result.Questions.Count();
+            Console.WriteLine(CountQuestion);
+            return Results.Ok(job);
+        });
     }
 }

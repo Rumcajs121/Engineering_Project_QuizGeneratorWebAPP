@@ -2,6 +2,7 @@ using LLMService.Commons.Models;
 using Microsoft.Extensions.AI;
 using Qdrant.Client;
 using Qdrant.Client.Grpc;
+using Tiktoken;
 
 namespace LLMService.Infrastructure.VectorStore;
 
@@ -12,7 +13,7 @@ public interface IVectorDataRepository
 }
 public class VectorDataRepository(QdrantClient qdrantClient,IEmbeddingGenerator<string, Embedding<float>> embedding):IVectorDataRepository
 {
-    
+
     private async Task EnsureCollectionAsync()
     {
         if (await qdrantClient.CollectionExistsAsync("chunksNotes")) return;
@@ -47,10 +48,10 @@ public class VectorDataRepository(QdrantClient qdrantClient,IEmbeddingGenerator<
         await qdrantClient.UpsertAsync("chunksNotes", points);
         return true;
     }
-
     public async Task<string> TopKChunk(int k, string question, IReadOnlyList<Guid> documentIds)
     {
         var qEmbedding = await embedding.GenerateAsync(question);
+        
         var queryVector = qEmbedding.Vector.ToArray();
         var filter = new Filter();
         filter.Should.AddRange(
@@ -80,4 +81,5 @@ public class VectorDataRepository(QdrantClient qdrantClient,IEmbeddingGenerator<
                 })
         );
     }
+    
 }

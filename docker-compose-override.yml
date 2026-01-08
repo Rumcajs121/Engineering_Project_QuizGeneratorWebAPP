@@ -26,6 +26,9 @@ services:
   ollama:
     ports:
       - "11434:11434"
+    environment:
+      - OLLAMA_REQUEST_TIMEOUT=10m         
+      - OLLAMA_NUM_CTX=16384
     restart: always
     volumes:
       - ollama_volume:/root/.ollama

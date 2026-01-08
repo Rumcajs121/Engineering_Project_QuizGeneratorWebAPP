@@ -19,6 +19,7 @@
         <PackageReference Include="OllamaSharp" />
         <PackageReference Include="StackExchange.Redis" />
         <PackageReference Include="Swashbuckle.AspNetCore" />
+        <PackageReference Include="Tiktoken" />
     </ItemGroup>
 
     <ItemGroup>

@@ -7,10 +7,24 @@ namespace LLMService.Infrastructure.LLMProvider;
 public class ChatModelClient 
     : OllamaApiClient, IChatClient
 {
-    public ChatModelClient()
-        : base(new Uri("http://localhost:11434"), "llama3.1")
+    public ChatModelClient(IConfiguration configuration)
+        : base(CreateHttpClient(configuration), "llama3.1")
     {
     }
+
+    private static HttpClient CreateHttpClient(IConfiguration configuration)
+    {
+        return new HttpClient
+        {
+            BaseAddress = new Uri("http://localhost:11434"),
+            Timeout = TimeSpan.FromMinutes(10)
+        };
+    }
+    // public ChatModelClient()
+    //     : base(new Uri("http://localhost:11434"), "llama3.1")
+    // {
+    //     
+    // }
 }
 
 public class EmbeddingModelClient 
