@@ -12,5 +12,5 @@ var app = builder.Build();
 app.MapDefaultEndpoints();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapReverseProxy();
+app.MapReverseProxy().RequireAuthorization();
 app.Run();
