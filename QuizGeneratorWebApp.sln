@@ -53,7 +53,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizService.Infrastructure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizService.Application", "src\QuizService\QuizService.Application\QuizService.Application.csproj", "{D8E2FBF0-FB55-4882-9AD9-EB1FD944CAB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Messaging", "BuildingBlocks\BuildingBlocks.Messaging\BuildingBlocks.Messaging.csproj", "{63E0C1AB-671C-40B1-962E-927031D5F5A1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Asynchronously", "BuildingBlocks\BuildingBlocks.Asynchronously\BuildingBlocks.Asynchronously.csproj", "{63E0C1AB-671C-40B1-962E-927031D5F5A1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Security", "BuildingBlocks\BuildingBlocks.Security\BuildingBlocks.Security\BuildingBlocks.Security.csproj", "{25868089-A641-4C6B-864A-82E5EA4405B7}"
 EndProject
