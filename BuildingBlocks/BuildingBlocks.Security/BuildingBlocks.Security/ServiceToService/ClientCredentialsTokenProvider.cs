@@ -1,7 +1,7 @@
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 
-namespace BuildingBlocks.Security;
+namespace BuildingBlocks.Security.ServiceToService;
 
 public sealed class ClientCredentialsTokenProvider( HttpClient http,
     IOptionsMonitor<ClientCredentialsOptions> options)

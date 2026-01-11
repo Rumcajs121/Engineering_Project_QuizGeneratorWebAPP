@@ -4,7 +4,7 @@ using LLMService.Infrastructure.Redis;
 
 namespace LLMService.Infrastructure;
 
-public class QuizJobWorker(IServiceScopeFactory scopeFactory, ILogger<QuizJobWorker> logger) : BackgroundService
+public class QuizJobWorker(IServiceScopeFactory scopeFactory, ILogger<QuizJobWorker> logger,IHttpClientFactory httpClientFactory) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -20,6 +20,7 @@ public class QuizJobWorker(IServiceScopeFactory scopeFactory, ILogger<QuizJobWor
 
             while (!stoppingToken.IsCancellationRequested)
             {
+                 IReadOnlyList<Guid> documentId=null;
                 string? jobId = null;
                 try
                 {
@@ -47,6 +48,7 @@ public class QuizJobWorker(IServiceScopeFactory scopeFactory, ILogger<QuizJobWor
                         job.Request.DocumentIds);
                     job.Result = quiz;
                     job.Status = QuizJobStatus.Generated;
+                    documentId = job.Request.DocumentIds; //TODO  BACGROUDSERVICE do Wyjasnienia
                     logger.LogInformation("Job {JobId} starting generated", jobId);
                     
                     await repository.UpdateJobAsync(job, stoppingToken);
@@ -56,18 +58,29 @@ public class QuizJobWorker(IServiceScopeFactory scopeFactory, ILogger<QuizJobWor
                         await repository.UpdateJobAsync(job, stoppingToken);
                         
                         logger.LogWarning("Job {JobId} failed — quiz is null", jobId);
-                        //TODO: In the future requeue Job.
+                        //TODO: Retry Job.
                         await repository.AckJobAsync(jobId);
                         continue;
                     }
-
+                    
                     logger.LogInformation("Job {JobId} generated successfully", jobId);
-                    //TODO: Send QuizService to create quiz 
+                    var httpContext=httpClientFactory.CreateClient("llmtoquizcomunications");
+                    
+                    //Request do QuizService
+                    var quizContext = FactoryBuildQuizDto(quiz,documentId.First()); 
+                    var payload = new { createQuizDto = quizContext };
+                    var response=await httpContext.PostAsJsonAsync("/quiz",payload, cancellationToken: stoppingToken);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                            var body=await response.Content.ReadAsStringAsync(stoppingToken);
+                            logger.LogError($"Request failed: {response.StatusCode} - {response.Content} - {response}");
+                            continue;
+                    }
+                    var quizId=await response.Content.ReadFromJsonAsync<CreateQuizResponse>(cancellationToken: stoppingToken);
+                    logger.LogInformation($"Request status {response.StatusCode} to create quiz {quizId.Id} succes");
                     job.Status = QuizJobStatus.Sent;
                     await repository.UpdateJobAsync(job, stoppingToken);
                     await repository.AckJobAsync(jobId);
-                    
-
                 }
                 catch (OperationCanceledException)
                 {
@@ -76,5 +89,34 @@ public class QuizJobWorker(IServiceScopeFactory scopeFactory, ILogger<QuizJobWor
                 }
             }
         }
+    }
+
+    private static RequestQuizDto FactoryBuildQuizDto(LlmQuiz generateQuizByLlm, Guid documentId )
+    {
+        var buildQuizContext = new RequestQuizDto
+        (
+            QuizId: Guid.NewGuid(), //TODO: BACGROUDSERVICE  Do Wyjaśnienia !!
+            QuizStatus: "Generating",
+            SourceId: documentId,
+            Title: generateQuizByLlm.Title,
+            CreatedAt: DateTime.Now,
+            Question: generateQuizByLlm.Questions.Select(q => new RequestQuestionQuizDto
+            (
+                QuestionId: Guid.NewGuid(), 
+                Text: q.Text,
+                Explanation: q.Explanation,
+                SourceChunkId: Guid.NewGuid(),//TODO: Do Wyjaśnienia !!
+                Answer: q.Answers.Select(a => new RequestAnswerQuizDto
+                (
+                    AnswerId: Guid.NewGuid(),
+                    Ordinal: a.Ordinal,
+                    Text: a.Text,
+                    IsCorrect: a.IsCorrect
+                )).ToList()
+            )).ToList(),
+            Tag: generateQuizByLlm.Tags
+        );
+            
+        return buildQuizContext;
     }
 }

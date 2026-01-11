@@ -1,3 +1,4 @@
+using BuildingBlocks.Security.ServiceToService;
 using LLMService;
 
 
@@ -13,7 +14,12 @@ builder.Services
     .AddApplication(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddKeycloakServiceToServiceAuthentication(builder.Configuration);
+builder.Services.AddHttpClient("llmtoquizcomunications", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:6033/"); //TODO: Private Network Docker
+    client.Timeout = TimeSpan.FromSeconds(30);
+}).AddKeycloakServiceToServiceAuthentication();
 
 var app = builder.Build();
 

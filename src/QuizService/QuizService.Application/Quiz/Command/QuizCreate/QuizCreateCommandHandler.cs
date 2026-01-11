@@ -16,7 +16,7 @@ public class QuizCreateCommandHandler(IUnitOfWork unitOfWork, IQuizRepository qu
     {
         var result=await quizService.CreateNewQuiz(command.CreateQuizDto);
         await quizRepository.AddAsync(result, cancellationToken);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        // await unitOfWork.SaveChangesAsync(cancellationToken);
         
         return new CreateQuizResult(result.Id.Value);
     }

@@ -24,6 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\BuildingBlocks\BuildingBlocks.Asynchronously\BuildingBlocks.Asynchronously.csproj" />
+      <ProjectReference Include="..\..\BuildingBlocks\BuildingBlocks.Security\BuildingBlocks.Security\BuildingBlocks.Security.csproj" />
       <ProjectReference Include="..\..\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj" />
       <ProjectReference Include="..\..\QuizGeneratorWebApp.ServiceDefaults\QuizGeneratorWebApp.ServiceDefaults.csproj" />
     </ItemGroup>

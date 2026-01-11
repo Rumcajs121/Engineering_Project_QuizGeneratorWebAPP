@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks.Security\BuildingBlocks.Security\BuildingBlocks.Security.csproj" />
       <ProjectReference Include="..\QuizService.Application\QuizService.Application.csproj" />
       <ProjectReference Include="..\QuizService.Infrastructure\QuizService.Infrastructure.csproj" />
     </ItemGroup>

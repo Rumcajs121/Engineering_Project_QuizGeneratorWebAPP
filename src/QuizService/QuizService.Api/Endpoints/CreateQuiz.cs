@@ -23,6 +23,6 @@ public class CreateQuiz:ICarterModule
         .Produces<CreateQuizResponse>(StatusCodes.Status201Created)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("CreateQuiz")
-        .WithDescription("CreateQuiz");
+        .WithDescription("CreateQuiz").RequireAuthorization();
     }
 }
