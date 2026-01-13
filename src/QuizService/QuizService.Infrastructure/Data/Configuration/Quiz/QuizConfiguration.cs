@@ -1,3 +1,5 @@
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using QuizService.Domain.Enums;
 
@@ -99,9 +101,31 @@ public class QuizConfiguration : IEntityTypeConfiguration<Quiz>
             .HasMaxLength(500)
             .IsRequired(false)
             .IsUnicode(true);
-        builder.Property(x => x.SourceId)
+        //TODO: Source custom cofiguration
+        var guidListComparer = new ValueComparer<List<Guid>>(
+            (a, b) => 
+                a == b || (a != null && b != null && a.SequenceEqual(b)),
+
+            a => a == null
+                ? 0
+                : a.Aggregate(0, (h, g) => HashCode.Combine(h, g)),
+
+            a => a == null ? new List<Guid>() : a.ToList()
+        );
+        builder.Property(e => e.ExternalId)
             .IsRequired()
+            .HasColumnName("ExternalId")
             .HasColumnType("uniqueidentifier");
+        builder.Property(x=>x.SourceId)
+            .HasColumnName("SourceId")
+            .HasConversion(
+                v => JsonSerializer.Serialize(v ?? new List<Guid>(), (JsonSerializerOptions)null),
+                v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null) ?? new List<Guid>()
+                )
+            .HasColumnType("nvarchar(max)");;
+        builder.Property(x=>x.SourceId).Metadata.SetValueComparer(guidListComparer);
+        
+        
         builder.Property(x => x.QuizStatus)
             .HasConversion<string>()
             .HasMaxLength(50)

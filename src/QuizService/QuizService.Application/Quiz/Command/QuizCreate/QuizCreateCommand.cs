@@ -19,9 +19,10 @@ public class QuizCreateCommandValidator : AbstractValidator<QuizCreateCommand>
 
         When(x => x.CreateQuizDto != null, () =>
         {
-            RuleFor(x => x.CreateQuizDto.SourceId)
-                .NotEmpty()
-                .WithMessage("SourceId is required and cannot be empty Guid.");
+            //TODO: Change Validator
+            // RuleFor(x => x.CreateQuizDto.SourceId)
+            //     .NotEmpty()
+            //     .WithMessage("SourceId is required and cannot be empty Guid.");
 
             RuleFor(x => x.CreateQuizDto.Title)
                 .MaximumLength(500)

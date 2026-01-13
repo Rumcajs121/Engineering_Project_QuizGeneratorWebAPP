@@ -3,7 +3,7 @@ namespace LLMService.Commons.Models;
 public record RequestQuizDto(
     Guid QuizId,
     string QuizStatus,
-    Guid SourceId,
+    List<Guid> SourceId,
     string Title,
     DateTimeOffset CreatedAt,
     IEnumerable<RequestQuestionQuizDto> Question,

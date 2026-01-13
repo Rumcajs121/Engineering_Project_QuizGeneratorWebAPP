@@ -4,7 +4,7 @@ public class CreateQuizDto
 {
     public Guid QuizId { get; init; }
     public string QuizStatus { get; init; }
-    public Guid SourceId { get; init; }
+    public List<Guid> SourceId { get; init; }
     public IEnumerable<CreateQusestionDto> Question { get; init; }
     public IEnumerable<string> Tag { get; init; }
     public string Title { get; init; }

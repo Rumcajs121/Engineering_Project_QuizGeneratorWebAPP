@@ -39,7 +39,7 @@ public sealed class LlmQuestion
 
 public sealed class LlmAnswer
 {
-    [Description("Order of the answer (1-4)")]
+    [Description("Order of the answer (0-3)")]
     [JsonPropertyName("ordinal")]
     public int Ordinal { get; init; }
     

@@ -69,6 +69,7 @@ public static class QuizAttemptMapping
             );
             questionAttempt.Add(attemptQ);
         }
+        //TODO: new guid for UserID
         return QuizAttempt.Create(quiz.QuizId,Guid.NewGuid(),snapshotToJson,DateTime.Now, 1,questionAttempt);
     }
     

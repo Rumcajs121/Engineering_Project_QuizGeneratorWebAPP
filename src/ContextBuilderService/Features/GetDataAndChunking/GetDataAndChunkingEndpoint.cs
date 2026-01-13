@@ -12,7 +12,7 @@ public class GetDataAndChunkingEndpoint:ICarterModule
     {
         app.MapGet("/chunking", async ([FromQuery] string request, [FromServices] ISender sender) =>
             {
-            var command=new GetDataAndChunkingQuery(request);
+            var command=new GetDataAndChunkingCommand(request);
             var result=await sender.Send(command);
             var response=result.Adapt<GetDataAndChunkingQueryResponse>();
             return Results.Ok(response);
@@ -21,6 +21,6 @@ public class GetDataAndChunkingEndpoint:ICarterModule
         .Produces<GetDataAndChunkingResponse>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("GetDataAndChunking")
-        .WithDescription("GetDataAndChunking");;
+        .WithDescription("GetDataAndChunking");
     }
 }

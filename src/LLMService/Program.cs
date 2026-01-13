@@ -17,7 +17,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddKeycloakServiceToServiceAuthentication(builder.Configuration);
 builder.Services.AddHttpClient("llmtoquizcomunications", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:6033/"); //TODO: Private Network Docker
+    client.BaseAddress = new Uri("https://localhost:6033/"); 
     client.Timeout = TimeSpan.FromSeconds(30);
 }).AddKeycloakServiceToServiceAuthentication();
 

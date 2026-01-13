@@ -26,7 +26,7 @@ public class GetDataAndChunkingService(IRepository repository):IGetDataAndChunki
             tokenCounter: null
         );
         var totalChunks = chunks.Count;
-        var documentId = Guid.NewGuid(); //TODO: Replace with actual document ID if available 
+        var documentId = Guid.Parse(fileName); 
         var chunkModel = chunks.Select((content, index) => new Chunk(
             DocumentId: documentId,
             ChunkIndex: index,

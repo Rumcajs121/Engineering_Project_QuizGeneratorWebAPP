@@ -67,7 +67,7 @@ public class QuizJobWorker(IServiceScopeFactory scopeFactory, ILogger<QuizJobWor
                     var httpContext=httpClientFactory.CreateClient("llmtoquizcomunications");
                     
                     //Request do QuizService
-                    var quizContext = FactoryBuildQuizDto(quiz,documentId.First()); 
+                    var quizContext = FactoryBuildQuizDto(quiz,documentId.ToList()); 
                     var payload = new { createQuizDto = quizContext };
                     var response=await httpContext.PostAsJsonAsync("/quiz",payload, cancellationToken: stoppingToken);
                     if (!response.IsSuccessStatusCode)
@@ -90,8 +90,8 @@ public class QuizJobWorker(IServiceScopeFactory scopeFactory, ILogger<QuizJobWor
             }
         }
     }
-
-    private static RequestQuizDto FactoryBuildQuizDto(LlmQuiz generateQuizByLlm, Guid documentId )
+    //TODO: change for List<Guid> Guid documentIds
+    private static RequestQuizDto FactoryBuildQuizDto(LlmQuiz generateQuizByLlm, List<Guid> documentId )
     {
         var buildQuizContext = new RequestQuizDto
         (
@@ -105,7 +105,7 @@ public class QuizJobWorker(IServiceScopeFactory scopeFactory, ILogger<QuizJobWor
                 QuestionId: Guid.NewGuid(), 
                 Text: q.Text,
                 Explanation: q.Explanation,
-                SourceChunkId: Guid.NewGuid(),//TODO: Do Wyjaśnienia !!
+                SourceChunkId: Guid.NewGuid(),
                 Answer: q.Answers.Select(a => new RequestAnswerQuizDto
                 (
                     AnswerId: Guid.NewGuid(),

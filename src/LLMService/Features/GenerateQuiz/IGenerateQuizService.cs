@@ -24,7 +24,6 @@ public class GenerateQuizService(IChatClient clientLLama,IVectorDataRepository r
         logger.LogInformation($"Question tokens (from Qdrant): {questionTokens:N0}");
         var searchQdrant = await repository.TopKChunk(k, question, documentIds);
         
-        // 2️⃣ Policz tokeny w kontekście (chunki z Qdrant)
         int contextTokens = CountTokens(searchQdrant);
         logger.LogInformation($"Context tokens (from Qdrant): {contextTokens:N0}");
         

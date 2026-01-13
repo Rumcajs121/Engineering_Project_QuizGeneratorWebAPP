@@ -10,8 +10,10 @@ namespace QuizService.Domain.Models.Quiz;
 public class Quiz:Aggregate<QuizId>
 {
     public QuizStatus QuizStatus { get; private set; }
-    //TODO: Add UserId ?? 
-    public Guid SourceId { get; private set; }
+    //TODO: Add UserId + List<SourceId> ?? 
+    public Guid ExternalId { get; private set; }
+    //SourceId == DocumentId 
+    public List<Guid> SourceId { get; private set; }
     private readonly List<QuizQuestion> _questions = new();
     public IReadOnlyCollection<QuizQuestion> Questions => _questions.AsReadOnly();
     
@@ -20,9 +22,9 @@ public class Quiz:Aggregate<QuizId>
     public string? Title { get; private set; }
     
     
-    public static Quiz Create(Guid sourceId, string? titleQuiz, IEnumerable<QuizQuestion> questions, IEnumerable<Tag>? tags = null)
+    public static Quiz Create(List<Guid> sourceId, string? titleQuiz, IEnumerable<QuizQuestion> questions, IEnumerable<Tag>? tags = null)
     {
-        if (sourceId == Guid.Empty)
+        if (sourceId is null ||sourceId.Count == 0  )
             throw new DomainException("SourceId is required.");
         if (titleQuiz != null)
         {

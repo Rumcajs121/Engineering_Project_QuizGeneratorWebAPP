@@ -4,7 +4,6 @@ using UserService.Commons.Dto;
 
 namespace UserService.Features.EditProfile;
 
-//TODO Check abstract record;
 public sealed record EditProfileCommandRequest(EditProfileDto Dto);
 public  sealed record EditProfileCommandResponse(bool Success);
 public record EditProfileCommand(EditProfileCommandRequest EditProfileDto):ICommand<EditProfileCommandResponse>;
