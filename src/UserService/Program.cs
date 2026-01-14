@@ -1,4 +1,5 @@
 using BuildingBlocks.Security;
+using BuildingBlocks.Security.ClientToService.CurrentUser;
 using UserService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,8 +9,8 @@ builder.Services.AddInfrastructure(builder.Configuration)
     .AddApplication(builder.Configuration)
     .AddApiService()
     .AddKeycloakJwtAuthentication(builder.Configuration)
-    .AddKeycloakAuthorizationPolicies()
-    .AddHttpContextAccessor();
+    .AddKeycloakAuthorizationPolicies();
+builder.Services.AddCurrentUser();
 builder.Services.AddEndpointsApiExplorer(); 
 
 builder.Services.AddSwaggerGen();

@@ -6,12 +6,12 @@ namespace UserService.Features.GetUserProfile;
 
 public interface IGetUserProfileService
 {
-    Task<ProfileDto>GetUserProfile(string externalId,CancellationToken ct);
+    Task<ProfileDto>GetUserProfile(Guid externalId,CancellationToken ct);
 }
 
 public class GetUserProfileService(IDataRepository repository) : IGetUserProfileService
 {
-    public async Task<ProfileDto> GetUserProfile(string externalId,CancellationToken ct)
+    public async Task<ProfileDto> GetUserProfile(Guid externalId,CancellationToken ct)
     {
         var userDomain= await repository.GetUserReadAsync(externalId,ct);
         if (userDomain != null)

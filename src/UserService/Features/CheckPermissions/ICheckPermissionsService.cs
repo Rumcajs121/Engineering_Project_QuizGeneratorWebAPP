@@ -5,18 +5,14 @@ namespace UserService.Features.CheckPermissions;
 
 public interface ICheckPermissionsService
 {
-    Task<bool> CheckPermissions(string externalId, string permission);
+    Task<string> CheckPermissions(Guid externalId);
 }
 
 public class CheckPermissionsService(IDataRepository repository):ICheckPermissionsService
 {
-    public async Task<bool> CheckPermissions(string externalId, string permission)
+    public async Task<string> CheckPermissions(Guid externalId)
     {
-        if (!Enum.TryParse<PrivilegesUserDomain>(permission, ignoreCase:true, out var required))
-        {
-            return false;
-        }
         var dbCheckPermissions = await repository.GetPrivileges(externalId);
-        return dbCheckPermissions >= required;
+        return dbCheckPermissions.ToString();
     }
 }

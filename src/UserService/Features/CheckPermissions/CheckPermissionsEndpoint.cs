@@ -5,17 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace UserService.Features.CheckPermissions;
 
-public record CheckPermissionsQueryEndpointRequest(string ExternalId,string Privilege);
-public record CheckPermissionsQueryEndpointResponse(bool Success);
+public record CheckPermissionsQueryEndpointResponse(string Privelage);
 public class CheckPermissionsEndpoint:ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         
-        app.MapGet("/permission", async ([AsParameters]CheckPermissionsQueryEndpointRequest request, [FromServices] ISender sender) =>
+        app.MapGet("/permission", async ([FromServices] ISender sender) =>
             {
-                var commandRequest = request.Adapt<CheckPermissionsQueryRequest>();
-                var command=new CheckPermissionsQuery(commandRequest);
+                var command=new CheckPermissionsQuery();
                 var result=await sender.Send(command);
                 var response = result.Adapt<CheckPermissionsQueryEndpointResponse>();
                 return Results.Ok(response);

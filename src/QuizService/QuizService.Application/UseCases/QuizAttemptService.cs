@@ -21,7 +21,7 @@ public class QuizAttemptService(IQuizAttemptRepository quizAttemptRepository,IQu
         return score;
         
     }
-
+    
     public async Task<QuizAttempt> CreateNewAnswer(Guid orderId)
     {
         var quiz=await quizRepository.GetByIdAsync(QuizId.Of(orderId));

@@ -1,7 +1,7 @@
 using System.Security.Claims;
-using UserService.Commons.Dto;
+using Microsoft.AspNetCore.Http;
 
-namespace UserService.Infrastructure;
+namespace BuildingBlocks.Security.ClientToService.CurrentUser;
 
 public sealed class CurrentUser(IHttpContextAccessor accessor):ICurrentUser
 {

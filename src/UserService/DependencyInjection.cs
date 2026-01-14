@@ -1,4 +1,5 @@
 using System.Reflection;
+using BuildingBlocks.Security.ClientToService.CurrentUser;
 using Carter;
 using Microsoft.EntityFrameworkCore;
 using UserService.Commons.Dto;

@@ -1,4 +1,4 @@
-namespace UserService.Commons.Dto;
+namespace BuildingBlocks.Security.ClientToService.CurrentUser;
 
 public interface ICurrentUser
 {

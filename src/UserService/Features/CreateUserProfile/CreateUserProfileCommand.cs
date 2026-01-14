@@ -1,4 +1,5 @@
 using BuildingBlocks.CQRS;
+using BuildingBlocks.Security.ClientToService.CurrentUser;
 using UserService.Commons.Dto;
 
 namespace UserService.Features.CreateUserProfile;
@@ -13,14 +14,7 @@ public class
 {
     public async Task<CreateUserProfileCommandResponse> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
     {
-        if (!currentUser.IsAuthenticated)
-            throw new UnauthorizedAccessException();
-        var subject = currentUser.Subject;
-        var email = currentUser.Email;
-        var userName = currentUser.UserName;
-
-        await service.CreateUser(subject, email, userName, cancellationToken);
-
+        await service.CreateUser(cancellationToken);
         return new CreateUserProfileCommandResponse(true);
     }
 }

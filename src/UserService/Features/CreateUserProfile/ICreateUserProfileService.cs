@@ -5,22 +5,23 @@ namespace UserService.Features.CreateUserProfile;
 
 public interface ICreateUserProfileService
 {
-    Task CreateUser( string subject, string email, string userName,CancellationToken ct);
+    Task CreateUser(CancellationToken ct);
 }
 
 public class CreateUserProfileService(IDataRepository repository) : ICreateUserProfileService
 {
-    public async Task CreateUser(string subject, string email, string userName, CancellationToken ct)
+    public async Task CreateUser(CancellationToken ct)
     {
-        var existing = await repository.GetUserForUpdateAsync(subject,ct);
+        var userContext = repository.ReadUserFromTheToken();
+        var existing = await repository.GetUserForUpdateAsync(userContext.Subject,ct);
 
         if (existing is null)
         {
             var user = new UserDomain
             {
-                ExternalId = subject,
-                Username = userName,
-                Email = email,
+                ExternalId = userContext.Subject,
+                Username = userContext.UserName,
+                Email = userContext.Email,
                 PrivilegeUserDomain = PrivilegesUserDomain.User,
                 IsActive = true,
                 LastLoginAt = DateTime.UtcNow
@@ -32,7 +33,6 @@ public class CreateUserProfileService(IDataRepository repository) : ICreateUserP
         {
             existing.LastLoginAt = DateTime.UtcNow;
         }
-
         await repository.DbSaveAsync();
     }
 }

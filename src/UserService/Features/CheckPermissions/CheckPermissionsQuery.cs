@@ -1,16 +1,17 @@
 using BuildingBlocks.CQRS;
+using UserService.Infrastructure;
 
 namespace UserService.Features.CheckPermissions;
 
-public record CheckPermissionsQueryRequest(string ExternalId,string Privilege);
-public record CheckPermissionsQueryResponse(bool Success);
-public record CheckPermissionsQuery(CheckPermissionsQueryRequest Permissions):IQuery<CheckPermissionsQueryResponse>;
+public record CheckPermissionsQueryResponse(string Privelage);
+public record CheckPermissionsQuery():IQuery<CheckPermissionsQueryResponse>;
 
-public class CheckPermissionsQueryHandler(ICheckPermissionsService service):IQueryHandler<CheckPermissionsQuery,CheckPermissionsQueryResponse>
+public class CheckPermissionsQueryHandler(ICheckPermissionsService service,IDataRepository repository):IQueryHandler<CheckPermissionsQuery,CheckPermissionsQueryResponse>
 {
     public async Task<CheckPermissionsQueryResponse> Handle(CheckPermissionsQuery query, CancellationToken cancellationToken)
     {
-        var result = await service.CheckPermissions(query.Permissions.ExternalId,query.Permissions.Privilege);
+        var externalId = repository.ReadExternalIdFromToken();
+        var result = await service.CheckPermissions(externalId);
         return new CheckPermissionsQueryResponse(result);
     }
 }
