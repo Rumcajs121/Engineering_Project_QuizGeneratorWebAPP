@@ -1,3 +1,5 @@
+using BuildingBlocks.Security;
+using BuildingBlocks.Security.ClientToService.CurrentUser;
 using BuildingBlocks.Security.ServiceToService;
 using LLMService;
 
@@ -11,9 +13,12 @@ builder.Services
     .AddLLM(builder.Configuration)
     .AddApiService()
     .AddInfrastructure(builder.Configuration)
-    .AddApplication(builder.Configuration);
+    .AddApplication(builder.Configuration)
+    .AddKeycloakJwtAuthentication(builder.Configuration)
+    .AddKeycloakAuthorizationPolicies();
 builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddKeycloakServiceToServiceAuthentication(builder.Configuration);
 builder.Services.AddHttpClient("llmtoquizcomunications", client =>
 {
@@ -21,10 +26,12 @@ builder.Services.AddHttpClient("llmtoquizcomunications", client =>
     client.Timeout = TimeSpan.FromSeconds(30);
 }).AddKeycloakServiceToServiceAuthentication();
 
+builder.Services.AddCurrentUser();
+
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
-// Configure the HTTP request pipeline.
+// Configure the HTTP parameter pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -33,5 +40,7 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseApiService();
 await app.RunAsync();

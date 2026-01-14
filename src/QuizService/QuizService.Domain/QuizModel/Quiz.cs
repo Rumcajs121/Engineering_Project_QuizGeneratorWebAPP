@@ -10,9 +10,7 @@ namespace QuizService.Domain.Models.Quiz;
 public class Quiz:Aggregate<QuizId>
 {
     public QuizStatus QuizStatus { get; private set; }
-    //TODO: Add UserId + List<SourceId> ?? 
     public Guid ExternalId { get; private set; }
-    //SourceId == DocumentId 
     public List<Guid> SourceId { get; private set; }
     private readonly List<QuizQuestion> _questions = new();
     public IReadOnlyCollection<QuizQuestion> Questions => _questions.AsReadOnly();
@@ -22,7 +20,7 @@ public class Quiz:Aggregate<QuizId>
     public string? Title { get; private set; }
     
     
-    public static Quiz Create(List<Guid> sourceId, string? titleQuiz, IEnumerable<QuizQuestion> questions, IEnumerable<Tag>? tags = null)
+    public static Quiz Create(List<Guid> sourceId, Guid externalId,string? titleQuiz, IEnumerable<QuizQuestion> questions, IEnumerable<Tag>? tags = null)
     {
         if (sourceId is null ||sourceId.Count == 0  )
             throw new DomainException("SourceId is required.");
@@ -38,6 +36,7 @@ public class Quiz:Aggregate<QuizId>
             Id = QuizId.Of(Guid.NewGuid()),
             QuizStatus = QuizStatus.Generating,
             SourceId = sourceId,
+            ExternalId= externalId,
             Title = titleQuiz
         };
         foreach (var q in questions ?? Enumerable.Empty<QuizQuestion>())
@@ -72,6 +71,7 @@ public class Quiz:Aggregate<QuizId>
             QuizId: QuizId.Of(Id.Value), 
             QuizName:Title,
             Status: this.QuizStatus.ToString(),
+            ExternalId:this.ExternalId,
             SourceId: this.SourceId,
             ShortDescription: this.Title,
             Questions: this.Questions

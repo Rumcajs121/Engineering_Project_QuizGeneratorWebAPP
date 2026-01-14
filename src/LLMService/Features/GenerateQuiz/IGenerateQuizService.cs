@@ -1,4 +1,5 @@
 using System.Text.Json;
+using BuildingBlocks.Security.ClientToService.CurrentUser;
 using LLMService.Commons.Models;
 using LLMService.Infrastructure.LLMProvider;
 using LLMService.Infrastructure.Redis;
@@ -11,10 +12,10 @@ namespace LLMService.Features.GenerateQuiz;
 public interface IGenerateQuizService
 {
     Task<LlmQuiz> GenerateQuiz(int k,int countQuestion,string question, IReadOnlyList<Guid> documentIds);
-    Task<string> CreateJobAsync(GenerateQuizRequest request, CancellationToken ct = default);
+    Task<string> CreateJobAndAddQueue(int k, int countQuestion,string question, IReadOnlyList<Guid> documentIds, CancellationToken ct = default);
 }
 
-public class GenerateQuizService(IChatClient clientLLama,IVectorDataRepository repository,IRedisDataRepository jobRepository,ILogger<GenerateQuizService> logger) : IGenerateQuizService
+public class GenerateQuizService(IChatClient clientLLama,IVectorDataRepository repository,IRedisDataRepository jobRepository,ILogger<GenerateQuizService> logger, ICurrentUser currentUser) : IGenerateQuizService
 {
     private Encoder? _encoder;
     
@@ -69,9 +70,11 @@ public class GenerateQuizService(IChatClient clientLLama,IVectorDataRepository r
         return quiz ??  throw new InvalidOperationException("LLM returned invalid JSON.");
     }
 
-    public async Task<string> CreateJobAsync(GenerateQuizRequest request, CancellationToken ct = default)
+    public async Task<string> CreateJobAndAddQueue(int k, int countQuestion,string question, IReadOnlyList<Guid> documentIds, CancellationToken ct = default)
     {
-        var jobId=await jobRepository.CreateJobAsync(request, ct);
+        var externalId = Guid.Parse(currentUser.Subject);
+        var context=new GenerateQuizParameter(k,countQuestion,question,documentIds,externalId);
+        var jobId=await jobRepository.CreateJobAsync(context, ct);
         await jobRepository.EnqueueJobAsync(jobId);
         return jobId;
     }

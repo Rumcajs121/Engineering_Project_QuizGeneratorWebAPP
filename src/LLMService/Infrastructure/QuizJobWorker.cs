@@ -21,6 +21,7 @@ public class QuizJobWorker(IServiceScopeFactory scopeFactory, ILogger<QuizJobWor
             while (!stoppingToken.IsCancellationRequested)
             {
                  IReadOnlyList<Guid> documentId=null;
+                 Guid externalId;
                 string? jobId = null;
                 try
                 {
@@ -42,13 +43,14 @@ public class QuizJobWorker(IServiceScopeFactory scopeFactory, ILogger<QuizJobWor
                     job.Status = QuizJobStatus.Running;
                     await repository.UpdateJobAsync(job, stoppingToken);
                     var quiz = await service.GenerateQuiz(
-                        job.Request.K,
-                        job.Request.CountQuestion,
-                        job.Request.Question,
-                        job.Request.DocumentIds);
+                        job.Parameter.K,
+                        job.Parameter.CountQuestion,
+                        job.Parameter.Question,
+                        job.Parameter.DocumentIds);
                     job.Result = quiz;
                     job.Status = QuizJobStatus.Generated;
-                    documentId = job.Request.DocumentIds; //TODO  BACGROUDSERVICE do Wyjasnienia
+                    documentId = job.Parameter.DocumentIds; 
+                    externalId=job.Parameter.ExternalId;
                     logger.LogInformation("Job {JobId} starting generated", jobId);
                     
                     await repository.UpdateJobAsync(job, stoppingToken);
@@ -66,18 +68,18 @@ public class QuizJobWorker(IServiceScopeFactory scopeFactory, ILogger<QuizJobWor
                     logger.LogInformation("Job {JobId} generated successfully", jobId);
                     var httpContext=httpClientFactory.CreateClient("llmtoquizcomunications");
                     
-                    //Request do QuizService
-                    var quizContext = FactoryBuildQuizDto(quiz,documentId.ToList()); 
+                    //Parameter do QuizService
+                    var quizContext = FactoryBuildQuizDto(quiz,documentId.ToList(),externalId); 
                     var payload = new { createQuizDto = quizContext };
                     var response=await httpContext.PostAsJsonAsync("/quiz",payload, cancellationToken: stoppingToken);
                     if (!response.IsSuccessStatusCode)
                     {
                             var body=await response.Content.ReadAsStringAsync(stoppingToken);
-                            logger.LogError($"Request failed: {response.StatusCode} - {response.Content} - {response}");
+                            logger.LogError($"Parameter failed: {response.StatusCode} - {response.Content} - {response}");
                             continue;
                     }
                     var quizId=await response.Content.ReadFromJsonAsync<CreateQuizResponse>(cancellationToken: stoppingToken);
-                    logger.LogInformation($"Request status {response.StatusCode} to create quiz {quizId.Id} succes");
+                    logger.LogInformation($"Parameter status {response.StatusCode} to create quiz {quizId.Id} succes");
                     job.Status = QuizJobStatus.Sent;
                     await repository.UpdateJobAsync(job, stoppingToken);
                     await repository.AckJobAsync(jobId);
@@ -91,12 +93,15 @@ public class QuizJobWorker(IServiceScopeFactory scopeFactory, ILogger<QuizJobWor
         }
     }
     //TODO: change for List<Guid> Guid documentIds
-    private static RequestQuizDto FactoryBuildQuizDto(LlmQuiz generateQuizByLlm, List<Guid> documentId )
+    private static RequestQuizDto FactoryBuildQuizDto(LlmQuiz generateQuizByLlm, List<Guid> documentId,Guid  externalId )
     {
+        
         var buildQuizContext = new RequestQuizDto
         (
-            QuizId: Guid.NewGuid(), //TODO: BACGROUDSERVICE  Do Wyjaśnienia !!
+            //TODO: Add UserID
+            QuizId: Guid.NewGuid(), 
             QuizStatus: "Generating",
+            ExternalId:externalId,
             SourceId: documentId,
             Title: generateQuizByLlm.Title,
             CreatedAt: DateTime.Now,

@@ -25,6 +25,7 @@ public class QuizService(ITagRepository tagRepository):IQuizService
         
         var newQuiz = Domain.Models.Quiz.Quiz.Create(
             sourceId: dto.SourceId,
+            externalId:dto.ExternalId,
             titleQuiz: dto.Title,
             questions: listNewQuestion
         );

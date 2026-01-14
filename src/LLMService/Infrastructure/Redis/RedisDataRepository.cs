@@ -10,7 +10,7 @@ namespace LLMService.Infrastructure.Redis;
 public interface IRedisDataRepository
 {
     Task<IEnumerable<Chunk>>  GetChunksAsync(Guid documentId);
-    Task<string> CreateJobAsync(GenerateQuizRequest request, CancellationToken ct = default);
+    Task<string> CreateJobAsync(GenerateQuizParameter parameter, CancellationToken ct = default);
     Task<QuizJob? > GetJobAsync(string jobId, CancellationToken ct = default);
     Task UpdateJobAsync(QuizJob job, CancellationToken ct = default);
     Task EnqueueJobAsync(string jobId);
@@ -46,15 +46,17 @@ public class RedisDataRepository(IDistributedCache cache, IConnectionMultiplexer
     }
 
     //QUEUE FOR BACKGROUND-SERVICE
-    public async Task<string> CreateJobAsync(GenerateQuizRequest request, CancellationToken ct = default)
+    public async Task<string> CreateJobAsync(GenerateQuizParameter parameter, CancellationToken ct = default)
     {
-        ArgumentNullException.ThrowIfNull(request);
+        ArgumentNullException.ThrowIfNull(parameter);
         var job = new QuizJob
         {
             JobId = Guid. NewGuid().ToString(),
             Status = QuizJobStatus.Pending,
-            Request = request,
-            CreatedAt = DateTime.UtcNow
+            Parameter = parameter,
+            ExternalId = parameter.ExternalId,
+            CreatedAt = DateTime.UtcNow,
+            QuizServiceId = "llm-service"
         };
         await SaveJobAsync(job, ct);
         return job.JobId;

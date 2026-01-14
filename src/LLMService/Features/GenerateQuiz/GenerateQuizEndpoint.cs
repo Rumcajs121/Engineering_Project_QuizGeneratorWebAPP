@@ -10,15 +10,16 @@ using StackExchange.Redis;
 
 namespace LLMService.Features.GenerateQuiz;
 
+public record GenerateQuizRequest(int K, int CountQuestion,string Question, IReadOnlyList<Guid> DocumentIds);
 public record GenerateQuizResponse(string JobId);
 
 public class GenerateQuizEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("/generate", async ([FromBody] GenerateQuizRequest request, [FromServices] ISender sender) =>
+        app.MapPost("/generate", async ([FromBody] GenerateQuizRequest parameter, [FromServices] ISender sender) =>
             {
-                var commandRequest = request.Adapt<GenerateQuizCommandRequest>();
+                var commandRequest = parameter.Adapt<GenerateQuizCommandRequest>();
                 var command = new GenerateQuizCommand(commandRequest);
                 var result = await sender.Send(command);
                 var response = result.Adapt<GenerateQuizResponse>();
@@ -31,10 +32,10 @@ public class GenerateQuizEndpoint : ICarterModule
             .WithDescription("""
                              Creates an asynchronous quiz generation job.
 
-                             The request is accepted and processed in the background.
+                             The parameter is accepted and processed in the background.
                              The response contains a JobId that can be used to track the job status
                              and retrieve the generated quiz once completed.
-                             """);
+                             """).RequireAuthorization();
         
         // ! DEVELOPING ENDPOINT !
         app.MapGet("/test/job/{jobId}", async ([FromRoute]string jobId,[FromServices] IConnectionMultiplexer redis) =>

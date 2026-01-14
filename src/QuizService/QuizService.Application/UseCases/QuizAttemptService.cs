@@ -22,9 +22,9 @@ public class QuizAttemptService(IQuizAttemptRepository quizAttemptRepository,IQu
         
     }
     
-    public async Task<QuizAttempt> CreateNewAnswer(Guid orderId)
+    public async Task<QuizAttempt> CreateNewAnswer(Guid quizId)
     {
-        var quiz=await quizRepository.GetByIdAsync(QuizId.Of(orderId));
+        var quiz=await quizRepository.GetByIdAsync(QuizId.Of(quizId));
         var snapshot=quiz.QuizToSnapshot();
         var quizAttempt=QuizAttemptMapping.ToQuizAttempt(snapshot);
         return quizAttempt;

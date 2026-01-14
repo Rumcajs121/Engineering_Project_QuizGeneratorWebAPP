@@ -7,6 +7,7 @@ public sealed record QuizSnapshot(
     QuizId QuizId,
     string QuizName,
     string Status,
+    Guid ExternalId,
     List<Guid> SourceId,
     string? ShortDescription,
     IReadOnlyList<QuestionSnapshot> Questions,
