@@ -10,17 +10,1227 @@
 			"name": "LLMService",
 			"item": [
 				{
-					"name": "YARP",
+					"name": "GenerateQuiz",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "grant_type",
+									"value": "authorization_code_with_pkce",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "postman.client",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://oauth.pstmn.io/v1/callback",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"k\": 2,\r\n  \"countQuestion\": 10,\r\n  \"question\": \"zego dotyczy tekst, jakie metody są najelpsze podczas uczenia\",\r\n  \"documentIds\": [\r\n    \"1793f5fb-cb71-4b60-adfc-ec14d615cdff\"\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{llmservice.api}}/generate",
+							"host": [
+								"{{llmservice.api}}"
+							],
+							"path": [
+								"generate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CheckJob",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{llmservice.api}}/test/job/e600a6b8-18d3-48bb-b8ba-21c4d18d3822",
+							"host": [
+								"{{llmservice.api}}"
+							],
+							"path": [
+								"test",
+								"job",
+								"e600a6b8-18d3-48bb-b8ba-21c4d18d3822"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateEmbendingWithChunk",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "grant_type",
+									"value": "authorization_code_with_pkce",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "postman.client",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://oauth.pstmn.io/v1/callback",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{llmservice.api}}/embedding/1793f5fb-cb71-4b60-adfc-ec14d615cdff",
+							"host": [
+								"{{llmservice.api}}"
+							],
+							"path": [
+								"embedding",
+								"1793f5fb-cb71-4b60-adfc-ec14d615cdff"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ContextBuilderService",
+			"item": [
+				{
+					"name": "GetDataAndChunking",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "grant_type",
+									"value": "authorization_code_with_pkce",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "postman.client",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://oauth.pstmn.io/v1/callback",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contextbuilder.api}}/chunking/1793f5fb-cb71-4b60-adfc-ec14d615cdff",
+							"host": [
+								"{{contextbuilder.api}}"
+							],
+							"path": [
+								"chunking",
+								"1793f5fb-cb71-4b60-adfc-ec14d615cdff"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UploadData",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "postman-cloud:///1f0f161b-800f-4e80-8bfc-fcfa8d51bf6e"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{contextbuilder.api}}/upload",
+							"host": [
+								"{{contextbuilder.api}}"
+							],
+							"path": [
+								"upload"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "QuizService",
+			"item": [
+				{
+					"name": "CreateQuiz",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "grant_type",
+									"value": "authorization_code_with_pkce",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "postman.client",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://oauth.pstmn.io/v1/callback",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"createQuizDto\": {\r\n    \"quizId\": \"a1c1b7b4-6f91-4f4f-9e6a-8d2c0a2c3b91\",\r\n    \"quizStatus\": \"Completed\",\r\n    \"sourceId\": [\r\n      \"1793f5fb-cb71-4b60-adfc-ec14d615cdff\"\r\n    ],\r\n    \"externalId\": \"1768dfc6-3d0d-40b4-9430-7e6dbc92f5b1\",\r\n    \"question\": [\r\n      {\r\n        \"questionId\": \"b4a77f51-1c34-4e9a-9f14-6a58fbd2a8d4\",\r\n        \"text\": \"Która metoda uczenia się jest uznawana za najbardziej efektywną?\",\r\n        \"explanation\": \"Aktywne powtarzanie i testowanie się znacząco poprawia trwałość zapamiętywania.\",\r\n        \"sourceChunkId\": \"9f6a4a27-7e63-4d6c-9a7e-1bcb4a2e2a10\",\r\n        \"answer\": [\r\n          {\r\n            \"answerId\": \"d1f92c6c-6d62-4b91-8d9a-4a7e7b90a001\",\r\n            \"ordinal\": 0,\r\n            \"text\": \"Czytanie notatek\",\r\n            \"isCorrect\": false\r\n          },\r\n          {\r\n            \"answerId\": \"d1f92c6c-6d62-4b91-8d9a-4a7e7b90a002\",\r\n            \"ordinal\": 1,\r\n            \"text\": \"Aktywne testowanie się\",\r\n            \"isCorrect\": true\r\n          },\r\n          {\r\n            \"answerId\": \"d1f92c6c-6d62-4b91-8d9a-4a7e7b90a003\",\r\n            \"ordinal\": 2,\r\n            \"text\": \"Samo podkreślanie tekstu\",\r\n            \"isCorrect\": false\r\n          },\r\n          {\r\n            \"answerId\": \"d1f92c6c-6d62-4b91-8d9a-4a7e7b90a004\",\r\n            \"ordinal\": 3,\r\n            \"text\": \"Wielokrotne przepisywanie\",\r\n            \"isCorrect\": false\r\n          }\r\n        ]\r\n      }\r\n    ],\r\n    \"tag\": [\r\n      \"uczenie\",\r\n      \"efektywność\",\r\n      \"metody\"\r\n    ],\r\n    \"title\": \"Efektywne metody uczenia się\",\r\n    \"createdAt\": \"2026-01-14T14:38:44.776Z\"\r\n  }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{quiz.api}}/quiz",
+							"host": [
+								"{{quiz.api}}"
+							],
+							"path": [
+								"quiz"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "QuizAttemptCreate",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "grant_type",
+									"value": "authorization_code_with_pkce",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "postman.client",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://oauth.pstmn.io/v1/callback",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{quiz.api}}/quiz/attempt/0112B6A9-D6DA-4A8C-A489-A27ED6DE7B9D",
+							"host": [
+								"{{quiz.api}}"
+							],
+							"path": [
+								"quiz",
+								"attempt",
+								"0112B6A9-D6DA-4A8C-A489-A27ED6DE7B9D"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllQuiz",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "grant_type",
+									"value": "authorization_code_with_pkce",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "postman.client",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://oauth.pstmn.io/v1/callback",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{quiz.api}}/quiz",
+							"host": [
+								"{{quiz.api}}"
+							],
+							"path": [
+								"quiz"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAttemptById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{quiz.api}}/quiz/attempt/B5CBB761-FE8B-418C-86E0-778A2BB55A9E",
+							"host": [
+								"{{quiz.api}}"
+							],
+							"path": [
+								"quiz",
+								"attempt",
+								"B5CBB761-FE8B-418C-86E0-778A2BB55A9E"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetQuizById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{quiz.api}}/quiz/0112B6A9-D6DA-4A8C-A489-A27ED6DE7B9D",
+							"host": [
+								"{{quiz.api}}"
+							],
+							"path": [
+								"quiz",
+								"0112B6A9-D6DA-4A8C-A489-A27ED6DE7B9D"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SubmitQuizAttempt",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "grant_type",
+									"value": "authorization_code_with_pkce",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "postman.client",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://oauth.pstmn.io/v1/callback",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"dto\": {\r\n    \"attemptId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\r\n    \"answers\": [\r\n      {\r\n        \"quizQuestionId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\r\n        \"selectedAnswerIds\": [\r\n          \"3fa85f64-5717-4562-b3fc-2c963f66afa6\"\r\n        ]\r\n      }\r\n    ]\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{quiz.api}}/quiz/submit",
+							"host": [
+								"{{quiz.api}}"
+							],
+							"path": [
+								"quiz",
+								"submit"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "UserService",
+			"item": [
+				{
+					"name": "CreateNewUser",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "scope",
+									"value": "aud.quiz-service",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "KotgApEAdJ4iNzI2x2NxeXfy5oXK9KpG",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "llm-service",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "llm-service-cc",
+									"type": "string"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://oauth.pstmn.io/v1/callback",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:6055/create",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "6055",
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUserProfile",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "scope",
+									"value": "aud.quiz-service",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "KotgApEAdJ4iNzI2x2NxeXfy5oXK9KpG",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "llm-service",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "llm-service-cc",
+									"type": "string"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://oauth.pstmn.io/v1/callback",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:6055/profile",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "6055",
+							"path": [
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CheckPermissions",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "scope",
+									"value": "postman.client",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "KotgApEAdJ4iNzI2x2NxeXfy5oXK9KpG",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "llm-service",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "llm-service-cc",
+									"type": "string"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://oauth.pstmn.io/v1/callback",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:6055/permission",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "6055",
+							"path": [
+								"permission"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditProfile",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "scope",
+									"value": "aud.quiz-service",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "KotgApEAdJ4iNzI2x2NxeXfy5oXK9KpG",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "llm-service",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "llm-service-cc",
+									"type": "string"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://oauth.pstmn.io/v1/callback",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"privilegeUserDomain\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:6055/edit",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "6055",
+							"path": [
+								"edit"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "OpenID Auth",
+			"item": [
+				{
+					"name": "OpenidConfiguration",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{KeyCloak}}/realms/quizapi/.well-known/openid-configuration",
+							"host": [
+								"{{KeyCloak}}"
+							],
+							"path": [
+								"realms",
+								"quizapi",
+								".well-known",
+								"openid-configuration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ServiceToServiceToken",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "scope",
+									"value": "aud.quiz-service",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "KotgApEAdJ4iNzI2x2NxeXfy5oXK9KpG",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "llm-service",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "llm-service-cc",
+									"type": "string"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://oauth.pstmn.io/v1/callback",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "postman-admin",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "e48fa4c6gEuqO0Y9XFFaGgl9nrND6MVu",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{KeyCloak}}/realms/quizapi/protocol/openid-connect/token",
+							"host": [
+								"{{KeyCloak}}"
+							],
+							"path": [
+								"realms",
+								"quizapi",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ClientToService",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "scope",
+									"value": "postman.client",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "postman",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://oauth.pstmn.io/v1/callback",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials:",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "postman-admin:",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "QQMxKGhfgNrPe5TJNcUbQed8FbSZO7kx:",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{KeyCloak}}/realms/quizapi/protocol/openid-connect/token\n",
+							"host": [
+								"{{KeyCloak}}"
+							],
+							"path": [
+								"realms",
+								"quizapi",
+								"protocol",
+								"openid-connect",
+								"token\n"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "YARP",
+			"item": [
+				{
+					"name": "YARP.UserService",
 					"item": [
 						{
-							"name": "/job",
+							"name": "CreateNewUser",
 							"request": {
 								"auth": {
-									"type": "bearer",
-									"bearer": [
+									"type": "oauth2",
+									"oauth2": [
 										{
-											"key": "token",
-											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJMcWU4TnloYW1wYW5YNU9rMk1od3N3WWRSM2FlNHIxOXczN0dVa2FsOW00In0.eyJleHAiOjE3NjgwMzU4MjIsImlhdCI6MTc2ODAzNTUyMiwiYXV0aF90aW1lIjoxNzY4MDM1NDM2LCJqdGkiOiJvbnJ0YWM6YzZiMjBhM2YtMzYzZS1mMjQ1LTQ3M2YtZTFlM2U5MzVjYjIyIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9xdWl6YXBpIiwiYXVkIjpbInBvc3RtYW4iLCJhY2NvdW50Il0sInN1YiI6IjE3NjhkZmM2LTNkMGQtNDBiNC05NDMwLTdlNmRiYzkyZjViMSIsInR5cCI6IkJlYXJlciIsImF6cCI6InBvc3RtYW4iLCJzaWQiOiJhZDI2YmY1NC04MTVjLTg1YTgtYjZlYy0xOWZiMDExOGNjZTEiLCJhY3IiOiIwIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHBzOi8vb2F1dGgucHN0bW4uaW8iXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJkZWZhdWx0LXJvbGVzLXF1aXphcGkiXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6InByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IlJ1bWNhanMgSGFua2EiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJydW1jYWpzMTIxIiwiZ2l2ZW5fbmFtZSI6IlJ1bWNhanMiLCJmYW1pbHlfbmFtZSI6IkhhbmthIiwiZW1haWwiOiJydW1jYWpzMTIxQHRlc3QucGwifQ.K5cbmqKSsJAaQDGKsEsQa4ldiiV2GInVsYZNR_y0NxsaLJ6RqU6yubGUbaZx1RSflunOdfksCeXO-VTv033ea8SDVNJTQHfae0B91VCXHMe8UZA2E82rBrn1k7BnXylfpK2_t0-Ie4e-7W7dk1YxT_jPwNQ_PnfZU97IIys7wCqUE2iujnoIqGoEYZm",
+											"key": "scope",
+											"value": "aud.quiz-service",
+											"type": "string"
+										},
+										{
+											"key": "clientSecret",
+											"value": "KotgApEAdJ4iNzI2x2NxeXfy5oXK9KpG",
+											"type": "string"
+										},
+										{
+											"key": "clientId",
+											"value": "llm-service",
+											"type": "string"
+										},
+										{
+											"key": "tokenName",
+											"value": "llm-service-cc",
+											"type": "string"
+										},
+										{
+											"key": "grant_type",
+											"value": "client_credentials",
+											"type": "string"
+										},
+										{
+											"key": "addTokenTo",
+											"value": "header",
+											"type": "string"
+										},
+										{
+											"key": "accessTokenUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+											"type": "string"
+										},
+										{
+											"key": "authUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+											"type": "string"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "https://oauth.pstmn.io/v1/callback",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{YARP}}/{{docker.user.service.api}}/create",
+									"host": [
+										"{{YARP}}"
+									],
+									"path": [
+										"{{docker.user.service.api}}",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetUserProfile",
+							"request": {
+								"auth": {
+									"type": "oauth2",
+									"oauth2": [
+										{
+											"key": "scope",
+											"value": "aud.quiz-service",
+											"type": "string"
+										},
+										{
+											"key": "clientSecret",
+											"value": "KotgApEAdJ4iNzI2x2NxeXfy5oXK9KpG",
+											"type": "string"
+										},
+										{
+											"key": "clientId",
+											"value": "llm-service",
+											"type": "string"
+										},
+										{
+											"key": "tokenName",
+											"value": "llm-service-cc",
+											"type": "string"
+										},
+										{
+											"key": "grant_type",
+											"value": "client_credentials",
+											"type": "string"
+										},
+										{
+											"key": "addTokenTo",
+											"value": "header",
+											"type": "string"
+										},
+										{
+											"key": "accessTokenUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+											"type": "string"
+										},
+										{
+											"key": "authUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+											"type": "string"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "https://oauth.pstmn.io/v1/callback",
 											"type": "string"
 										}
 									]
@@ -28,18 +1238,158 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://localhost:6077/api/llm/test/job/66bd4247-60f8-4f3c-a31f-a37d9e6ab441",
-									"protocol": "https",
+									"raw": "{{YARP}}/{{docker.user.service.api}}/profile",
 									"host": [
-										"localhost"
+										"{{YARP}}"
 									],
-									"port": "6077",
 									"path": [
-										"api",
-										"llm",
-										"test",
-										"job",
-										"66bd4247-60f8-4f3c-a31f-a37d9e6ab441"
+										"{{docker.user.service.api}}",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CheckPermissions",
+							"request": {
+								"auth": {
+									"type": "oauth2",
+									"oauth2": [
+										{
+											"key": "scope",
+											"value": "postman.client",
+											"type": "string"
+										},
+										{
+											"key": "clientSecret",
+											"value": "KotgApEAdJ4iNzI2x2NxeXfy5oXK9KpG",
+											"type": "string"
+										},
+										{
+											"key": "clientId",
+											"value": "llm-service",
+											"type": "string"
+										},
+										{
+											"key": "tokenName",
+											"value": "llm-service-cc",
+											"type": "string"
+										},
+										{
+											"key": "grant_type",
+											"value": "client_credentials",
+											"type": "string"
+										},
+										{
+											"key": "addTokenTo",
+											"value": "header",
+											"type": "string"
+										},
+										{
+											"key": "accessTokenUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+											"type": "string"
+										},
+										{
+											"key": "authUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+											"type": "string"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "https://oauth.pstmn.io/v1/callback",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{YARP}}/{{docker.user.service.api}}/permission",
+									"host": [
+										"{{YARP}}"
+									],
+									"path": [
+										"{{docker.user.service.api}}",
+										"permission"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "EditProfile",
+							"request": {
+								"auth": {
+									"type": "oauth2",
+									"oauth2": [
+										{
+											"key": "scope",
+											"value": "aud.quiz-service",
+											"type": "string"
+										},
+										{
+											"key": "clientSecret",
+											"value": "KotgApEAdJ4iNzI2x2NxeXfy5oXK9KpG",
+											"type": "string"
+										},
+										{
+											"key": "clientId",
+											"value": "llm-service",
+											"type": "string"
+										},
+										{
+											"key": "tokenName",
+											"value": "llm-service-cc",
+											"type": "string"
+										},
+										{
+											"key": "grant_type",
+											"value": "client_credentials",
+											"type": "string"
+										},
+										{
+											"key": "addTokenTo",
+											"value": "header",
+											"type": "string"
+										},
+										{
+											"key": "accessTokenUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+											"type": "string"
+										},
+										{
+											"key": "authUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+											"type": "string"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "https://oauth.pstmn.io/v1/callback",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"privilegeUserDomain\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{YARP}}/{{docker.user.service.api}}/edit",
+									"host": [
+										"{{YARP}}"
+									],
+									"path": [
+										"{{docker.user.service.api}}",
+										"edit"
 									]
 								}
 							},
@@ -48,10 +1398,449 @@
 					]
 				},
 				{
-					"name": "DIRECTLY",
+					"name": "YARP.QuizService",
 					"item": [
 						{
-							"name": "/generate",
+							"name": "CreateQuiz",
+							"request": {
+								"auth": {
+									"type": "oauth2",
+									"oauth2": [
+										{
+											"key": "grant_type",
+											"value": "authorization_code_with_pkce",
+											"type": "string"
+										},
+										{
+											"key": "clientId",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "clientSecret",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "tokenName",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "scope",
+											"value": "postman.client",
+											"type": "string"
+										},
+										{
+											"key": "addTokenTo",
+											"value": "header",
+											"type": "string"
+										},
+										{
+											"key": "accessTokenUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+											"type": "string"
+										},
+										{
+											"key": "authUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+											"type": "string"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "https://oauth.pstmn.io/v1/callback",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"createQuizDto\": {\r\n    \"quizId\": \"a1c1b7b4-6f91-4f4f-9e6a-8d2c0a2c3b91\",\r\n    \"quizStatus\": \"Completed\",\r\n    \"sourceId\": [\r\n      \"1793f5fb-cb71-4b60-adfc-ec14d615cdff\"\r\n    ],\r\n    \"externalId\": \"1768dfc6-3d0d-40b4-9430-7e6dbc92f5b1\",\r\n    \"question\": [\r\n      {\r\n        \"questionId\": \"b4a77f51-1c34-4e9a-9f14-6a58fbd2a8d4\",\r\n        \"text\": \"Która metoda uczenia się jest uznawana za najbardziej efektywną?\",\r\n        \"explanation\": \"Aktywne powtarzanie i testowanie się znacząco poprawia trwałość zapamiętywania.\",\r\n        \"sourceChunkId\": \"9f6a4a27-7e63-4d6c-9a7e-1bcb4a2e2a10\",\r\n        \"answer\": [\r\n          {\r\n            \"answerId\": \"d1f92c6c-6d62-4b91-8d9a-4a7e7b90a001\",\r\n            \"ordinal\": 0,\r\n            \"text\": \"Czytanie notatek\",\r\n            \"isCorrect\": false\r\n          },\r\n          {\r\n            \"answerId\": \"d1f92c6c-6d62-4b91-8d9a-4a7e7b90a002\",\r\n            \"ordinal\": 1,\r\n            \"text\": \"Aktywne testowanie się\",\r\n            \"isCorrect\": true\r\n          },\r\n          {\r\n            \"answerId\": \"d1f92c6c-6d62-4b91-8d9a-4a7e7b90a003\",\r\n            \"ordinal\": 2,\r\n            \"text\": \"Samo podkreślanie tekstu\",\r\n            \"isCorrect\": false\r\n          },\r\n          {\r\n            \"answerId\": \"d1f92c6c-6d62-4b91-8d9a-4a7e7b90a004\",\r\n            \"ordinal\": 3,\r\n            \"text\": \"Wielokrotne przepisywanie\",\r\n            \"isCorrect\": false\r\n          }\r\n        ]\r\n      }\r\n    ],\r\n    \"tag\": [\r\n      \"uczenie\",\r\n      \"efektywność\",\r\n      \"metody\"\r\n    ],\r\n    \"title\": \"Efektywne metody uczenia się\",\r\n    \"createdAt\": \"2026-01-14T14:38:44.776Z\"\r\n  }\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{YARP}}/{{docker.quiz.api}}/quiz",
+									"host": [
+										"{{YARP}}"
+									],
+									"path": [
+										"{{docker.quiz.api}}",
+										"quiz"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "QuizAttemptCreate",
+							"request": {
+								"auth": {
+									"type": "oauth2",
+									"oauth2": [
+										{
+											"key": "grant_type",
+											"value": "authorization_code_with_pkce",
+											"type": "string"
+										},
+										{
+											"key": "clientId",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "clientSecret",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "tokenName",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "scope",
+											"value": "postman.client",
+											"type": "string"
+										},
+										{
+											"key": "addTokenTo",
+											"value": "header",
+											"type": "string"
+										},
+										{
+											"key": "accessTokenUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+											"type": "string"
+										},
+										{
+											"key": "authUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+											"type": "string"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "https://oauth.pstmn.io/v1/callback",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{YARP}}/{{docker.quiz.api}}/quiz/attempt/0112B6A9-D6DA-4A8C-A489-A27ED6DE7B9D",
+									"host": [
+										"{{YARP}}"
+									],
+									"path": [
+										"{{docker.quiz.api}}",
+										"quiz",
+										"attempt",
+										"0112B6A9-D6DA-4A8C-A489-A27ED6DE7B9D"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetAllQuiz",
+							"request": {
+								"auth": {
+									"type": "oauth2",
+									"oauth2": [
+										{
+											"key": "grant_type",
+											"value": "authorization_code_with_pkce",
+											"type": "string"
+										},
+										{
+											"key": "clientId",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "clientSecret",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "tokenName",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "scope",
+											"value": "postman.client",
+											"type": "string"
+										},
+										{
+											"key": "addTokenTo",
+											"value": "header",
+											"type": "string"
+										},
+										{
+											"key": "accessTokenUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+											"type": "string"
+										},
+										{
+											"key": "authUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+											"type": "string"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "https://oauth.pstmn.io/v1/callback",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{YARP}}/{{docker.quiz.api}}/quiz",
+									"host": [
+										"{{YARP}}"
+									],
+									"path": [
+										"{{docker.quiz.api}}",
+										"quiz"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetAttemptById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{YARP}}/{{docker.quiz.api}}/quiz/attempt/B5CBB761-FE8B-418C-86E0-778A2BB55A9E",
+									"host": [
+										"{{YARP}}"
+									],
+									"path": [
+										"{{docker.quiz.api}}",
+										"quiz",
+										"attempt",
+										"B5CBB761-FE8B-418C-86E0-778A2BB55A9E"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetQuizById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{YARP}}/{{docker.quiz.api}}/quiz/0112B6A9-D6DA-4A8C-A489-A27ED6DE7B9D",
+									"host": [
+										"{{YARP}}"
+									],
+									"path": [
+										"{{docker.quiz.api}}",
+										"quiz",
+										"0112B6A9-D6DA-4A8C-A489-A27ED6DE7B9D"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "SubmitQuizAttempt",
+							"request": {
+								"auth": {
+									"type": "oauth2",
+									"oauth2": [
+										{
+											"key": "grant_type",
+											"value": "authorization_code_with_pkce",
+											"type": "string"
+										},
+										{
+											"key": "clientId",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "clientSecret",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "tokenName",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "scope",
+											"value": "postman.client",
+											"type": "string"
+										},
+										{
+											"key": "addTokenTo",
+											"value": "header",
+											"type": "string"
+										},
+										{
+											"key": "accessTokenUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+											"type": "string"
+										},
+										{
+											"key": "authUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+											"type": "string"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "https://oauth.pstmn.io/v1/callback",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"dto\": {\r\n    \"attemptId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\r\n    \"answers\": [\r\n      {\r\n        \"quizQuestionId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\r\n        \"selectedAnswerIds\": [\r\n          \"3fa85f64-5717-4562-b3fc-2c963f66afa6\"\r\n        ]\r\n      }\r\n    ]\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{YARP}}/{{docker.quiz.api}}/quiz/submit",
+									"host": [
+										"{{YARP}}"
+									],
+									"path": [
+										"{{docker.quiz.api}}",
+										"quiz",
+										"submit"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "YARP.ContextBuilderService",
+					"item": [
+						{
+							"name": "GetDataAndChunking",
+							"request": {
+								"auth": {
+									"type": "oauth2",
+									"oauth2": [
+										{
+											"key": "grant_type",
+											"value": "authorization_code_with_pkce",
+											"type": "string"
+										},
+										{
+											"key": "clientId",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "clientSecret",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "tokenName",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "scope",
+											"value": "postman.client",
+											"type": "string"
+										},
+										{
+											"key": "addTokenTo",
+											"value": "header",
+											"type": "string"
+										},
+										{
+											"key": "accessTokenUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
+											"type": "string"
+										},
+										{
+											"key": "authUrl",
+											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
+											"type": "string"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "https://oauth.pstmn.io/v1/callback",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{YARP}}/{{docker.contextbuilder.api}}/chunking/1793f5fb-cb71-4b60-adfc-ec14d615cdff",
+									"host": [
+										"{{YARP}}"
+									],
+									"path": [
+										"{{docker.contextbuilder.api}}",
+										"chunking",
+										"1793f5fb-cb71-4b60-adfc-ec14d615cdff"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UploadData",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "postman-cloud:///1f0f161b-800f-4e80-8bfc-fcfa8d51bf6e"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{YARP}}/{{docker.contextbuilder.api}}/upload",
+									"host": [
+										"{{YARP}}"
+									],
+									"path": [
+										"{{docker.contextbuilder.api}}",
+										"upload"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "YARP.LLMService",
+					"item": [
+						{
+							"name": "GenerateQuiz",
 							"request": {
 								"auth": {
 									"type": "oauth2",
@@ -115,13 +1904,12 @@
 									}
 								},
 								"url": {
-									"raw": "https://localhost:6044/generate",
-									"protocol": "https",
+									"raw": "{{YARP}}/{{docker.llmservice.api}}/generate",
 									"host": [
-										"localhost"
+										"{{YARP}}"
 									],
-									"port": "6044",
 									"path": [
+										"{{docker.llmservice.api}}",
 										"generate"
 									]
 								}
@@ -129,18 +1917,17 @@
 							"response": []
 						},
 						{
-							"name": "/job",
+							"name": "CheckJob",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://localhost:6044/test/job/e600a6b8-18d3-48bb-b8ba-21c4d18d3822",
-									"protocol": "https",
+									"raw": "{{YARP}}/{{docker.llmservice.api}}/test/job/e600a6b8-18d3-48bb-b8ba-21c4d18d3822",
 									"host": [
-										"localhost"
+										"{{YARP}}"
 									],
-									"port": "6044",
 									"path": [
+										"{{docker.llmservice.api}}",
 										"test",
 										"job",
 										"e600a6b8-18d3-48bb-b8ba-21c4d18d3822"
@@ -148,154 +1935,33 @@
 								}
 							},
 							"response": []
-						}
-					]
-				}
-			]
-		},
-		{
-			"name": "ContextBuilderService",
-			"item": [
-				{
-					"name": "YARP",
-					"item": []
-				}
-			]
-		},
-		{
-			"name": "QuizService",
-			"item": []
-		},
-		{
-			"name": "Authentication/Authorization",
-			"item": [
-				{
-					"name": "UserService",
-					"item": []
-				},
-				{
-					"name": "OPENID",
-					"item": [
-						{
-							"name": "OpenidConfiguration",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{keycloak}}/realms/quizapi/.well-known/openid-configuration",
-									"host": [
-										"{{keycloak}}"
-									],
-									"path": [
-										"realms",
-										"quizapi",
-										".well-known",
-										"openid-configuration"
-									]
-								}
-							},
-							"response": []
 						},
 						{
-							"name": "ServiceToServiceToken",
+							"name": "CreateEmbendingWithChunk",
 							"request": {
 								"auth": {
 									"type": "oauth2",
 									"oauth2": [
 										{
-											"key": "scope",
-											"value": "aud.quiz-service",
-											"type": "string"
-										},
-										{
-											"key": "clientSecret",
-											"value": "KotgApEAdJ4iNzI2x2NxeXfy5oXK9KpG",
+											"key": "grant_type",
+											"value": "authorization_code_with_pkce",
 											"type": "string"
 										},
 										{
 											"key": "clientId",
-											"value": "llm-service",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "clientSecret",
+											"value": "",
 											"type": "string"
 										},
 										{
 											"key": "tokenName",
-											"value": "llm-service-cc",
+											"value": "",
 											"type": "string"
 										},
-										{
-											"key": "grant_type",
-											"value": "client_credentials",
-											"type": "string"
-										},
-										{
-											"key": "addTokenTo",
-											"value": "header",
-											"type": "string"
-										},
-										{
-											"key": "accessTokenUrl",
-											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
-											"type": "string"
-										},
-										{
-											"key": "authUrl",
-											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/auth",
-											"type": "string"
-										},
-										{
-											"key": "redirect_uri",
-											"value": "https://oauth.pstmn.io/v1/callback",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "grant_type",
-											"value": "client_credentials",
-											"type": "text"
-										},
-										{
-											"key": "client_id",
-											"value": "postman-admin",
-											"type": "text"
-										},
-										{
-											"key": "client_secret",
-											"value": "e48fa4c6gEuqO0Y9XFFaGgl9nrND6MVu",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": "{{keycloak}}/realms/quizapi/protocol/openid-connect/token",
-									"host": [
-										"{{keycloak}}"
-									],
-									"path": [
-										"realms",
-										"quizapi",
-										"protocol",
-										"openid-connect",
-										"token"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "ClientToService",
-							"request": {
-								"auth": {
-									"type": "oauth2",
-									"oauth2": [
 										{
 											"key": "scope",
 											"value": "postman.client",
@@ -307,11 +1973,6 @@
 											"type": "string"
 										},
 										{
-											"key": "clientId",
-											"value": "postman",
-											"type": "string"
-										},
-										{
 											"key": "accessTokenUrl",
 											"value": "http://localhost:8080/realms/quizapi/protocol/openid-connect/token",
 											"type": "string"
@@ -330,43 +1991,201 @@
 								},
 								"method": "POST",
 								"header": [],
-								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "grant_type",
-											"value": "client_credentials:",
-											"type": "text"
-										},
-										{
-											"key": "client_id",
-											"value": "postman-admin:",
-											"type": "text"
-										},
-										{
-											"key": "client_secret",
-											"value": "QQMxKGhfgNrPe5TJNcUbQed8FbSZO7kx:",
-											"type": "text"
-										}
-									]
-								},
 								"url": {
-									"raw": "{{keycloak}}/realms/quizapi/protocol/openid-connect/token\n",
+									"raw": "{{YARP}}/{{docker.llmservice.api}}/embedding/1793f5fb-cb71-4b60-adfc-ec14d615cdff",
 									"host": [
-										"{{keycloak}}"
+										"{{YARP}}"
 									],
 									"path": [
-										"realms",
-										"quizapi",
-										"protocol",
-										"openid-connect",
-										"token\n"
+										"{{docker.llmservice.api}}",
+										"embedding",
+										"1793f5fb-cb71-4b60-adfc-ec14d615cdff"
 									]
 								}
 							},
 							"response": []
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "Qdrant",
+			"item": [
+				{
+					"name": "GetVetorById",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"ids\": [\r\n    \"012628af-a09e-4600-8d94-db4fc6673f38\"\r\n  ],\r\n  \"with_payload\": true,\r\n  \"with_vector\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Qdrant}}/collections/chunksNotes/points",
+							"host": [
+								"{{Qdrant}}"
+							],
+							"path": [
+								"collections",
+								"chunksNotes",
+								"points"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CollectionInfo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Qdrant}}/collections/chunksNotes",
+							"host": [
+								"{{Qdrant}}"
+							],
+							"path": [
+								"collections",
+								"chunksNotes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeletCollections",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{Qdrant}}/collections/chunksNotes",
+							"host": [
+								"{{Qdrant}}"
+							],
+							"path": [
+								"collections",
+								"chunksNotes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllCollectio",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Qdrant}}/collections",
+							"host": [
+								"{{Qdrant}}"
+							],
+							"path": [
+								"collections"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DistanceMatrixPairs",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sample\": 10,\r\n    \"limit\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Qdrant}}/collections/chunksNotes/points/search/matrix/pairs",
+							"host": [
+								"{{Qdrant}}"
+							],
+							"path": [
+								"collections",
+								"chunksNotes",
+								"points",
+								"search",
+								"matrix",
+								"pairs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ReturnTheKNearest",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"vector\": [\r\n        -0.12915171682834625,\r\n        -0.3979484438896179,\r\n        -3.26755952835083,\r\n        0.20002435147762299,\r\n        0.2383316159248352,\r\n        -0.26250049471855164,\r\n        0.9156571626663208,\r\n        0.3608258366584778,\r\n        -0.7199521660804749,\r\n        1.0932929515838623,\r\n        -0.8982540965080261,\r\n        0.39179325103759766,\r\n        1.8200619220733643,\r\n        0.35397210717201233,\r\n        -0.6055768132209778,\r\n        -1.4887418746948242,\r\n        -0.012355029582977295,\r\n        -0.7269556522369385,\r\n        -1.817157506942749,\r\n        1.1365175247192383,\r\n        0.050660714507102966,\r\n        0.9167903661727905,\r\n        -0.1222260594367981,\r\n        -1.0432885885238647,\r\n        1.0375900268554688,\r\n        -0.07157079130411148,\r\n        1.3554755449295044,\r\n        0.4209592342376709,\r\n        -0.5029581785202026,\r\n        -0.025693818926811218,\r\n        0.6175452470779419,\r\n        -0.4279212951660156,\r\n        -0.5017843842506409,\r\n        -0.2914581298828125,\r\n        -0.01667650416493416,\r\n        0.15205924212932587,\r\n        1.6463958024978638,\r\n        -0.06474108248949051,\r\n        0.42682087421417236,\r\n        -0.16674137115478516,\r\n        -0.10215552896261215,\r\n        -0.14421823620796204,\r\n        0.25758981704711914,\r\n        -0.46341967582702637,\r\n        0.8493607640266418,\r\n        -0.29639822244644165,\r\n        0.34229975938796997,\r\n        -0.2054063081741333,\r\n        1.1321163177490234,\r\n        0.4010828733444214,\r\n        -0.4556261897087097,\r\n        -0.012867782264947891,\r\n        1.3079675436019897,\r\n        -1.120490550994873,\r\n        1.3899669647216797,\r\n        0.7921198606491089,\r\n        0.23549865186214447,\r\n        0.0688381940126419,\r\n        0.9320024251937866,\r\n        -0.08902052044868469,\r\n        2.3020992279052734,\r\n        1.4956536293029785,\r\n        -0.9208794832229614,\r\n        1.5000452995300293,\r\n        0.32959121465682983,\r\n        -0.710486888885498,\r\n        -0.8748502731323242,\r\n        1.4103800058364868,\r\n        0.041409432888031006,\r\n        -0.5992410778999329,\r\n        0.4277849793434143,\r\n        -0.2520306706428528,\r\n        0.876704216003418,\r\n        -0.4456573724746704,\r\n        -0.4051940441131592,\r\n        -0.7758137583732605,\r\n        -0.637056291103363,\r\n        0.05461601912975311,\r\n        0.16137966513633728,\r\n        0.07185043394565582,\r\n        0.5202282071113586,\r\n        -0.027190618216991425,\r\n        0.8220549821853638,\r\n        0.19277137517929077,\r\n        1.1336033344268799,\r\n        -0.32696014642715454,\r\n        -0.17489957809448242,\r\n        0.12902705371379852,\r\n        -0.6876640319824219,\r\n        0.06980013847351074,\r\n        -0.02691398561000824,\r\n        -0.8250387907028198,\r\n        0.6604585647583008,\r\n        0.7566951513290405,\r\n        -0.5577802658081055,\r\n        0.15756551921367645,\r\n        -0.7410699129104614,\r\n        1.1388349533081055,\r\n        0.014576416462659836,\r\n        -0.9550533294677734,\r\n        -0.051723662763834,\r\n        0.10228058695793152,\r\n        0.264706552028656,\r\n        -0.8146994113922119,\r\n        0.5072735548019409,\r\n        0.18135611712932587,\r\n        0.7118809223175049,\r\n        0.42607253789901733,\r\n        -1.1219333410263062,\r\n        0.05445283651351929,\r\n        -0.4910362958908081,\r\n        1.6062395572662354,\r\n        -0.04680473357439041,\r\n        -0.09085046499967575,\r\n        0.7441616654396057,\r\n        0.12530183792114258,\r\n        0.528020977973938,\r\n        -0.6753250360488892,\r\n        0.6192757487297058,\r\n        -0.1571958065032959,\r\n        0.24310946464538574,\r\n        0.16333027184009552,\r\n        1.2241151332855225,\r\n        0.29625600576400757,\r\n        -0.21704937517642975,\r\n        -0.16290529072284698,\r\n        -0.19962383806705475,\r\n        0.04014363884925842,\r\n        -0.3284827768802643,\r\n        -0.8795524835586548,\r\n        0.46115633845329285,\r\n        -0.03277880698442459,\r\n        -0.05230101943016052,\r\n        -0.544295608997345,\r\n        0.37624025344848633,\r\n        0.09231530129909515,\r\n        -0.30058497190475464,\r\n        -0.843451738357544,\r\n        0.5465875267982483,\r\n        0.940935492515564,\r\n        0.8393776416778564,\r\n        -0.3471871316432953,\r\n        0.43730247020721436,\r\n        -1.045067548751831,\r\n        -0.4750882387161255,\r\n        -0.8987267017364502,\r\n        0.2596912384033203,\r\n        -0.4589216709136963,\r\n        -0.579653263092041,\r\n        0.3925864100456238,\r\n        -0.20372729003429413,\r\n        0.28023219108581543,\r\n        -0.10343702882528305,\r\n        0.6618708372116089,\r\n        -0.19711273908615112,\r\n        -0.985069990158081,\r\n        -1.1741760969161987,\r\n        0.4255501627922058,\r\n        0.1623290479183197,\r\n        0.2203247845172882,\r\n        0.5235132575035095,\r\n        -0.08085417747497559,\r\n        -1.5038478374481201,\r\n        0.5904259085655212,\r\n        -0.6161805391311646,\r\n        -1.6449089050292969,\r\n        -0.3911963701248169,\r\n        0.5331366062164307,\r\n        1.3110589981079102,\r\n        0.7348929643630981,\r\n        -1.8808403015136719,\r\n        -0.21549026668071747,\r\n        -0.72114098072052,\r\n        -0.3883150815963745,\r\n        0.6826711297035217,\r\n        0.45857179164886475,\r\n        -0.23345719277858734,\r\n        0.6247590780258179,\r\n        -0.19304397702217102,\r\n        -0.6557304263114929,\r\n        0.26047396659851074,\r\n        -1.4276171922683716,\r\n        0.33347946405410767,\r\n        0.21297666430473328,\r\n        -0.9936491250991821,\r\n        -0.7475942373275757,\r\n        0.08403647691011429,\r\n        -0.39416271448135376,\r\n        -0.7354333400726318,\r\n        -0.24009530246257782,\r\n        -0.18340595066547394,\r\n        0.45242130756378174,\r\n        -0.9221356511116028,\r\n        -1.1980643272399902,\r\n        -0.11280136555433273,\r\n        0.4852297306060791,\r\n        1.0413792133331299,\r\n        0.912278413772583,\r\n        0.42718690633773804,\r\n        -0.0935613289475441,\r\n        0.3790578246116638,\r\n        0.6491918563842773,\r\n        0.19997194409370422,\r\n        0.4841943681240082,\r\n        -0.791555643081665,\r\n        0.9447121620178223,\r\n        0.20064139366149902,\r\n        1.5654382705688477,\r\n        -0.10400965809822083,\r\n        1.7238150835037231,\r\n        0.5612855553627014,\r\n        0.45925986766815186,\r\n        0.0678468868136406,\r\n        0.126325324177742,\r\n        0.3461965322494507,\r\n        0.2817123532295227,\r\n        0.5028629302978516,\r\n        -0.6545180082321167,\r\n        -0.44182658195495605,\r\n        0.7313350439071655,\r\n        0.4928928017616272,\r\n        0.4752633273601532,\r\n        -0.3261841833591461,\r\n        -0.6345517039299011,\r\n        0.5205891132354736,\r\n        0.16971704363822937,\r\n        -0.6699714660644531,\r\n        0.7666257619857788,\r\n        0.6353766918182373,\r\n        -0.045523419976234436,\r\n        -0.5099001526832581,\r\n        -1.9061938524246216,\r\n        1.2669336795806885,\r\n        -0.3096591532230377,\r\n        -0.44991645216941833,\r\n        0.7432157397270203,\r\n        0.4101254642009735,\r\n        1.8004649877548218,\r\n        0.4974937438964844,\r\n        -0.1952737271785736,\r\n        -0.1713981032371521,\r\n        0.3501746654510498,\r\n        -0.11893154680728912,\r\n        0.10803631693124771,\r\n        -0.9887959361076355,\r\n        0.3985432982444763,\r\n        -0.2586820125579834,\r\n        -0.9691457748413086,\r\n        -0.5893019437789917,\r\n        0.6623407602310181,\r\n        0.5765673518180847,\r\n        0.2196069359779358,\r\n        0.42141953110694885,\r\n        0.3770047426223755,\r\n        0.33718520402908325,\r\n        -0.44486021995544434,\r\n        -0.16708707809448242,\r\n        0.8608391284942627,\r\n        -0.27412718534469604,\r\n        -0.3079909086227417,\r\n        0.554929256439209,\r\n        0.407029926776886,\r\n        -0.5805078744888306,\r\n        -1.2109029293060303,\r\n        -0.726978600025177,\r\n        -0.2385239601135254,\r\n        -0.4856291115283966,\r\n        0.004450447857379913,\r\n        0.2802976369857788,\r\n        -0.2532961666584015,\r\n        -0.7540929317474365,\r\n        -0.328546404838562,\r\n        -0.4288308024406433,\r\n        0.9374769926071167,\r\n        -0.3570048213005066,\r\n        -0.6334317922592163,\r\n        0.8996400833129883,\r\n        -0.03613532334566116,\r\n        -0.6486087441444397,\r\n        0.857354998588562,\r\n        -0.2896740138530731,\r\n        0.5189051628112793,\r\n        -0.34970080852508545,\r\n        -0.2671371400356293,\r\n        -0.09036141633987427,\r\n        0.34912025928497314,\r\n        0.18880556523799896,\r\n        0.09654740989208221,\r\n        0.6594429016113281,\r\n        -0.5674222707748413,\r\n        1.4621199369430542,\r\n        -0.0970955491065979,\r\n        -0.8408945202827454,\r\n        0.8816681504249573,\r\n        -0.808555006980896,\r\n        0.43873220682144165,\r\n        1.5272002220153809,\r\n        -0.17962710559368134,\r\n        0.6846529245376587,\r\n        -0.7411169409751892,\r\n        1.1504971981048584,\r\n        1.0606610774993896,\r\n        0.9599823951721191,\r\n        -0.3294631838798523,\r\n        -1.1300128698349,\r\n        -0.1044963076710701,\r\n        0.07264108955860138,\r\n        -1.1873996257781982,\r\n        1.0311439037322998,\r\n        -0.5496572852134705,\r\n        -1.260761022567749,\r\n        0.285861074924469,\r\n        -0.1523924171924591,\r\n        0.4291115999221802,\r\n        -1.283143401145935,\r\n        1.1864579916000366,\r\n        -0.338522344827652,\r\n        -0.06655173003673553,\r\n        0.6766443252563477,\r\n        0.3878571689128876,\r\n        0.2897474765777588,\r\n        -0.28889209032058716,\r\n        1.0612976551055908,\r\n        -0.288524866104126,\r\n        -0.282959908246994,\r\n        0.6991574764251709,\r\n        -0.14568397402763367,\r\n        0.5453824996948242,\r\n        0.5955002903938293,\r\n        -0.11687390506267548,\r\n        -0.258891761302948,\r\n        2.1740493774414062,\r\n        -0.04887102544307709,\r\n        0.060746096074581146,\r\n        0.4563359022140503,\r\n        0.06830348819494247,\r\n        -0.4017360508441925,\r\n        -1.4008179903030396,\r\n        -0.07972823828458786,\r\n        0.6449745297431946,\r\n        0.2536087930202484,\r\n        -0.09961086511611938,\r\n        0.14008323848247528,\r\n        -1.6105680465698242,\r\n        -0.5221495628356934,\r\n        -0.022029587998986244,\r\n        -0.42199158668518066,\r\n        -0.48601382970809937,\r\n        1.1730098724365234,\r\n        -0.18265613913536072,\r\n        -0.08329363912343979,\r\n        0.28590285778045654,\r\n        -0.7274048328399658,\r\n        -0.13694943487644196,\r\n        0.809589147567749,\r\n        -0.09208063781261444,\r\n        0.37429288029670715,\r\n        1.4557979106903076,\r\n        0.3929618000984192,\r\n        -0.09831620752811432,\r\n        0.7493894100189209,\r\n        -0.7930819988250732,\r\n        0.3722800612449646,\r\n        -0.10983578860759735,\r\n        -0.7696284055709839,\r\n        0.33075401186943054,\r\n        1.569563865661621,\r\n        -0.25807100534439087,\r\n        0.4039522409439087,\r\n        0.7543588876724243,\r\n        -1.4079848527908325,\r\n        -0.5867486000061035,\r\n        -0.5030186176300049,\r\n        -0.6285970211029053,\r\n        1.018256425857544,\r\n        0.19105443358421326,\r\n        -1.598515272140503,\r\n        -0.5121786594390869,\r\n        -1.2405261993408203,\r\n        0.5644239783287048,\r\n        0.25993454456329346,\r\n        -1.1344983577728271,\r\n        -0.2808575928211212,\r\n        0.50850909948349,\r\n        1.2452690601348877,\r\n        -0.2851683497428894,\r\n        0.6892232894897461,\r\n        0.06439745426177979,\r\n        -0.4096737504005432,\r\n        0.4666285216808319,\r\n        -0.13555967807769775,\r\n        -1.2062032222747803,\r\n        -0.6790157556533813,\r\n        0.598945140838623,\r\n        -0.21065206825733185,\r\n        -0.11262155324220657,\r\n        0.707615315914154,\r\n        0.016691118478775024,\r\n        0.290105938911438,\r\n        -0.4535682201385498,\r\n        0.18971435725688934,\r\n        -1.9876097440719604,\r\n        0.16019389033317566,\r\n        -1.0826849937438965,\r\n        0.39421382546424866,\r\n        0.04388262331485748,\r\n        -1.0865620374679565,\r\n        -1.0918867588043213,\r\n        1.7582743167877197,\r\n        -0.6405030488967896,\r\n        0.6751524209976196,\r\n        1.2393091917037964,\r\n        0.3483586311340332,\r\n        -1.1174273490905762,\r\n        -0.2773112952709198,\r\n        0.7643324136734009,\r\n        0.6844402551651001,\r\n        -0.34661591053009033,\r\n        0.19028380513191223,\r\n        0.45087099075317383,\r\n        2.041778564453125,\r\n        0.5213532447814941,\r\n        -0.7410982847213745,\r\n        -0.06494118273258209,\r\n        -0.26766517758369446,\r\n        0.8701675534248352,\r\n        0.4109300971031189,\r\n        0.08942325413227081,\r\n        0.259594202041626,\r\n        -1.26828134059906,\r\n        -0.0036577507853507996,\r\n        -0.17510248720645905,\r\n        0.523016631603241,\r\n        -0.034215547144412994,\r\n        -1.2069201469421387,\r\n        -0.125919908285141,\r\n        0.29319697618484497,\r\n        -0.22631311416625977,\r\n        0.860772967338562,\r\n        1.1983137130737305,\r\n        -0.7842622995376587,\r\n        -0.8532277345657349,\r\n        -0.7897003889083862,\r\n        -0.4181550145149231,\r\n        0.19628047943115234,\r\n        1.0770930051803589,\r\n        -0.02835981175303459,\r\n        -0.5753732323646545,\r\n        -1.1151577234268188,\r\n        -0.5815770030021667,\r\n        0.09684659540653229,\r\n        0.5522671937942505,\r\n        -0.030028298497200012,\r\n        0.3489823043346405,\r\n        1.999251127243042,\r\n        0.24458545446395874,\r\n        -0.5203201770782471,\r\n        0.316849946975708,\r\n        -0.47711971402168274,\r\n        0.8915648460388184,\r\n        0.8457918167114258,\r\n        0.5264778137207031,\r\n        -0.8502707481384277,\r\n        -0.9751700758934021,\r\n        -0.02566119283437729,\r\n        -1.028670072555542,\r\n        0.18307317793369293,\r\n        -0.49867284297943115,\r\n        1.0920207500457764,\r\n        0.5521297454833984,\r\n        -0.14716297388076782,\r\n        -0.3346938192844391,\r\n        1.5656580924987793,\r\n        -0.7991052865982056,\r\n        -0.26441702246665955,\r\n        0.49504297971725464,\r\n        -0.31016698479652405,\r\n        0.9890218377113342,\r\n        -0.10510750114917755,\r\n        1.0550251007080078,\r\n        -0.2283044457435608,\r\n        -0.7257004380226135,\r\n        -0.7030271291732788,\r\n        -0.7790862321853638,\r\n        -0.24877402186393738,\r\n        0.07705762982368469,\r\n        0.5459803938865662,\r\n        -0.09799185395240784,\r\n        0.897142231464386,\r\n        -0.6956192255020142,\r\n        0.9278802871704102,\r\n        0.4792061448097229,\r\n        0.10210652649402618,\r\n        -0.6870645880699158,\r\n        0.04543111473321915,\r\n        -0.8089027404785156,\r\n        -0.633710503578186,\r\n        1.0256445407867432,\r\n        1.3906657695770264,\r\n        0.1663665771484375,\r\n        1.1099536418914795,\r\n        0.10048805922269821,\r\n        -0.562286376953125,\r\n        0.00613914430141449,\r\n        1.5823962688446045,\r\n        -0.48499810695648193,\r\n        -0.20053191483020782,\r\n        -0.5671911239624023,\r\n        -1.4429616928100586,\r\n        0.2862411439418793,\r\n        -0.8861700296401978,\r\n        -0.3820238709449768,\r\n        0.8535968661308289,\r\n        0.37165260314941406,\r\n        -0.3989483416080475,\r\n        -0.7931487560272217,\r\n        0.49800217151641846,\r\n        -0.030055494979023933,\r\n        0.09658436477184296,\r\n        -0.01647680625319481,\r\n        0.2995840311050415,\r\n        0.07841112464666367,\r\n        -0.42788776755332947,\r\n        -0.421461284160614,\r\n        -0.331310510635376,\r\n        0.8938791155815125,\r\n        0.6272722482681274,\r\n        -0.21313169598579407,\r\n        0.9950217008590698,\r\n        -0.2031419426202774,\r\n        -0.22090482711791992,\r\n        -0.548841655254364,\r\n        -1.6044409275054932,\r\n        -0.7715075016021729,\r\n        -0.49160242080688477,\r\n        -0.24170807003974915,\r\n        -0.7048044204711914,\r\n        -0.8014053106307983,\r\n        0.29390349984169006,\r\n        0.054487016052007675,\r\n        0.3970298767089844,\r\n        -0.06475424021482468,\r\n        1.127199411392212,\r\n        -0.739986002445221,\r\n        0.8968538045883179,\r\n        0.16425460577011108,\r\n        0.25741082429885864,\r\n        0.49301677942276,\r\n        0.1683736890554428,\r\n        -1.1861411333084106,\r\n        0.25131043791770935,\r\n        -1.36281418800354,\r\n        -0.15689712762832642,\r\n        -0.6470949053764343,\r\n        0.6324459314346313,\r\n        -0.34909239411354065,\r\n        0.1941039264202118,\r\n        -0.6703383922576904,\r\n        0.20028138160705566,\r\n        -1.0397788286209106,\r\n        0.4567095935344696,\r\n        0.13688629865646362,\r\n        1.2796952724456787,\r\n        0.166065514087677,\r\n        0.658120334148407,\r\n        -1.3546559810638428,\r\n        -0.5389719605445862,\r\n        -0.08731161803007126,\r\n        0.7354655265808105,\r\n        1.0047472715377808,\r\n        -0.05427353456616402,\r\n        -1.4617345333099365,\r\n        -0.9585564732551575,\r\n        -0.6920942068099976,\r\n        0.09905766695737839,\r\n        0.09464533627033234,\r\n        0.5217699408531189,\r\n        0.0957912877202034,\r\n        -0.7192213535308838,\r\n        -0.04667407274246216,\r\n        0.681300163269043,\r\n        -0.8402373790740967,\r\n        -0.2997664511203766,\r\n        1.2031528949737549,\r\n        -0.10477663576602936,\r\n        0.26567578315734863,\r\n        0.42164912819862366,\r\n        -0.34192782640457153,\r\n        -0.3656957149505615,\r\n        -0.45151597261428833,\r\n        -0.3949594497680664,\r\n        -0.577213704586029,\r\n        -0.23967087268829346,\r\n        -0.2350679337978363,\r\n        -0.29668790102005005,\r\n        -0.1650102287530899,\r\n        0.19158320128917694,\r\n        -0.4059344530105591,\r\n        -0.04842503368854523,\r\n        0.3938101828098297,\r\n        -0.927422285079956,\r\n        0.2163739800453186,\r\n        0.3462793529033661,\r\n        -0.4505365490913391,\r\n        -1.0968310832977295,\r\n        1.2015570402145386,\r\n        -0.4125951826572418,\r\n        0.16525256633758545,\r\n        -0.4031716287136078,\r\n        -0.5340607166290283,\r\n        1.7358355522155762,\r\n        0.25906142592430115,\r\n        -0.0805576741695404,\r\n        0.30260396003723145,\r\n        -0.42363327741622925,\r\n        -0.7784350514411926,\r\n        1.8370187282562256,\r\n        -0.20003962516784668,\r\n        0.5048527121543884,\r\n        0.012388095259666443,\r\n        -0.8567050695419312,\r\n        -0.8206777572631836,\r\n        0.805779218673706,\r\n        -1.1619088649749756,\r\n        1.1411333084106445,\r\n        -0.48511621356010437,\r\n        -2.090730667114258,\r\n        -1.244725227355957,\r\n        -1.1101365089416504,\r\n        0.8395730257034302,\r\n        -0.03702282905578613,\r\n        -0.16150924563407898,\r\n        -0.6461799144744873,\r\n        -0.14252476394176483,\r\n        -1.5970089435577393,\r\n        0.7760617733001709,\r\n        0.4990657866001129,\r\n        0.7787836790084839,\r\n        -0.8626998662948608,\r\n        0.7470996379852295,\r\n        0.7681406736373901,\r\n        0.28674474358558655,\r\n        0.0007490478456020355,\r\n        0.689916729927063,\r\n        0.7030285596847534,\r\n        -0.8446435332298279,\r\n        1.1542038917541504,\r\n        -0.23907144367694855,\r\n        0.34004420042037964,\r\n        -0.9074749946594238,\r\n        1.2463738918304443,\r\n        1.2344036102294922,\r\n        0.8877604007720947,\r\n        -0.3104366958141327,\r\n        0.4153081476688385,\r\n        -0.5584530234336853,\r\n        0.22110070288181305,\r\n        -0.38098716735839844,\r\n        -0.5985010862350464,\r\n        -1.38398277759552,\r\n        -0.4534721076488495,\r\n        0.14819402992725372,\r\n        -0.3589429259300232,\r\n        -0.10249745845794678,\r\n        -0.13701392710208893,\r\n        0.402549147605896,\r\n        0.25609010457992554,\r\n        1.3057602643966675,\r\n        -1.481247901916504,\r\n        -0.6947628259658813,\r\n        0.4260581433773041,\r\n        -0.21222272515296936,\r\n        0.847240686416626,\r\n        -0.2647436857223511,\r\n        0.08244302868843079,\r\n        0.444247841835022,\r\n        0.8979054689407349,\r\n        0.407508909702301,\r\n        -0.5563161969184875,\r\n        -0.6224954128265381,\r\n        -0.10075144469738007,\r\n        -0.5461636185646057,\r\n        -0.286479115486145,\r\n        -0.44361037015914917,\r\n        0.01673843152821064,\r\n        -0.6615177989006042,\r\n        0.8932192921638489,\r\n        -0.5665384531021118,\r\n        -0.9193369746208191,\r\n        -0.27992963790893555,\r\n        -0.17528235912322998,\r\n        -0.8345392346382141,\r\n        0.39456796646118164,\r\n        -0.9645357728004456,\r\n        -0.007063534110784531,\r\n        -0.5919287204742432,\r\n        -0.3300616145133972,\r\n        -0.09939493983983994,\r\n        -0.3992094099521637,\r\n        1.67685866355896,\r\n        0.04062607139348984,\r\n        0.35824742913246155,\r\n        0.29021385312080383,\r\n        1.2290384769439697,\r\n        -1.4503000974655151,\r\n        -0.7184566259384155,\r\n        -0.5791273713111877,\r\n        -0.35014399886131287,\r\n        0.2789645195007324,\r\n        -0.4141438603401184,\r\n        -0.9280256628990173,\r\n        0.869903564453125,\r\n        -0.34102508425712585,\r\n        0.511946976184845,\r\n        1.5951439142227173,\r\n        0.044803306460380554,\r\n        0.31154298782348633,\r\n        -1.5568830966949463,\r\n        -0.3858288824558258,\r\n        0.6377036571502686,\r\n        1.421373963356018,\r\n        -0.367473304271698,\r\n        -1.0778725147247314,\r\n        0.35740798711776733,\r\n        -0.004611536860466003,\r\n        1.4428532123565674,\r\n        -0.23328056931495667,\r\n        -1.183917760848999,\r\n        0.2433607578277588,\r\n        -0.24270987510681152,\r\n        0.7037072777748108,\r\n        0.6590988636016846,\r\n        -0.5115602612495422,\r\n        0.2743830680847168,\r\n        -0.3938068449497223,\r\n        0.3279126286506653,\r\n        -1.4584660530090332,\r\n        0.7890591025352478,\r\n        -0.15001165866851807,\r\n        0.07455524057149887,\r\n        0.006494141183793545,\r\n        0.043776609003543854,\r\n        0.5616971254348755,\r\n        1.1724190711975098,\r\n        -0.05029209703207016,\r\n        -0.824326753616333,\r\n        -0.32853859663009644,\r\n        0.37949138879776,\r\n        0.16717161238193512,\r\n        -0.6662338972091675,\r\n        -0.14910519123077393,\r\n        -1.1023402214050293,\r\n        -0.40938660502433777,\r\n        0.4568392038345337,\r\n        0.06142549216747284,\r\n        0.12934209406375885,\r\n        0.49550861120224,\r\n        -0.3377825915813446,\r\n        1.5582548379898071,\r\n        -0.06218896433711052,\r\n        0.7143779397010803,\r\n        -0.16718262434005737,\r\n        0.28800734877586365,\r\n        -0.4826963245868683,\r\n        -1.8102208375930786,\r\n        0.4972122311592102,\r\n        -0.9780184030532837,\r\n        -1.1112703084945679\r\n    ],\r\n     \"limit\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Qdrant}}/collections/chunksNotes/points/search",
+							"host": [
+								"{{Qdrant}}"
+							],
+							"path": [
+								"collections",
+								"chunksNotes",
+								"points",
+								"search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Embending.Nomic.LLM",
+			"item": [
+				{
+					"name": "EmbendingQuery",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"model\": \"nomic-embed-text\",\r\n  \"prompt\": \"Jakie są najlepsze metody uczenia się\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:11434/api/embeddings",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "11434",
+							"path": [
+								"api",
+								"embeddings"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}

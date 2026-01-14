@@ -1,6 +1,0 @@
-@ContextBuilderService_HostAddress = http://localhost:5283
-
-GET {{ContextBuilderService_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
