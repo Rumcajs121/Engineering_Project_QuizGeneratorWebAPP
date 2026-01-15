@@ -49,6 +49,8 @@ public class GenerateQuizService(IChatClient clientLLama,IVectorDataRepository r
         {
             PropertyNameCaseInsensitive = true
         });
+        
+        
         int responseTokens = CountTokens(response.Text);
         const int MAX_SAFE_TOKENS = 4096;
         double usagePercent = (double)promptTokens / MAX_SAFE_TOKENS * 100;

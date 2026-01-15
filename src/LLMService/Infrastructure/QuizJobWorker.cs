@@ -42,6 +42,7 @@ public class QuizJobWorker(IServiceScopeFactory scopeFactory, ILogger<QuizJobWor
 
                     job.Status = QuizJobStatus.Running;
                     await repository.UpdateJobAsync(job, stoppingToken);
+                    //TODO Validation !!
                     var quiz = await service.GenerateQuiz(
                         job.Parameter.K,
                         job.Parameter.CountQuestion,
@@ -52,6 +53,8 @@ public class QuizJobWorker(IServiceScopeFactory scopeFactory, ILogger<QuizJobWor
                     documentId = job.Parameter.DocumentIds; 
                     externalId=job.Parameter.ExternalId;
                     logger.LogInformation("Job {JobId} starting generated", jobId);
+                    
+                    //TODO: CreateValidationMethod input parameter QuizObject 
                     
                     await repository.UpdateJobAsync(job, stoppingToken);
                     if (job.Result == null)
