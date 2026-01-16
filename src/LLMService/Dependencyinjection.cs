@@ -48,6 +48,7 @@ public static class Dependencyinjection
         services.AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()); });
         services.AddScoped<ICreateEmbeddingWithChunkService, CreateEmbeddingWithChunkService>();
         services.AddScoped<IGenerateQuizService, GenerateQuizService>();
+        services.AddScoped<IWorkflowGenerateQuizByLlm, WorkflowGenerateQuizByLlm>();
         return services;
     }
 

@@ -58,4 +58,38 @@ public static class LLMPromptSettings
 
         return new ChatMessage(ChatRole. User, text);
     }
+    public  static string BuildRepairContext(LlmRetryRequest request)
+    {
+        string ragSection;
+        if (string.IsNullOrWhiteSpace(request.ContextRag))
+            ragSection = "CONTEXT: <none>\n";
+        else
+            ragSection = $"CONTEXT:\n{request.ContextRag}\n";
+
+        string jsonSection;
+        if (string.IsNullOrWhiteSpace(request.IncorrectQuiz))
+            jsonSection = "INPUT_JSON: <none>\n";
+        else
+            jsonSection = $"INPUT_JSON:\n{request.IncorrectQuiz}\n";
+        
+        var context = $"""
+                       You are fixing a quiz JSON. Return ONLY valid JSON matching the schema.
+                       Do not include markdown or explanations.
+                       TOPIC / USER QUESTION:
+                       {request.Question}
+                       Constraints:
+                       - Questions must contain exactly {request.QuestionCount} items (if asked to generate missing, add only missing).
+                       - Each question must have exactly 4 answers.
+                       - Exactly one answer must be correct.
+                       - Ordinals must be unique and in range 0-3.
+
+                       Validation errors to fix:
+                       {request.Errors}
+                       RAG Context:
+                       {ragSection}
+                       The last quiz you created
+                       {jsonSection}
+                       """;
+        return context;
+    }
 }

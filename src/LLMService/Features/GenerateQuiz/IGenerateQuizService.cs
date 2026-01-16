@@ -45,29 +45,24 @@ public class GenerateQuizService(IChatClient clientLLama,IVectorDataRepository r
         
         var response = await clientLLama.GetResponseAsync(messages, options);
         
+        //TODO: 1. Check parse method
         var quiz = JsonSerializer.Deserialize<LlmQuiz>(response.Text, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         });
-        
+        //TODO: 2. FluentValidation 
+        //TODO: 3. Retry
         
         int responseTokens = CountTokens(response.Text);
-        const int MAX_SAFE_TOKENS = 4096;
-        double usagePercent = (double)promptTokens / MAX_SAFE_TOKENS * 100;
-        bool isSafe = promptTokens < MAX_SAFE_TOKENS;
         int totalTokens = promptTokens + responseTokens;
         logger.LogInformation(
             "Token Analysis: Question={QuestionTokens}, Context={ContextTokens}, " +
             "Prompt={PromptTokens}, Response={ResponseTokens}, Total={TotalTokens}, " +
-            "MaxSafe={MaxSafe}, Usage={Usage:F1}%, Safe={IsSafe}",
             questionTokens,
             contextTokens,
             promptTokens,
             responseTokens,
-            totalTokens,
-            MAX_SAFE_TOKENS,
-            usagePercent,
-            isSafe
+            totalTokens
         );
         return quiz ??  throw new InvalidOperationException("LLM returned invalid JSON.");
     }

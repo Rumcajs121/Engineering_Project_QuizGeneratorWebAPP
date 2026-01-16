@@ -17,6 +17,7 @@ public class QuizJob
     public GenerateQuizParameter Parameter { get; set; } = default!;
     public Guid ExternalId { get; set; }
     public LlmQuiz?  Result { get; set; }
+    public int? RetryCount { get; set; }
     public string? Error { get; set; } 
     public string? QuizServiceId { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

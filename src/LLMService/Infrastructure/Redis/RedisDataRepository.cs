@@ -1,6 +1,5 @@
 using BuildingBlocks.Redis;
 using LLMService.Commons.Models;
-using LLMService.Features.GenerateQuiz;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using StackExchange.Redis;
@@ -16,6 +15,7 @@ public interface IRedisDataRepository
     Task EnqueueJobAsync(string jobId);
     Task<string? > DequeueJobAsync();
     Task AckJobAsync(string jobId);
+    Task RequeueJobAsync(string jobId);
 } 
 public class RedisDataRepository(IDistributedCache cache, IConnectionMultiplexer redis) : IRedisDataRepository
 {
@@ -114,6 +114,14 @@ public class RedisDataRepository(IDistributedCache cache, IConnectionMultiplexer
     public Task AckJobAsync(string jobId)
     {
         return _db.ListRemoveAsync(ProcessingKey, jobId, count: 1);
+    }
+
+    public async Task RequeueJobAsync(string jobId)
+    {
+        var tran = _db.CreateTransaction();
+        _ = tran.ListRemoveAsync(ProcessingKey, jobId, 1);
+        _ = tran.ListLeftPushAsync(QueueKey, jobId);
+        await tran.ExecuteAsync();
     }
 
     private async Task SaveJobAsync(QuizJob job, CancellationToken ct)
