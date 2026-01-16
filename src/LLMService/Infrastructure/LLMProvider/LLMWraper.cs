@@ -8,7 +8,7 @@ public class ChatModelClient
     : OllamaApiClient, IChatClient
 {
     public ChatModelClient(IConfiguration configuration)
-        : base(CreateHttpClient(configuration), "llama3.1")
+        : base(CreateHttpClient(configuration), "llama3.1-quiz")
     {
     }
 

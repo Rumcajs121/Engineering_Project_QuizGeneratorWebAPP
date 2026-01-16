@@ -9,18 +9,16 @@ namespace LLMService.Infrastructure;
 
 public interface IWorkflowGenerateQuizByLlm
 {
-    Task<LlmQuiz> GenerateQuizPipeline(int k, int countQuestion, string question, IReadOnlyList<Guid> documentIds,CancellationToken ct);
+    Task<LlmQuiz> GenerateQuizPipeline(string contextQdrant, int countQuestion, string question,CancellationToken ct);
 }
 public record LlmRetryRequest(int QuestionCount, string Question, string Errors, string? IncorrectQuiz, string?  ContextRag);
 
-public class WorkflowGenerateQuizByLlm(IChatClient clientLLama,IVectorDataRepository repository):IWorkflowGenerateQuizByLlm
+public class WorkflowGenerateQuizByLlm(IChatClient clientLLama,ILogger<WorkflowGenerateQuizByLlm> logger):IWorkflowGenerateQuizByLlm
 {
-        public async Task<LlmQuiz> GenerateQuizPipeline(int k, int countQuestion, string question, IReadOnlyList<Guid> documentIds,CancellationToken ct)
+        public async Task<LlmQuiz> GenerateQuizPipeline(string contextQdrant, int countQuestion, string question,CancellationToken ct)
         {
-            const int maxAttempts = 2;
+            const int maxAttempts = 3;
             // First Answear.
-            var contextQdrant = await repository.TopKChunk(k, question, documentIds);
-            
             var messages = LLMPromptSettings.BuildQuizMessages(
                 questionCount: countQuestion,
                 topic: question,
@@ -33,7 +31,16 @@ public class WorkflowGenerateQuizByLlm(IChatClient clientLLama,IVectorDataReposi
                 )
             };
             var response = await clientLLama.GetResponseAsync(messages, options);
+            //Logger token
             
+            
+            var totalTokens = response.Usage.TotalTokenCount;
+            var percentusage = (totalTokens * 100) / 8192;
+            logger.LogInformation(
+                $"MessagesCount:  InPut Token: {response.Usage.InputTokenCount} tokens /n" +
+                $"Output Token:{response.Usage.OutputTokenCount} tokens /n" +
+                $"UsagePercentage: (~{percentusage}% of 8192 limit)"
+            );
             for (int attempt = 1; attempt <= maxAttempts; attempt++)
             {
                 // First Check.
@@ -51,22 +58,8 @@ public class WorkflowGenerateQuizByLlm(IChatClient clientLLama,IVectorDataReposi
                     continue;
                     
                 }
-                // Second Check
-                if (quiz.Questions.Count != countQuestion)
-                {
-                    if (attempt == maxAttempts)
-                    {
-                        throw new InvalidOperationException($"LLM failed to return correct question count after {maxAttempts} attempts. Expected {countQuestion}, got {quiz.Questions.Count}");
-                    }
-                    var err = $"Questions.Count mismatch. Expected {countQuestion}, got {quiz.Questions.Count}. Missing {countQuestion - quiz.Questions.Count}.";
-                    var retry = new LlmRetryRequest(countQuestion, question, err, JsonSerializer.Serialize(quiz), contextQdrant);
-                    response = await ReturnAnswear(retry);
-                    await Task.Delay(500 * attempt, ct);
-                    continue;
-                }
                 //Do Validation Model
                 var validationMessages = LlmValidationResult(quiz);
-                
                 //Thread Check
                 if (validationMessages.Count > 0)
                 {
@@ -77,6 +70,20 @@ public class WorkflowGenerateQuizByLlm(IChatClient clientLLama,IVectorDataReposi
                     }
                     var err = string.Join("\n", validationMessages.Select(e => $"- {e}"));
                     var retry = new LlmRetryRequest(countQuestion, question, err, JsonSerializer.Serialize(quiz), ContextRag: null);
+                    response = await ReturnAnswear(retry);
+                    await Task.Delay(500 * attempt, ct);
+                    continue;
+                }
+                // Second Check
+                //TODO Change na wieksze niż countQuestion
+                if (quiz.Questions.Count >= countQuestion)
+                {
+                    if (attempt == maxAttempts)
+                    {
+                        throw new InvalidOperationException($"LLM failed to return correct question count after {maxAttempts} attempts. Expected {countQuestion}, got {quiz.Questions.Count}");
+                    }
+                    var err = $"Questions.Count mismatch. Expected {countQuestion}, got {quiz.Questions.Count}. Missing {countQuestion - quiz.Questions.Count}.";
+                    var retry = new LlmRetryRequest(countQuestion, question, err, JsonSerializer.Serialize(quiz), contextQdrant);
                     response = await ReturnAnswear(retry);
                     await Task.Delay(500 * attempt, ct);
                     continue;
@@ -155,7 +162,7 @@ public class LlmQuizValidation : AbstractValidator<LlmQuiz>
         RuleForEach(x => x.Tags)
             .NotEmpty()
             .NotNull()
-            .MaximumLength(20)
+            .MaximumLength(150)
             .WithMessage("Tag are required");
         RuleFor(x => x.Questions)
             .NotNull()
@@ -172,7 +179,7 @@ public class LlmQuestionValidation : AbstractValidator<LlmQuestion>
         RuleFor(x => x.Explanation)
             .NotEmpty()
             .NotNull()
-            .MaximumLength(100)
+            .MaximumLength(1000)
             .WithMessage("Explanation is required");
         RuleFor(x => x.SourceChunkIndex)
             .NotEmpty()
@@ -182,7 +189,7 @@ public class LlmQuestionValidation : AbstractValidator<LlmQuestion>
         RuleFor(x => x.Text)
             .NotEmpty()
             .NotNull()
-            .MaximumLength(200)
+            .MaximumLength(1000)
             .WithMessage("QuestionText is required");
         RuleFor(x => x.Answers)
             .Must(answers => answers.Count(a => a.IsCorrect) == 1)
@@ -202,7 +209,7 @@ public class LlmAnswerValidation : AbstractValidator<LlmAnswer>
         RuleFor(x => x.Text)
             .NotNull()
             .NotEmpty()
-            .MaximumLength(300)
+            .MaximumLength(1000)
             .WithMessage("Answer is required");
     }
 }

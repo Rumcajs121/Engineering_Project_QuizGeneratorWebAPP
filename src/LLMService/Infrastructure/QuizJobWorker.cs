@@ -1,13 +1,13 @@
 using LLMService.Commons.Models;
 using LLMService.Infrastructure.Redis;
+using LLMService.Infrastructure.VectorStore;
 
 namespace LLMService.Infrastructure;
 
 public class QuizJobWorker(
     IServiceScopeFactory scopeFactory,
     ILogger<QuizJobWorker> logger,
-    IHttpClientFactory httpClientFactory,
-    IWorkflowGenerateQuizByLlm workflowLlm) : BackgroundService
+    IHttpClientFactory httpClientFactory) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -15,9 +15,12 @@ public class QuizJobWorker(
         while (!stoppingToken.IsCancellationRequested)
         {
             using var scope = scopeFactory.CreateScope();
-
             var repository = scope.ServiceProvider
                 .GetRequiredService<IRedisDataRepository>();
+            var workflowLlm = scope.ServiceProvider
+                .GetRequiredService<IWorkflowGenerateQuizByLlm>();
+            var qdrantRepository = scope.ServiceProvider
+                .GetRequiredService<IVectorDataRepository>();
             string? jobId = null;
             try
             {
@@ -43,8 +46,9 @@ public class QuizJobWorker(
                 await repository.UpdateJobAsync(job, stoppingToken);
                 try
                 {
-                    quiz = await workflowLlm.GenerateQuizPipeline(job.Parameter.K, job.Parameter.CountQuestion,
-                        job.Parameter.Question, job.Parameter.DocumentIds,stoppingToken);
+                    var contextQdrant = await qdrantRepository.TopKChunk(job.Parameter.K,job.Parameter.Question,job.Parameter.DocumentIds);
+                    quiz = await workflowLlm.GenerateQuizPipeline(contextQdrant, job.Parameter.CountQuestion,
+                        job.Parameter.Question,stoppingToken);
                 }
                 catch (Exception ex)
                 {
