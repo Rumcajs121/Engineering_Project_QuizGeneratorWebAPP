@@ -32,13 +32,11 @@ public class WorkflowGenerateQuizByLlm(IChatClient clientLLama,ILogger<WorkflowG
             };
             var response = await clientLLama.GetResponseAsync(messages, options);
             //Logger token
-            
-            
             var totalTokens = response.Usage.TotalTokenCount;
             var percentusage = (totalTokens * 100) / 8192;
             logger.LogInformation(
-                $"MessagesCount:  InPut Token: {response.Usage.InputTokenCount} tokens /n" +
-                $"Output Token:{response.Usage.OutputTokenCount} tokens /n" +
+                $"MessagesCount:  InPut Token: {response.Usage.InputTokenCount} tokens | " +
+                $"Output Token:{response.Usage.OutputTokenCount} tokens |" +
                 $"UsagePercentage: (~{percentusage}% of 8192 limit)"
             );
             for (int attempt = 1; attempt <= maxAttempts; attempt++)
@@ -58,6 +56,7 @@ public class WorkflowGenerateQuizByLlm(IChatClient clientLLama,ILogger<WorkflowG
                     continue;
                     
                 }
+                
                 //Do Validation Model
                 var validationMessages = LlmValidationResult(quiz);
                 //Thread Check
@@ -75,8 +74,7 @@ public class WorkflowGenerateQuizByLlm(IChatClient clientLLama,ILogger<WorkflowG
                     continue;
                 }
                 // Second Check
-                //TODO Change na wieksze niż countQuestion
-                if (quiz.Questions.Count >= countQuestion)
+                if (quiz.Questions.Count < countQuestion)
                 {
                     if (attempt == maxAttempts)
                     {
@@ -155,7 +153,7 @@ public class LlmQuizValidation : AbstractValidator<LlmQuiz>
         RuleFor(x => x.Title)
             .NotEmpty()
             .WithMessage("Title is required")
-            .MaximumLength(200);
+            .MaximumLength(1000);
         RuleFor(x => x.Tags)
             .NotNull()
             .WithMessage("Tags is required");
@@ -166,7 +164,7 @@ public class LlmQuizValidation : AbstractValidator<LlmQuiz>
             .WithMessage("Tag are required");
         RuleFor(x => x.Questions)
             .NotNull()
-            .WithMessage("Questions is required");
+            .Must(q => q.Any()).WithMessage("At least one question is required.");
         RuleForEach(x => x.Questions)
             .SetValidator(new LlmQuestionValidation())
             .WithMessage("Questions is required");
@@ -177,23 +175,25 @@ public class LlmQuestionValidation : AbstractValidator<LlmQuestion>
     public LlmQuestionValidation()
     {
         RuleFor(x => x.Explanation)
-            .NotEmpty()
-            .NotNull()
-            .MaximumLength(1000)
-            .WithMessage("Explanation is required");
+            .MaximumLength(2000)
+            .When(x => !string.IsNullOrWhiteSpace(x.Explanation))
+            .WithMessage("Explanation must be ≤ 2000 chars.");
         RuleFor(x => x.SourceChunkIndex)
-            .NotEmpty()
-            .NotNull()
             .GreaterThanOrEqualTo(0)
-            .WithMessage("SourceChunkIndex must be greater than or equal to 0");;
+            .WithMessage("SourceChunkIndex must be >= 0.");
         RuleFor(x => x.Text)
-            .NotEmpty()
+            .Must(t => !string.IsNullOrWhiteSpace(t))
             .NotNull()
             .MaximumLength(1000)
             .WithMessage("QuestionText is required");
         RuleFor(x => x.Answers)
-            .Must(answers => answers.Count(a => a.IsCorrect) == 1)
-            .WithMessage("There must be exactly one correct answer.");
+            .NotNull()
+            .Must(a => a.Count >= 3)
+            .WithMessage("At least 4 answers are required.")
+            .Must(a => a.Count(ans => ans.IsCorrect) == 1)
+            .WithMessage("There must be exactly one correct answer.")
+            .Must(a => a.Select(ans => ans.Ordinal).Distinct().Count() == a.Count)
+            .WithMessage("Answer ordinals must be unique.");
         RuleForEach(x => x.Answers)
             .SetValidator(new LlmAnswerValidation());
         
@@ -203,12 +203,13 @@ public class LlmAnswerValidation : AbstractValidator<LlmAnswer>
 {
     public LlmAnswerValidation()
     {
+        //TODO: Change when we had more Answer
         RuleFor(x => x.Ordinal)
-            .InclusiveBetween(0, 3)
-            .WithMessage("Ordinal must be between 0 and 3");
+            .GreaterThanOrEqualTo(0)
+            .WithMessage("Ordinal must be >= 0, Answer ordinals must be consecutive starting from 0.");;
         RuleFor(x => x.Text)
             .NotNull()
-            .NotEmpty()
+            .Must(t => !string.IsNullOrWhiteSpace(t))
             .MaximumLength(1000)
             .WithMessage("Answer is required");
     }

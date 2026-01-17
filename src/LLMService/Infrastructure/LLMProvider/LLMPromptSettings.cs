@@ -29,10 +29,10 @@ public static class LLMPromptSettings
             "- text: string (required, the question in Polish)\n" +
             "- explanation: string (required, 1–2 sentences in Polish; this must be a subtle hint or contextual clue that helps reasoning, but it MUST NOT directly reveal or explicitly point to the correct answer)\n" +
             "- sourceChunkIndex: integer (required, index from CONTEXT [Chunk X])\n" +
-            "- answers: array of exactly 4 objects (required)\n\n" +
+            "- answers: array with a minimum length of 3, where EXACTLY ONE answer object has isCorrect = true and all others have isCorrect = false (required) \n\n" +
 
             "Each answer MUST have ALL these fields:\n" +
-            "- ordinal: integer (required, 0, 1, 2, or 3)\n" +
+            "- ordinal:  give each answer a number, starting at 0 and going up one by one.(require integere) \n" +
             "- text: string (required, answer text in Polish)\n" +
             "- isCorrect: boolean (required, exactly one true per question)\n\n" +
 
@@ -48,7 +48,7 @@ public static class LLMPromptSettings
     private static ChatMessage UserPrompt(string topic, string context)
     {
         var text =
-            $"Generate a multiple choice quiz with MULTIPLE questions about:\n" +
+            $"Create a SINGLE-ANSWER multiple choice with one correct option quiz.:\n" +
             $"\"{topic}\"\n\n" +
             "CONTEXT (knowledge fragments — use ONLY this information):\n" +
             $"{context}\n\n" +

@@ -33,16 +33,16 @@ public class QuizQuestion : Entity<QuizQuestionId>
             sourceChunkId = null;
         
         var answers = (initialAnswers ?? Enumerable.Empty<(int, string, bool)>()).ToList();
-
-        if (answers.Count != 4)
-            throw new DomainException("Exactly 4 answers required.");
+        
+        if (answers.Count < 3)
+            throw new DomainException("More than 3 answers are required.");
 
         if (answers.Count(a => a.IsCorrect) != 1)
             throw new DomainException("Exactly one correct answer required.");
 
         if (answers.Select(a => a.Ordinal).Distinct().Count() != answers.Count)
             throw new DomainException("Answer ordinals must be unique.");
-
+        
         var question = new QuizQuestion(text.Trim(), explanation?.Trim(), sourceChunkId);
 
         foreach (var a in answers)
@@ -52,7 +52,8 @@ public class QuizQuestion : Entity<QuizQuestionId>
 
     public void AddAnswer(int ordinal,string text,bool isCorrect)
     {
-        if(_answers.Any(a=>a.Ordinal == ordinal)) throw new DomainException($"Answer with ordinal {ordinal} already exists for this question.");
+        if(_answers.Any(a=>a.Ordinal == ordinal)) 
+            throw new DomainException($"Answer with ordinal {ordinal} already exists for this question.");
         if (isCorrect && _answers.Any(a => a.IsCorrect))
             throw new DomainException("There is already a correct answer for this question.");
         var answer=new QuizAnswer(ordinal,text,isCorrect);

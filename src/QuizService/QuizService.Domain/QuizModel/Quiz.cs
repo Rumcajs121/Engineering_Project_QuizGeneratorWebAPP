@@ -28,8 +28,8 @@ public class Quiz:Aggregate<QuizId>
         {
             titleQuiz = titleQuiz.Trim();
             if (titleQuiz.Length == 0) titleQuiz = null;
-            if (titleQuiz?.Length > 500) 
-                throw new DomainException("ShortDescription must be ≤ 500 chars.");
+            if (titleQuiz?.Length > 1000) 
+                throw new DomainException("Title must be ≤ 1000 chars.");
         }
         var quiz = new Quiz
         {
