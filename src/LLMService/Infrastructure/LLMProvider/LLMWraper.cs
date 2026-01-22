@@ -7,11 +7,7 @@ namespace LLMService.Infrastructure.LLMProvider;
 public class ChatModelClient 
     : OllamaApiClient, IChatClient
 {
-    // public ChatModelClient(IConfiguration configuration)
-    //     : base(CreateHttpClient(configuration), "llama3.1-quiz")
-    // {
-    // }
-
+    
     private static HttpClient CreateHttpClient(IConfiguration configuration)
     {
         return new HttpClient

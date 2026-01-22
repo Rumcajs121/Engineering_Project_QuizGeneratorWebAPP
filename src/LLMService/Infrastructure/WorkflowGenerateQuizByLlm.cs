@@ -17,7 +17,7 @@ public class WorkflowGenerateQuizByLlm(IChatClient clientLLama,ILogger<WorkflowG
 {
         public async Task<LlmQuiz> GenerateQuizPipeline(string contextQdrant, int countQuestion, string question,CancellationToken ct)
         {
-            const int maxAttempts = 3;
+            const int maxAttempts = 2;
             // First Answear.
             var messages = LLMPromptSettings.BuildQuizMessages(
                 questionCount: countQuestion,

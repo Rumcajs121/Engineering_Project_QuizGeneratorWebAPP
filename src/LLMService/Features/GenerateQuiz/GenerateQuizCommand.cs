@@ -14,14 +14,6 @@ public class GenerateQuizCommandHandler(IGenerateQuizService service,ICurrentUse
     {
         
         var jobId=await service.CreateJobAndAddQueue(command.Request.K,command.Request.CountQuestion,command.Request.Question,command.Request.DocumentIds,cancellationToken);
-        
-        // var jobId = await repository.CreateJobAsync(new GenerateQuizParameter(
-        //         command.Parameter.K,
-        //         command.Parameter.CountQuestion,
-        //         command.Parameter.Question,
-        //         command.Parameter.DocumentIds,externalId),
-        //     cancellationToken);
-        // await repository.EnqueueJobAsync(jobId);
         return new GenerateQuizCommandResponse(jobId);
     }
 }
