@@ -1,3 +1,4 @@
+using BuildingBlocks.Security;
 using ContextBuilderService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +9,9 @@ builder.Services.AddSwaggerGen();
 builder.Services
     .AddApiService()
     .AddDistributedCache(builder.Configuration)
-    .AddApplication(builder.Configuration);
+    .AddApplication(builder.Configuration)
+    .AddKeycloakJwtAuthentication(builder.Configuration)
+    .AddKeycloakAuthorizationPolicies();
 
 
 var app = builder.Build();

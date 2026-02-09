@@ -2,7 +2,6 @@
 using QuizGeneratorWebApp.AppHost;
 
 var builder = DistributedApplication.CreateBuilder(args);
-
 //---BACKENDY---
 
 var ctxBuilderSvc=builder.AddProject<Projects.ContextBuilderService>("contextbuilderservice")

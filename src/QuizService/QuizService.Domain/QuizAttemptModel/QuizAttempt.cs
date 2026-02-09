@@ -17,7 +17,6 @@ public class QuizAttempt:Aggregate<QuizAttemptId>
     public int?  Difficult { get; private set; }
     private readonly List<QuizAttemptQuestion> _attemptQuestions= new();
     public IReadOnlyCollection<QuizAttemptQuestion> AttemptQuestions => _attemptQuestions.AsReadOnly();
-
     public static QuizAttempt Create(
         QuizId quizId,
         Guid userId,

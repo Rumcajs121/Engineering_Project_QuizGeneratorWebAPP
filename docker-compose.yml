@@ -14,4 +14,3 @@ volumes:
     ollama_volume:
     qdrant_data:
     keycloak_data:
-      
