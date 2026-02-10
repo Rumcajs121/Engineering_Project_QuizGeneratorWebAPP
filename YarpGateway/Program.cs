@@ -20,9 +20,9 @@ builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
 var app = builder.Build();
-app.UseCors("GatewayCorsPolicy");
+// app.UseCors("GatewayCorsPolicy");
 app.MapDefaultEndpoints();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapReverseProxy().RequireAuthorization();
+app.MapReverseProxy();
 app.Run();

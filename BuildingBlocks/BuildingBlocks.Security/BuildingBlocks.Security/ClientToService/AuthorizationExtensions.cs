@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices.ComTypes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BuildingBlocks.Security;
@@ -9,17 +11,8 @@ public static class AuthorizationExtensions
     {
         services.AddAuthorization(options =>
         {
-            options.AddPolicy("User", policy =>
-                policy.RequireAuthenticatedUser()
-                    .RequireRole("user"));
-
-            options.AddPolicy("Admin", policy =>
-                policy.RequireAuthenticatedUser()
-                    .RequireRole("admin"));
-
-            options.AddPolicy("Operator", policy =>
-                policy.RequireAuthenticatedUser()
-                    .RequireRole("operator"));
+            options.FallbackPolicy=new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+            options.AddPolicy("Public",p=>p.RequireAssertion(_=>true));
         });
         return services;
     }
