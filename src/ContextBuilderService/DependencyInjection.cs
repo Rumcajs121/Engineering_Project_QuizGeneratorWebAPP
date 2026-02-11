@@ -1,4 +1,5 @@
 using System.Reflection;
+using BuildingBlocks.Behavior;
 using Carter;
 using ContextBuilderService.ContextBuilder.UploadData;
 using ContextBuilderService.Domain.Repository;
@@ -24,6 +25,8 @@ public static class DependencyInjection
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+            cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
         });
         return services;
     }

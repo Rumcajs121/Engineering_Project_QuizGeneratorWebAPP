@@ -1,4 +1,5 @@
 using System.Reflection;
+using BuildingBlocks.Behavior;
 using BuildingBlocks.Security.ClientToService.CurrentUser;
 using Carter;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,8 @@ public static class DependencyInjection
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+            cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
         });
         services.AddScoped<ICheckPermissionsService, CheckPermissionsService>();
         services.AddScoped<ICreateUserProfileService,CreateUserProfileService>();

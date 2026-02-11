@@ -1,4 +1,5 @@
 using System.Reflection;
+using BuildingBlocks.Behavior;
 using Carter;
 using LLMService.Features.CreateEmbendingWithChunk;
 using LLMService.Features.GenerateQuiz;
@@ -45,7 +46,12 @@ public static class Dependencyinjection
 
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()); });
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+            cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
+        });
         services.AddScoped<ICreateEmbeddingWithChunkService, CreateEmbeddingWithChunkService>();
         services.AddScoped<IGenerateQuizService, GenerateQuizService>();
         services.AddScoped<IWorkflowGenerateQuizByLlm, WorkflowGenerateQuizByLlm>();

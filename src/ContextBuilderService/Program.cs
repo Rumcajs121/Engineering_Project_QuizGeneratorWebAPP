@@ -1,3 +1,4 @@
+using BuildingBlocks.Exceptions.Handler;
 using BuildingBlocks.Security;
 using ContextBuilderService;
 
@@ -12,7 +13,7 @@ builder.Services
     .AddApplication(builder.Configuration)
     .AddKeycloakJwtAuthentication(builder.Configuration)
     .AddKeycloakAuthorizationPolicies();
-
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 var app = builder.Build();
 
@@ -22,7 +23,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseExceptionHandler(options=>{});
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseHttpsRedirection();
 app.UseApiService();
+
 app.Run();
