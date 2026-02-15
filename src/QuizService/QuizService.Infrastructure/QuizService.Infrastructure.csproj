@@ -8,6 +8,8 @@
 
     <ItemGroup>
         
+      <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks.Security\BuildingBlocks.Security\BuildingBlocks.Security.csproj" />
+        
       <ProjectReference Include="..\QuizService.Application\QuizService.Application.csproj" />
     </ItemGroup>
 

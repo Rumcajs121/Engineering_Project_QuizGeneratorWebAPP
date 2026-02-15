@@ -2,6 +2,7 @@
 
 using BuildingBlocks.Exceptions.Handler;
 using BuildingBlocks.Security;
+using BuildingBlocks.Security.ClientToService.CurrentUser;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,8 @@ builder.Services
     .AddApplicationService(builder.Configuration)
     .AddInfrastructureService(builder.Configuration);
 builder.Services.AddKeycloakJwtAuthentication(builder.Configuration)
-    .AddKeycloakAuthorizationPolicies();
+    .AddKeycloakAuthorizationPolicies()
+    .AddCurrentUser();
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 var app = builder.Build();
 
