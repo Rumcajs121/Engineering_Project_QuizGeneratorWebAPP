@@ -1,4 +1,31 @@
 ﻿services:
+  contextbuilderservice:
+    image: ${DOCKER_REGISTRY-}contextbuilderservice
+    build:
+      context: .
+      dockerfile: src/ContextBuilderService/Dockerfile
+  llmservice:
+    image: ${DOCKER_REGISTRY-}llmservice
+    build:
+      context: .
+      dockerfile: src/LLMService/Dockerfile
+  quizservice:
+    image: ${DOCKER_REGISTRY-}quizservice
+    build:
+      context: .
+      dockerfile: src/QuizService/QuizService.Api/Dockerfile
+  userervice:
+    image: ${DOCKER_REGISTRY-}userervice
+    build:
+      context: .
+      dockerfile: src/UserService/Dockerfile 
+  yarp:
+    image: ${DOCKER_REGISTRY-}yarp
+    build:
+      context: .
+      dockerfile: YarpGateway/Dockerfile
+  squid:
+    image: ubuntu/squid
   quizDb:
     image: mcr.microsoft.com/mssql/server
   distributedcachequiz:
@@ -14,3 +41,5 @@ volumes:
     ollama_volume:
     qdrant_data:
     keycloak_data:
+    squid_cache:
+    squid_logs:
