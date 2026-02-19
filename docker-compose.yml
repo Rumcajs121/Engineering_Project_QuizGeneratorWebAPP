@@ -24,8 +24,8 @@
     build:
       context: .
       dockerfile: YarpGateway/Dockerfile
-  squid:
-    image: ubuntu/squid
+  envoy-proxy:
+    image: envoyproxy/envoy:tools-v1.37-latest
   quizDb:
     image: mcr.microsoft.com/mssql/server
   distributedcachequiz:
@@ -41,5 +41,9 @@ volumes:
     ollama_volume:
     qdrant_data:
     keycloak_data:
-    squid_cache:
-    squid_logs:
+networks:
+  quizgenerator_net:
+    driver: bridge
+    internal: true
+  public_net:
+    driver: bridge

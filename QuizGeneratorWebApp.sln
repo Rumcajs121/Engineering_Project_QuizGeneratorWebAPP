@@ -57,6 +57,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Asynchronous
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Security", "BuildingBlocks\BuildingBlocks.Security\BuildingBlocks.Security\BuildingBlocks.Security.csproj", "{25868089-A641-4C6B-864A-82E5EA4405B7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EnvoyProxy", "EnvoyProxy", "{91D77865-E6A0-4D9E-B5C2-9D07C204E27A}"
+	ProjectSection(SolutionItems) = preProject
+		Envoy\envoy.yml = Envoy\envoy.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +87,7 @@ Global
 		{D8E2FBF0-FB55-4882-9AD9-EB1FD944CAB3} = {DDC32DBD-B1F1-4758-9B97-6866DE5D8C66}
 		{63E0C1AB-671C-40B1-962E-927031D5F5A1} = {002E2C70-1B71-496A-8540-FDD68CEBC3DD}
 		{25868089-A641-4C6B-864A-82E5EA4405B7} = {002E2C70-1B71-496A-8540-FDD68CEBC3DD}
+		{91D77865-E6A0-4D9E-B5C2-9D07C204E27A} = {D9267620-630A-4468-B642-80818946F82A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{31B1BE28-4A33-4D37-A69B-B8FF51CC2E37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

@@ -1,6 +1,24 @@
 name: QuizGenerator
 services:
-  
+  envoy-proxy:
+    ports:
+      - "5070:5070"
+      - "5060:5060"
+    command: ["-c", "/etc/envoy/envoy.yml", "--log-level", "info"]
+    restart: unless-stopped
+    networks:
+      - public_net
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:5070/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    volumes:
+      - ./Envoy/envoy.yml:/etc/envoy/envoy.yml:ro
   quizDb:
     container_name: quizDb
     environment:
