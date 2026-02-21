@@ -60,7 +60,8 @@ Aplikacja została zaprojektowana w architekturze **mikroserwisowej** z wykorzys
 ---
 
 ## 🏗 Architektura systemu
-<p align="center"><img width="600" height="400" alt="image" src="https://github.com/user-attachments/assets/eeb48cd7-2b61-4d51-aace-2eb3c17c38c4" /></p>
+<p align="center"><img width="1100" height="809" alt="image" src="https://github.com/user-attachments/assets/4da6d00f-eb0d-4da4-887d-36e94cbccd0d" /></p>
+
 
 
 System składa się z **4 mikroserwisów** zarządzanych przez **.NET Aspire AppHost**:
