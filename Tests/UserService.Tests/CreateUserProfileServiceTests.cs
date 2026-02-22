@@ -18,11 +18,20 @@ public class CreateUserProfileServiceTests
             UserName:"rumcajs",
             IsAuthenticated:true
             );
+        var dataTimeCheck = DateTime.UtcNow;
         var repository = new Mock<IDataRepository>(MockBehavior.Strict);
         repository.Setup(r=>r.ReadUserFromTheToken()).Returns(fakeUserContext);
-        repository.Setup(r => r.GetUserForUpdateAsync(fakeUserContext.Subject, It.IsAny<CancellationToken>())).ReturnsAsync((UserDomain?)null);
-        repository.Setup(r => r.AddUserForDbAsync(It.IsAny<UserDomain>()))
-            .Returns(Task.CompletedTask);
+        repository.Setup(r => r.GetUserForUpdateAsync(fakeUserContext.Subject, ct)).ReturnsAsync((UserDomain?)null);
+        repository.Setup(r => r.AddUserForDbAsync(It.Is<UserDomain>(u =>
+            u.ExternalId == fakeUserContext.Subject &&
+            u.Username == fakeUserContext.UserName &&
+            u.Email == fakeUserContext.Email &&
+            u.PrivilegeUserDomain == PrivilegesUserDomain.User &&
+            u.IsActive == true &&
+            u.CreatedAt >= dataTimeCheck &&
+            u.LastLoginAt.HasValue &&
+            u.LastLoginAt.Value >= dataTimeCheck
+        ))).Returns(Task.CompletedTask);
         repository.Setup(r => r.DbSaveAsync())
             .Returns(Task.CompletedTask);
         var service = new CreateUserProfileService(repository.Object);
@@ -30,8 +39,11 @@ public class CreateUserProfileServiceTests
         //Act
         await service.CreateUser(ct);
         //Assert
+        repository.Verify(r => r.ReadUserFromTheToken(), Times.Once);
+        repository.Verify(r => r.GetUserForUpdateAsync(fakeUserContext.Subject, ct), Times.Once);
         repository.Verify(r => r.AddUserForDbAsync(It.IsAny<UserDomain>()), Times.Once);
         repository.Verify(r => r.DbSaveAsync(), Times.Once);
+        repository.VerifyNoOtherCalls();
         
     }
 }
