@@ -9,6 +9,8 @@ public class FakeDataRepository:IDataRepository
     private readonly Dictionary<Guid, UserDomain> _users = [];
     public int AddUserCalls { get; private set; }
     public int SaveCalls { get; private set; }
+    public int ReadUserFromTokenCalls { get; private set; }
+    public int ReadSubFromTokenCall { get; private set; }
     public List<UserDomain> AddedUsers { get; } = [];
     public Guid TokenSubject { get; set; } = Guid.NewGuid();
     public string TokenEmail { get; set; } = "test@local";
@@ -44,11 +46,17 @@ public class FakeDataRepository:IDataRepository
         return Task.CompletedTask;
     }
 
-    public UserContextDto ReadUserFromTheToken() =>
-        new(TokenEmail, TokenSubject, TokenUserName, TokenIsAuthenticated);
+    public UserContextDto ReadUserFromTheToken()
+    {
+        ReadUserFromTokenCalls++;
+        var user=new UserContextDto(TokenEmail, TokenSubject, TokenUserName, TokenIsAuthenticated);
+        return user;
+    }
+        
 
     public Guid ReadExternalIdFromToken()
     {
+        ReadSubFromTokenCall++;
         var subject = Guid.Parse("696e634a-a3a2-4b71-9471-bfcd3cfbe7be");
         return subject;
     }
