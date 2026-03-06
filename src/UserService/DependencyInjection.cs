@@ -31,7 +31,7 @@ public static class DependencyInjection
             cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
         });
         services.AddScoped<ICheckPermissionsService, CheckPermissionsService>();
-        services.AddScoped<ICreateUserProfileService,CreateUserProfileService>();
+        services.AddScoped<ICreateUserProfileService,UserServiceUnits>();
         services.AddScoped<IEditProfileService,EditProfileService>();
         services.AddScoped<IGetUserProfileService, GetUserProfileService>();
         return services;

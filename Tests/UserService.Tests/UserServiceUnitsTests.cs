@@ -9,14 +9,14 @@ using UserService.Tests.FakeRepository;
 
 namespace UserService.Tests;
 
-public class CreateUserProfileServiceTests
+public class UserServiceUnitsTests
 {
     [Fact]
     public async Task Check_user_in_database_and_update_date_value_lastLogin()
     {
         var ct = TestContext.Current.CancellationToken;
         var repository= new FakeDataRepository();
-        var service = new CreateUserProfileService(repository);
+        var service = new UserServiceUnits(repository);
         var existing=new FakeUserBuilder()
             .WithExternalId(Guid.Parse("81899d30-82e4-4db6-8b5d-669b05392232"))
             .Build();
@@ -35,7 +35,7 @@ public class CreateUserProfileServiceTests
     public async Task Create_domain_user_when_user_exists()
     {
         var repository= new FakeDataRepository();
-        var service = new CreateUserProfileService(repository);
+        var service = new UserServiceUnits(repository);
         repository.TokenSubject = Guid.NewGuid();
         repository.TokenUserName = "alice";
         repository.TokenEmail = "alice@test.com";
@@ -84,6 +84,37 @@ public class CreateUserProfileServiceTests
         repository.SaveCalls.Should().Be(1);
         repository.ReadSubFromTokenCall.Should().Be(1);
     }
-    //Przynajmniej jeden test typu “null nie nadpisuje”
-    //DTO całe null
+
+    [Fact]
+    public async Task Check_if_condition_in_EditedProfile()
+    {
+        var repository= new FakeDataRepository();
+        var service = new EditProfileService(repository);
+        var ct = TestContext.Current.CancellationToken;
+        var existing=new FakeUserBuilder()
+            .WithExternalId(Guid.Parse("696e634a-a3a2-4b71-9471-bfcd3cfbe7be"))
+            .Build();
+        repository.TokenSubject = existing.ExternalId;
+        repository.Seed(existing);
+        string? newUserName=null;
+        string? newEmail=null;
+        bool? newIsActive=null;
+        PrivilegesUserDomain? newPrivilegeUserDomain=null;
+        var dto = new EditProfileDto
+        {
+            IsActive = newIsActive,
+            Username = newUserName,
+            Email = newEmail,
+            PrivilegeUserDomain=newPrivilegeUserDomain
+        };
+        await service.EditProfile(dto,ct);
+        var checkUser = repository.GetUser(repository.TokenSubject);
+        checkUser.Should().NotBeNull();
+        checkUser.Username.Should().Be(existing.Username);
+        checkUser.Email.Should().Be(existing.Email);
+        checkUser.PrivilegeUserDomain.Should().Be(existing.PrivilegeUserDomain);
+        checkUser.IsActive.Should().Be(existing.IsActive);
+        repository.ReadSubFromTokenCall.Should().Be(1);
+        repository.SaveCalls.Should().Be(1);
+    }
 }

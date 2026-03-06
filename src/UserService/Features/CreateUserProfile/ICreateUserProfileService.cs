@@ -8,7 +8,7 @@ public interface ICreateUserProfileService
     Task CreateUser(CancellationToken ct);
 }
 
-public class CreateUserProfileService(IDataRepository repository) : ICreateUserProfileService
+public class UserServiceUnits(IDataRepository repository) : ICreateUserProfileService
 {
     public async Task CreateUser(CancellationToken ct)
     {
