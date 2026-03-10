@@ -18,7 +18,6 @@
 - [Kluczowe funkcjonalności](#-kluczowe-funkcjonalności)
 - [Architektura systemu](#-architektura-systemu)
 - [Stos technologiczny](#-stos-technologiczny)
-- [Uruchomienie projektu](#-uruchomienie-projektu)
 - [Pipeline generowania quizu](#-pipeline-generowania-quizu)
 - [API Endpoints](#-api-endpoints)
 - [Wzorce projektowe](#-wzorce-projektowe)
@@ -38,24 +37,18 @@ Aplikacja została zaprojektowana w architekturze **mikroserwisowej** z wykorzys
 ## ✨ Kluczowe funkcjonalności
 
 
-| Funkcjonalność | Opis | Status |
-|---|---|---|
-| 📄 **Upload dokumentów** | Przesyłanie plików PDF, automatyczna konwersja do tekstu i przechowywanie w Azure Blob Storage | ✅ Zrealizowane |
-| 🔪 **Chunking tekstu** | Inteligentne dzielenie tekstu na fragmenty z zachowaniem kontekstu (Semantic Kernel TextChunker) | ✅ Zrealizowane |
-| 🧬 **Embedding & Vector Store** | Generowanie embeddingów i zapisywanie w bazie wektorowej Qdrant | ✅ Zrealizowane |
-| 🤖 **Generowanie quizów przez AI** | Tworzenie pytań i odpowiedzi za pomocą LLM z walidacją i mechanizmem retry | ✅ Zrealizowane |
-| 📝 **Zarządzanie quizami** | Tworzenie, przeglądanie i rozwiązywanie quizów | ✅ Zrealizowane |
-| 🏷️ **System tagów** | Kategoryzowanie quizów za pomocą tagów | 🗺️ W planach |
-| 👤 **Zarządzanie użytkownikami** | Profile użytkowników z uwierzytelnianiem przez Keycloak | 🛠️ W trakcie |
-| 🔐 **Bezpieczeństwo** | JWT authentication (Keycloak), autoryzacja, komunikacja client-to-service i service-to-service | ✅ Zrealizowane |
-| ⚡ **Asynchroniczne przetwarzanie** | Kolejka zadań w Redis z background service | ✅ Zrealizowane |
-| 🌐 **Pełny routing przez YARP** | Centralny ruch przychodzący do usług przez API Gateway (YARP) | 🛠️ W trakcie |
-| 🚪 **Ruch wychodzący przez Envoy** | Obsługa egress (ruch wychodzący) i polityk sieciowych przez Envoy | 🛠️ W trakcie |
-| 🐳 **Docker Compose** | Plik `docker-compose.yml` do uruchamiania całego stacku (Keycloak/Redis/Qdrant/SQL/itp.) | 🛠️ W trakcie |
-| 🚀 **Pełne wsparcie .NET Aspire** | Spójna orkiestracja, observability i uruchamianie całego systemu przez Aspire AppHost | 🛠️ W trakcie|
-| 🐇 **Message Broker (RabbitMQ)** | Skalowalne przetwarzanie zdarzeń i zadań w tle | 🗺️ W planach |
-| 🎨 **Frontend (Blazor)** | Interfejs webowy aplikacji | 🗺️ W planach |
-| 🧪 **Testy jednostkowe** | Testy logiki biznesowej i usług (unit tests) | 🛠️ W trakcie |
+| Funkcjonalność | Opis |
+|---|---|
+| 📄 **Upload dokumentów** | Przesyłanie plików PDF, automatyczna konwersja do tekstu i przechowywanie w Azure Blob Storage |
+| 🔪 **Chunking tekstu** | Inteligentne dzielenie tekstu na fragmenty z zachowaniem kontekstu (Semantic Kernel TextChunker) |
+| 🧬 **Embedding & Vector Store** | Generowanie embeddingów i zapisywanie w bazie wektorowej Qdrant |
+| 🤖 **Generowanie quizów przez AI** | Tworzenie pytań i odpowiedzi za pomocą LLM z walidacją i mechanizmem retry |
+| 📝 **Zarządzanie quizami** | Tworzenie, przeglądanie i rozwiązywanie quizów |
+| 👤 **Zarządzanie użytkownikami** | Integracja z Identity providerem -  Keycloak |
+| 🔐 **Bezpieczeństwo** | JWT authentication (Keycloak), autoryzacja, komunikacja client-to-service i service-to-service |
+| ⚡ **Asynchroniczne przetwarzanie** | Kolejka zadań w Redis z background service |
+| 🌐 **Pełny routing przez YARP** | Wdrożenie protegego API Gateway (YARP) |
+| 🐳 **Docker Compose** | Plik `docker-compose.yml` do uruchamiania infrastuktury (Keycloak/Redis/Qdrant/SQL/itp.) |
 
 ---
 
@@ -104,14 +97,6 @@ System składa się z **4 mikroserwisów** zarządzanych przez **.NET Aspire App
 ### Frontend
 - **Blazor** – WebAssembly + Interactive Server Rendering
 - **HTML / CSS**
-
----
-
-
-## 🚀 Uruchomienie projektu
-
-> **Adnotacja:** W opracowaniu — aktualnie tworzony jest plik `docker-compose.yaml`.  
-> **Adnotacja:** W opracowaniu - jest pełna migracja z ręcznej konfiguracji Docker Compose do **.NET Aspire**.
 
 ---
 ## 🔄 Pipeline generowania quizu
