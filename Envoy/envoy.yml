@@ -11,25 +11,22 @@ static_resources:
         socket_address:
           address: 0.0.0.0
           port_value: 5060
-      
       filter_chains:
         - filters:
             - name: envoy.filters.network.http_connection_manager
               typed_config:
                 "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
                 stat_prefix: ingress_https
-                
-                http_protocol_options:
-                  accept_http_10: true
-                
+                strip_any_host_port: true
+
                 upgrade_configs:
                   - upgrade_type: CONNECT
-                
+
                 access_log:
                   - name: envoy.access_loggers.stdout
                     typed_config:
                       "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
-                
+
                 route_config:
                   name: https_proxy_route
                   virtual_hosts:
@@ -39,11 +36,7 @@ static_resources:
                         - "blob.core.windows.net"
                       routes:
                         - match:
-                            prefix: "/"
-                            headers:
-                              - name: ":method"
-                                string_match:
-                                  exact: "CONNECT"
+                            connect_matcher: {}
                           route:
                             cluster: dynamic_forward_proxy_cluster
                             upgrade_configs:
@@ -54,8 +47,7 @@ static_resources:
                             cluster: dynamic_forward_proxy_cluster
 
                     - name: default_block
-                      domains:
-                        - "*"
+                      domains: ["*"]
                       routes:
                         - match:
                             prefix: "/"
@@ -63,7 +55,7 @@ static_resources:
                             status: 403
                             body:
                               inline_string: "Access Denied"
-                
+
                 http_filters:
                   - name: envoy.filters.http.dynamic_forward_proxy
                     typed_config:

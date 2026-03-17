@@ -41,6 +41,7 @@ volumes:
     ollama_volume:
     qdrant_data:
     keycloak_data:
+    envoy_config:
 networks:
   quizgenerator_net:
     driver: bridge

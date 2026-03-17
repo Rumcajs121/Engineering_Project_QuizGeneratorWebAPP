@@ -1,18 +1,41 @@
 name: QuizGenerator
 services:
+  contextbuilderservice:
+    image: ${DOCKER_REGISTRY-}contextbuilderservice
+    build:
+      context: .
+      dockerfile: src/ContextBuilderService/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    depends_on:
+      - distributedcachequiz
+      - envoy-proxy
+      - yarp
+    expose:
+      - "8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+      interval: 20s
+      timeout: 60s
+      retries: 3
+      start_period: 60s
+    networks:
+      - private_net
   envoy-proxy:
     ports:
       - "5070:5070"
       - "5060:5060"
-    command: ["-c", "/etc/envoy/envoy.yml", "--log-level", "info"]
+    command: [ "envoy", "-c", "/etc/envoy/envoy.yml", "--log-level", "info" ]
     restart: unless-stopped
     networks:
+      - private_net
       - public_net
     dns:
       - 8.8.8.8
       - 8.8.4.4
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:5070/ready"]
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:5070/ready" ]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -33,7 +56,7 @@ services:
     container_name: distributedcachequiz
     restart: always
     ports:
-      - "6379:6379"    
+      - "6379:6379"
   qdrant:
     container_name: qdrantdb
     restart: always
@@ -60,14 +83,14 @@ services:
           devices:
             - driver: nvidia
               count: all
-              capabilities: [gpu]
+              capabilities: [ gpu ]
   keycloak:
     container_name: keycloak
     image: quay.io/keycloak/keycloak:26.4.7
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
-    command: ["start-dev"]
+    command: [ "start-dev" ]
     ports:
       - "8080:8080"
     restart: always
