@@ -69,13 +69,19 @@ static_resources:
                       "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
 
   clusters:
-    - name: dynamic_forward_proxy_cluster
-      lb_policy: CLUSTER_PROVIDED
-      connect_timeout: 30s
-      cluster_type:
-        name: envoy.clusters.dynamic_forward_proxy
-        typed_config:
-          "@type": type.googleapis.com/envoy.extensions.clusters.dynamic_forward_proxy.v3.ClusterConfig
-          dns_cache_config:
-            name: dynamic_forward_proxy_cache_config
-            dns_lookup_family: V4_ONLY
+  - name: dynamic_forward_proxy_cluster
+    lb_policy: CLUSTER_PROVIDED
+    connect_timeout: 30s
+    cluster_type:
+      name: envoy.clusters.dynamic_forward_proxy
+      typed_config:
+        "@type": type.googleapis.com/envoy.extensions.clusters.dynamic_forward_proxy.v3.ClusterConfig
+        dns_cache_config:
+          name: dynamic_forward_proxy_cache_config
+          dns_lookup_family: V4_ONLY
+
+    transport_socket:
+      name: envoy.transport_sockets.tls
+      typed_config:
+        "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+    

@@ -14,7 +14,7 @@
     build:
       context: .
       dockerfile: src/QuizService/QuizService.Api/Dockerfile
-  userervice:
+  userservice:
     image: ${DOCKER_REGISTRY-}userervice
     build:
       context: .
@@ -43,7 +43,7 @@ volumes:
     keycloak_data:
     envoy_config:
 networks:
-  quizgenerator_net:
+  private_net:
     driver: bridge
     internal: true
   public_net:
