@@ -176,7 +176,7 @@ System składa się z **4 mikroserwisów** zarządzanych przez **.NET Aspire App
 ---
 ## 🎓 Praca dyplomowa
 
-- 📘 **PDF (Google Drive):** [Otwórz pracę inżynierską](https://drive.google.com/file/d/1S1Ld_OnRQdhkcLBsl-A52JtQbUOc8gXF/view?usp=drive_link)
+- 📘 **PDF (Google Drive):** [Otwórz pracę inżynierską](https://drive.google.com/file/d/15V4reWRDY-TyVk5XYrBCs7t3KTQcxEXH/view?usp=drive_link)
 ## 📄 Licencja
 
 Ten projekt jest udostępniany na licencji **MIT** – szczegóły w pliku [LICENSE](LICENSE).
