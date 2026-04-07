@@ -176,10 +176,7 @@ System składa się z **4 mikroserwisów** zarządzanych przez **.NET Aspire App
 ---
 ## 🎓 Praca dyplomowa
 
-- 📄 **Link do pracy dyplomowej:** _(zostanie dodany po obronie)_  
-
-> **Adnotacja:** Dokumentacja pracy dyplomowej (PDF) zostanie opublikowana i podlinkowana **dopiero po obronie**.
-
+- 📘 **PDF (Google Drive):** [Otwórz pracę inżynierską](https://drive.google.com/file/d/1S1Ld_OnRQdhkcLBsl-A52JtQbUOc8gXF/view?usp=drive_link)
 ## 📄 Licencja
 
 Ten projekt jest udostępniany na licencji **MIT** – szczegóły w pliku [LICENSE](LICENSE).
